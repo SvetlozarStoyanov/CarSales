@@ -16,6 +16,7 @@ namespace CarSales.Core.Models.Vehicles
         public string Brand { get; set; } = null!;
         public string Model { get; set; } = null!;
         public string Description { get; set; } = null!;
+        public string? ImageUrl { get; set; }
         public int YearProduced { get; set; }
         public double TopSpeed { get; set; }
         public double KilometersDriven { get; set; }
