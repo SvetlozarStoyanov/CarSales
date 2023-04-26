@@ -1,6 +1,6 @@
 ﻿using AirsoftMatchMaker.Infrastructure.Data.Common.Repository;
 using CarSales.Core.Contracts;
-using CarSales.Core.Services.Vehicles;
+using CarSales.Core.Services;
 
 namespace CarSales.Web.Extensions
 {
