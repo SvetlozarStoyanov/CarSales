@@ -19,6 +19,7 @@ namespace CarSales.Infrastructure.Data.Entities
         public string Model { get; set; } = null!;
         [Required]
         public string Description { get; set; } = null!;
+        public string? ImageUrl { get; set; }
         public int YearProduced { get; set; }
         public double TopSpeed { get; set; }
         public double KilometersDriven { get; set; }
