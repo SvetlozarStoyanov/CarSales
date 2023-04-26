@@ -1,5 +1,6 @@
 ﻿using CarSales.Core.Models.Users;
 using CarSales.Infrastructure.Data.Entities;
+using CarSales.Web.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -81,17 +82,18 @@ namespace CarSales.Web.Controllers
                 ModelState.AddModelError(string.Empty, "Invalid login!");
                 return View(model);
             }
+            
             return RedirectToAction("Index", "Home");
         }
 
 
-
         [Authorize]
+        [HttpPost]
         public async Task<IActionResult> Logout()
         {
             await signInManager.SignOutAsync();
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "Vehicles");
         }
     }
 }
