@@ -3,6 +3,7 @@ using CarSales.Infrastructure.Data.Entities;
 using CarSales.Web.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 
 namespace CarSales.Web
 {
@@ -64,11 +65,31 @@ namespace CarSales.Web
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
+
+
+            app.MapAreaControllerRoute(
+                name: "Owner",
+                areaName: "Owner",
+                pattern: "Owner/{controller=Home}/{action=Index}/{id?}");
 
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
+            //app.UseEndpoints(endpoints =>
+            //{
+            //    endpoints.MapControllerRoute(
+            //      name: "default",
+            //      pattern: "{controller=Home}/{action=Index}/{id?}");
+
+            //    endpoints.MapControllerRoute(
+            //      name: "areas",
+            //      pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
+            //    );
+
+            //    endpoints.MapRazorPages();
+            //});
             app.MapRazorPages();
 
             app.Run();
