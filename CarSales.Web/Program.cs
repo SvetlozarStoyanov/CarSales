@@ -29,9 +29,21 @@ namespace CarSales.Web
             })
             .AddRoles<Role>()
             .AddEntityFrameworkStores<CarSalesDbContext>();
-            builder.Services.AddControllersWithViews();
+
+            builder.Services.AddControllersWithViews(options =>
+            {
+                options.Filters.Add<AutoValidateAntiforgeryTokenAttribute>();
+            });
+
+            builder.Services.AddAuthentication();
+            builder.Services.AddAuthorization();
 
             builder.Services.AddApplicationServices();
+
+            builder.Services.ConfigureApplicationCookie(options =>
+            {
+                options.LoginPath = "/Users/Login";
+            });
 
             var app = builder.Build();
 
