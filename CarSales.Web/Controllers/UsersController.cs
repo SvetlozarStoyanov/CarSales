@@ -92,6 +92,23 @@ namespace CarSales.Web.Controllers
                 return View(model);
             }
             
+            return RedirectToAction(nameof(LoginRedirect));
+        }
+        public async Task<IActionResult> LoginRedirect()
+        {
+            var user = await userManager.GetUserAsync(User);
+            if (await userManager.IsInRoleAsync(user, "Salesman"))
+            {
+                return Redirect("/Salesman/Home/Index");
+            }
+            else if (await userManager.IsInRoleAsync(user, "Owner"))
+            {
+                return Redirect("/Owner/Home/Index");
+            }
+            else if (await userManager.IsInRoleAsync(user, "Admin"))
+            {
+                return Redirect("/Administrator/Home/Index");
+            }
             return RedirectToAction("Index", "Home");
         }
 
