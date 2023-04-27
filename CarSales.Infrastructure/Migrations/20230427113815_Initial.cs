@@ -2,6 +2,8 @@
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace CarSales.Web.Data.Migrations
 {
     /// <inheritdoc />
@@ -16,33 +18,47 @@ namespace CarSales.Web.Data.Migrations
                 type: "nvarchar(max)",
                 nullable: true);
 
+            migrationBuilder.InsertData(
+                table: "AspNetUserRoles",
+                columns: new[] { "RoleId", "UserId" },
+                values: new object[] { "bbea2448-c801-43d1-8b05-e3a2c22338d9", "66ccb670-f0dd-4aa1-a83d-8b2a0003bb50" });
+
             migrationBuilder.UpdateData(
                 table: "AspNetUsers",
                 keyColumn: "Id",
                 keyValue: "66ccb670-f0dd-4aa1-a83d-8b2a0003bb50",
                 columns: new[] { "ConcurrencyStamp", "PasswordHash", "SecurityStamp" },
-                values: new object[] { "fd715f14-0b77-4066-828a-48adba54a22f", "AQAAAAIAAYagAAAAEEN7LlzNTwoEpHO8NSNL2m8/PUC7Q3IK+u5SaAV2tWbYMTJknhZsarrHBDLqbFjNnQ==", "193f47c0-f911-44e7-9837-bcd4af239d04" });
+                values: new object[] { "e7bf1dd9-235e-4449-830c-184d73081541", "AQAAAAIAAYagAAAAEMTwAnR1nIURiTTgTY0L8Hh/cb5uKe21BsByf5+C0JQsRW+pKtIFRyJ31TwmBT/9iA==", "859c9d1d-3f06-4846-bc73-611db8dbb07e" });
 
             migrationBuilder.UpdateData(
                 table: "AspNetUsers",
                 keyColumn: "Id",
                 keyValue: "926bee86-8bbd-43f6-bc1c-9639d43531a4",
                 columns: new[] { "ConcurrencyStamp", "PasswordHash", "SecurityStamp" },
-                values: new object[] { "5ace843c-3b69-4eac-956f-c74e7339f252", "AQAAAAIAAYagAAAAED9UoymaGbL1F0JgfzjoFHCaRlHEKVftU3rP48wN2E4Ao4joLslJpb8jMJjInaoxig==", "c7e4a1b0-c2db-498d-87b5-89e753c17e82" });
+                values: new object[] { "c398881f-46ed-4969-9aba-9d9c1a5cd452", "AQAAAAIAAYagAAAAEKnKAQIk3Lo42B/sQ4QogM888d1/O8ZsyMO9ICxhdBCntdjfMYCA7LwtWjgTiJw9cw==", "ca3deeb2-f00a-471a-86a7-d8a0a2731cfe" });
 
             migrationBuilder.UpdateData(
                 table: "AspNetUsers",
                 keyColumn: "Id",
                 keyValue: "b5fef437-f504-46d2-926d-3158e54e1932",
                 columns: new[] { "ConcurrencyStamp", "PasswordHash", "SecurityStamp" },
-                values: new object[] { "83480018-ecf3-4ffa-bee7-22bb03f8cf2a", "AQAAAAIAAYagAAAAEN1UbuU15HaEKMHqJl1ty9rzNDabO/yGcA6bdk4q4M8SEUHBjyF87omXa3gMBNoyFA==", "90353409-5069-4f61-87b3-ffdea6765189" });
+                values: new object[] { "147f514a-ae32-4a60-81ee-4e4756a7d9db", "AQAAAAIAAYagAAAAEMakFTcWs4CyR9N4Eb1YfCZ4vW80LRpv6wyQl//A9E+GLCU1Akt/O7awG8b0UAtfcA==", "69914115-32d3-450e-9b9e-a6a968dbaaf5" });
 
             migrationBuilder.UpdateData(
                 table: "AspNetUsers",
                 keyColumn: "Id",
                 keyValue: "cbed6d2a-e60a-49df-a6e3-982ccd980393",
                 columns: new[] { "ConcurrencyStamp", "PasswordHash", "SecurityStamp" },
-                values: new object[] { "436d439e-c130-44cd-9b6e-7cb11641734b", "AQAAAAIAAYagAAAAEA6NkVQXJtgnqpyTFYsFjuWZbnAWnZTAe6eK2BTuPacrYgf9yH+3e71yoPhs9NXi/g==", "20bfe686-f6ca-46cd-b7b4-23baab59b402" });
+                values: new object[] { "dc12dbbb-42f7-48c0-bd17-aa3d808871c8", "AQAAAAIAAYagAAAAECpc3SqcXtbqfReBdZnizPUNosHXbPi2NKN8W0iPHCXd+DSptxxnSambJ9B2HQCnUg==", "dbab16d1-b529-4887-8e93-0ce3290e6db3" });
+
+            migrationBuilder.InsertData(
+                table: "Owners",
+                columns: new[] { "Id", "UserId" },
+                values: new object[,]
+                {
+                    { 2, "926bee86-8bbd-43f6-bc1c-9639d43531a4" },
+                    { 3, "66ccb670-f0dd-4aa1-a83d-8b2a0003bb50" }
+                });
 
             migrationBuilder.UpdateData(
                 table: "Vehicles",
@@ -69,6 +85,21 @@ namespace CarSales.Web.Data.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DeleteData(
+                table: "AspNetUserRoles",
+                keyColumns: new[] { "RoleId", "UserId" },
+                keyValues: new object[] { "bbea2448-c801-43d1-8b05-e3a2c22338d9", "66ccb670-f0dd-4aa1-a83d-8b2a0003bb50" });
+
+            migrationBuilder.DeleteData(
+                table: "Owners",
+                keyColumn: "Id",
+                keyValue: 2);
+
+            migrationBuilder.DeleteData(
+                table: "Owners",
+                keyColumn: "Id",
+                keyValue: 3);
+
             migrationBuilder.DropColumn(
                 name: "ImageUrl",
                 table: "Vehicles");
