@@ -1,4 +1,5 @@
-﻿using CarSales.Core.Models.Users;
+﻿using CarSales.Core.Contracts;
+using CarSales.Core.Models.Users;
 using CarSales.Infrastructure.Data.Entities;
 using CarSales.Web.Extensions;
 using Microsoft.AspNetCore.Authorization;
@@ -112,14 +113,16 @@ namespace CarSales.Web.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-
         [Authorize]
-        [HttpPost]
         public async Task<IActionResult> Logout()
         {
             await signInManager.SignOutAsync();
 
             return RedirectToAction("Index", "Vehicles");
+        }
+        public IActionResult AccessDenied()
+        {
+            return View();
         }
     }
 }
