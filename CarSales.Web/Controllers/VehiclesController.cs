@@ -15,9 +15,6 @@ namespace CarSales.Web.Controllers
         public async Task<IActionResult> Index()
         {
             var model = await vehicleService.GetAllVehiclesWhichAreForSaleAsync();
-            var userId = User.Id();
-            var userIsInRole = User.IsInRole("Owner");
-
             return View(model);
         }
 

@@ -44,6 +44,7 @@ namespace CarSales.Web
             builder.Services.ConfigureApplicationCookie(options =>
             {
                 options.LoginPath = "/Users/Login";
+                options.AccessDeniedPath = "/Users/AccessDenied";
             });
 
             var app = builder.Build();
@@ -69,14 +70,16 @@ namespace CarSales.Web
             app.UseAuthorization();
 
 
-            app.MapAreaControllerRoute(
-                name: "Owner",
-                areaName: "Owner",
-                pattern: "Owner/{controller=Home}/{action=Index}/{id?}");
+            app.MapControllerRoute(
+                name: "areas",
+                pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
 
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
+
+            app.MapRazorPages();
+
             //app.UseEndpoints(endpoints =>
             //{
             //    endpoints.MapControllerRoute(
@@ -90,7 +93,6 @@ namespace CarSales.Web
 
             //    endpoints.MapRazorPages();
             //});
-            app.MapRazorPages();
 
             app.Run();
         }

@@ -15,7 +15,7 @@ namespace CarSales.Core.Services
         }
         public async Task<ICollection<VehicleListViewModel>> GetAllVehiclesWhichAreForSaleAsync()
         {
-            var vehicles =await repository.AllReadOnly<Vehicle>()
+            var vehicles = await repository.AllReadOnly<Vehicle>()
                 .Where(v => v.OwnerId == null)
                 .Select(v => new VehicleListViewModel()
                 {
@@ -49,7 +49,7 @@ namespace CarSales.Core.Services
                     VehicleType = v.VehicleType,
                     VehicleRating = v.VehicleRating,
                     SalesmanId = v.SalesmanId,
-                    SalesmanName = v.Salesman != null ?  $"{v.Salesman.User.FirstName} {v.Salesman.User.LastName}" : null,
+                    SalesmanName = v.Salesman != null ? $"{v.Salesman.User.FirstName} {v.Salesman.User.LastName}" : null,
                     OwnerId = v.OwnerId,
                     OwnerName = v.Owner != null ? $"{v.Owner.User.FirstName} {v.Owner.User.LastName}" : null
                 }).FirstOrDefaultAsync();
@@ -61,8 +61,8 @@ namespace CarSales.Core.Services
             var owner = await repository.AllReadOnly<Owner>()
                 .FirstOrDefaultAsync(o => o.UserId == userId);
             var ownerVehicles = await repository.AllReadOnly<Vehicle>()
-                .Where(v => v.OwnerId == owner.Id).
-                Select(v => new VehicleListViewModel()
+                .Where(v => v.OwnerId == owner.Id)
+                .Select(v => new VehicleListViewModel()
                 {
                     Id = v.Id,
                     Name = $"{v.Brand} {v.Model} {v.YearProduced}",

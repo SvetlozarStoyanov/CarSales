@@ -10,6 +10,8 @@ namespace CarSales.Web.Extensions
         {
             services.AddScoped<IRepository, Repository>();
             services.AddScoped<IVehicleService, VehicleService>();
+            services.AddScoped<IOwnerService, OwnerService>();
+            services.AddScoped<IUserService, UserService>();
 
             return services;
         }

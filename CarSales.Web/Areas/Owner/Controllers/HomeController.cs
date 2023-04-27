@@ -1,12 +1,9 @@
 ﻿using CarSales.Web.Models;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
 namespace CarSales.Web.Areas.Owner.Controllers
 {
-    //[Area("Owner")]
-    //[Authorize(Roles = "Owner")]
     public class HomeController : BaseController
     {
         private readonly ILogger<HomeController> _logger;
@@ -15,7 +12,6 @@ namespace CarSales.Web.Areas.Owner.Controllers
         {
             _logger = logger;
         }
-        //[Route("/Owner/Home/Index/{id?}")]
         public IActionResult Index()
         {
             return View();
