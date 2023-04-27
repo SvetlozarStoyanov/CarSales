@@ -92,7 +92,7 @@ namespace CarSales.Web.Controllers
                 ModelState.AddModelError(string.Empty, "Invalid login!");
                 return View(model);
             }
-            
+
             return RedirectToAction(nameof(LoginRedirect));
         }
         public async Task<IActionResult> LoginRedirect()
