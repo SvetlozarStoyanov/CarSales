@@ -1,0 +1,33 @@
+﻿@using CarSales.Infrastructure.Data.Entities;
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
+
+<ul class="navbar-nav">
+    @if (SignInManager.IsSignedIn(User))
+    {
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">My vehicles</a>
+            <div class="dropdown-menu">
+                <a class="nav-link" asp-area="Salesman" asp-controller="Vehicles" asp-action="Mine">Owned</a>
+                <a class="nav-link" asp-area="Salesman" asp-controller="Vehicles" asp-action="MyVehiclesOnSale">On Sale</a>
+            </div>
+        </li>
+
+        @*<li class="nav-item">
+    <a class="nav-link">My account</a>
+    </li>*@
+        <li class="nav-item">
+            <a class="nav-link" asp-area="" asp-controller="Users" asp-action="Logout">Logout</a>
+        </li>
+    }
+    else
+    {
+        <li class="nav-item">
+            <a class="nav-link" asp-area="" asp-controller="Users" asp-action="Register">Register</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" asp-area="" asp-controller="Users" asp-action="Login">Login</a>
+        </li>
+    }
+</ul>
