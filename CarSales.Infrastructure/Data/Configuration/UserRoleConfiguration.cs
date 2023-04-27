@@ -32,6 +32,11 @@ namespace CarSales.Infrastructure.Data.Configuration
                     UserId = "926bee86-8bbd-43f6-bc1c-9639d43531a4",
                     RoleId = "bbea2448-c801-43d1-8b05-e3a2c22338d9"
                 },
+                new IdentityUserRole<string>()
+                {
+                    UserId = "66ccb670-f0dd-4aa1-a83d-8b2a0003bb50",
+                    RoleId = "bbea2448-c801-43d1-8b05-e3a2c22338d9"
+                },
                 //Salesmen
                 new IdentityUserRole<string>()
                 {
