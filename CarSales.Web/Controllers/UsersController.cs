@@ -60,10 +60,11 @@ namespace CarSales.Web.Controllers
             var result = await userManager.CreateAsync(user, model.Password);
             if (result.Succeeded)
             {
-                await signInManager.SignInAsync(user, false);
+                //await signInManager.SignInAsync(user, false);
                 await userManager.AddToRoleAsync(user, "Owner");
+                await ownerService.CreateOwnerAsync(user.Id);
                 TempData["success"] = "Successful registration!";
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction(nameof(Login));
             }
             ModelState.AddModelError(string.Empty, "Registration unsuccessful!");
 
