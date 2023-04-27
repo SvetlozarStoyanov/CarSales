@@ -1,4 +1,5 @@
 ﻿using CarSales.Core.Contracts;
+using CarSales.Web.Extensions;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CarSales.Web.Areas.Owner.Controllers
@@ -25,6 +26,12 @@ namespace CarSales.Web.Areas.Owner.Controllers
                 TempData["error"] = "Vehicle does not exist!";
                 return RedirectToAction("Index");
             }
+            return View(model);
+        }
+
+        public async Task<IActionResult> Mine()
+        {
+            var model = await vehicleService.GetOwnerVehiclesAsync(User.Id());
             return View(model);
         }
     }
