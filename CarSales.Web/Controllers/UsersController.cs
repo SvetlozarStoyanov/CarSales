@@ -13,11 +13,19 @@ namespace CarSales.Web.Controllers
         private readonly UserManager<User> userManager;
         private readonly SignInManager<User> signInManager;
         private readonly RoleManager<Role> roleManager;
-        public UsersController(UserManager<User> userManager, SignInManager<User> signInManager, RoleManager<Role> roleManager)
+        private readonly IOwnerService ownerService;
+        private readonly IUserService userService;
+        public UsersController(UserManager<User> userManager,
+            SignInManager<User> signInManager,
+            RoleManager<Role> roleManager,
+            IOwnerService ownerService,
+            IUserService userService)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
             this.roleManager = roleManager;
+            this.ownerService = ownerService;
+            this.userService = userService;
         }
 
 
