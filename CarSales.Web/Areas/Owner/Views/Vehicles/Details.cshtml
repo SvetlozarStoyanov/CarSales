@@ -17,15 +17,15 @@
         </p>
     </div>
     <div class="mt-3 mb-3">
-    @if (Model.SalesmanId != null)
-    {
-        <h2>Seller: @Model.SalesmanName</h2>
-        <h3 class="mt-3 mb-3">@Model.Price credits</h3>
-    }
-    else if (Model.OwnerId != null)
-    {
-        <h2>Owner: @Model.OwnerName</h2>
-    }
+        @if (Model.SalesmanId != null)
+        {
+            <h2>Seller: @Model.SalesmanName</h2>
+            <h3 class="mt-3 mb-3">@Model.Price credits</h3>
+        }
+        else if (Model.OwnerId != null)
+        {
+            <h2>Owner: @Model.OwnerName</h2>
+        }
     </div>
     <div class="text-center">
         @{
@@ -46,6 +46,18 @@
         <h4>
             @Model.VehicleRating
         </h4>
+        @if (Model.OwnerUserId != null && Model.OwnerUserId == User.Id())
+        {
+            var vehicleRatingModel = new VehicleChangeRatingModel()
+            {
+                Id = Model.Id,
+                OldRating = Model.VehicleRating
+            };
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                Change rating
+            </button>
+            <partial name="_ChangeRatingModal" model="@vehicleRatingModel" />
+        }
     </div>
     <div>
         <img style="width:500px;height:400px" src="@imageUrl" />
