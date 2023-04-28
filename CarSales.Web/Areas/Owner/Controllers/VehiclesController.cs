@@ -1,4 +1,5 @@
 ﻿using CarSales.Core.Contracts;
+using CarSales.Core.Models.Vehicles;
 using CarSales.Web.Extensions;
 using Microsoft.AspNetCore.Mvc;
 
@@ -33,6 +34,12 @@ namespace CarSales.Web.Areas.Owner.Controllers
         {
             var model = await vehicleService.GetOwnerVehiclesAsync(User.Id());
             return View(model);
+        }
+        [HttpPost]
+        public async Task<IActionResult> ChangeRating(VehicleChangeRatingModel model)
+        {
+            await vehicleService.ChangeVehicleRatingAsync(model.Id, (int)model.NewRating);
+            return RedirectToAction(nameof(Details), new { id = model.Id });
         }
     }
 
