@@ -1,5 +1,6 @@
 ﻿using CarSales.Core.Models.Vehicles;
 using CarSales.Infrastructure.Data.Entities;
+using CarSales.Infrastructure.Data.Enums;
 
 namespace CarSales.Core.Contracts
 {
@@ -32,5 +33,6 @@ namespace CarSales.Core.Contracts
         /// <returns><see cref="ICollection{VehicleListViewModel}"/></returns>
         Task<ICollection<VehicleListViewModel>> GetSalesmanVehiclesAsync(string userId);
 
+        Task ChangeVehicleRatingAsync(int id, int newRating);
     }
 }

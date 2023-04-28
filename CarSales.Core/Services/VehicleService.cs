@@ -2,6 +2,7 @@
 using CarSales.Core.Contracts;
 using CarSales.Core.Models.Vehicles;
 using CarSales.Infrastructure.Data.Entities;
+using CarSales.Infrastructure.Data.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace CarSales.Core.Services
@@ -51,6 +52,7 @@ namespace CarSales.Core.Services
                     SalesmanId = v.SalesmanId,
                     SalesmanName = v.Salesman != null ? $"{v.Salesman.User.FirstName} {v.Salesman.User.LastName}" : null,
                     OwnerId = v.OwnerId,
+                    OwnerUserId = v.Owner != null ? v.Owner.UserId : null,
                     OwnerName = v.Owner != null ? $"{v.Owner.User.FirstName} {v.Owner.User.LastName}" : null
                 }).FirstOrDefaultAsync();
             return vehicle;
@@ -92,6 +94,14 @@ namespace CarSales.Core.Services
                     SalesmanName = $"{v.Salesman.User.FirstName} {v.Salesman.User.LastName}"
                 }).ToListAsync();
             return salesmanVehicles;
+        }
+
+        public async Task ChangeVehicleRatingAsync(int id, int newRating)
+        {
+            var vehicle = await repository.GetByIdAsync<Vehicle>(id);
+            vehicle.VehicleRating = (VehicleRating)newRating;
+            repository.Update<Vehicle>(vehicle);
+            await repository.SaveChangesAsync();
         }
     }
 }
