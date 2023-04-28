@@ -24,6 +24,7 @@ namespace CarSales.Core.Models.Vehicles
         public VehicleType VehicleType { get; set; }
         public VehicleRating VehicleRating { get; set; }
         public int? OwnerId { get; set; }
+        public string? OwnerUserId { get; set; }
         public string? OwnerName { get; set; }
         public int? SalesmanId { get; set; }
         public string? SalesmanName { get; set; }
