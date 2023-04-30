@@ -106,9 +106,9 @@ namespace CarSales.Web.Controllers
             {
                 return Redirect("/Owner/Home/Index");
             }
-            else if (await userManager.IsInRoleAsync(user, "Admin"))
+            else if (await userManager.IsInRoleAsync(user, "Administrator"))
             {
-                return Redirect("/Administrator/Home/Index");
+                return Redirect("/Admin/Home/Index");
             }
             return RedirectToAction("Index", "Home");
         }
@@ -119,6 +119,14 @@ namespace CarSales.Web.Controllers
             await signInManager.SignOutAsync();
 
             return RedirectToAction("Index", "Vehicles");
+        }
+
+        public async Task<IActionResult> LogoutAndLogin()
+        {
+            var user = await userManager.GetUserAsync(User);
+            await signInManager.SignOutAsync();
+            await signInManager.SignInAsync(user, false);
+            return RedirectToAction("Index", "Home");
         }
         public IActionResult AccessDenied()
         {
