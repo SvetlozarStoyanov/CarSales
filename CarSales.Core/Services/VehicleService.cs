@@ -49,12 +49,16 @@ namespace CarSales.Core.Services
                     Price = v.Price,
                     VehicleType = v.VehicleType,
                     VehicleRating = v.VehicleRating,
-                    SalesmanId = v.SalesmanId,
-                    SalesmanName = v.Salesman != null ? $"{v.Salesman.User.FirstName} {v.Salesman.User.LastName}" : null,
                     OwnerId = v.OwnerId,
                     OwnerUserId = v.Owner != null ? v.Owner.UserId : null,
-                    OwnerName = v.Owner != null ? $"{v.Owner.User.FirstName} {v.Owner.User.LastName}" : null
-                }).FirstOrDefaultAsync();
+                    OwnerName = v.Owner != null ? $"{v.Owner.User.FirstName} {v.Owner.User.LastName}" : null,
+                    SalesmanId = v.SalesmanId,
+                    SalesmanUserId = v.Salesman != null ? v.Salesman.UserId : null,
+                    SalesmanName = v.Salesman != null ? $"{v.Salesman.User.FirstName} {v.Salesman.User.LastName}" : null,
+                    VehicleChangeRatingModel = new VehicleChangeRatingModel(v.Id, v.VehicleRating)
+                })
+                .FirstOrDefaultAsync();
+
             return vehicle;
         }
 
@@ -82,7 +86,7 @@ namespace CarSales.Core.Services
             var salesman = await repository.AllReadOnly<Salesman>()
                 .FirstOrDefaultAsync(o => o.UserId == userId);
             var salesmanVehicles = await repository.AllReadOnly<Vehicle>()
-                .Where(v => v.OwnerId == salesman.Id).
+                .Where(v => v.SalesmanId == salesman.Id).
                 Select(v => new VehicleListViewModel()
                 {
                     Id = v.Id,
@@ -96,6 +100,8 @@ namespace CarSales.Core.Services
             return salesmanVehicles;
         }
 
+
+
         public async Task ChangeVehicleRatingAsync(int id, int newRating)
         {
             var vehicle = await repository.GetByIdAsync<Vehicle>(id);
@@ -103,5 +109,7 @@ namespace CarSales.Core.Services
             repository.Update<Vehicle>(vehicle);
             await repository.SaveChangesAsync();
         }
+
+
     }
 }
