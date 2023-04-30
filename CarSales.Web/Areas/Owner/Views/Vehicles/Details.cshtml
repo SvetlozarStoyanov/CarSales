@@ -46,17 +46,12 @@
         <h4>
             @Model.VehicleRating
         </h4>
-        @if (Model.OwnerUserId != null && Model.OwnerUserId == User.Id())
+        @if (Model.VehicleChangeRatingModel != null && Model.OwnerUserId == User.Id())
         {
-            var vehicleRatingModel = new VehicleChangeRatingModel()
-            {
-                Id = Model.Id,
-                OldRating = Model.VehicleRating
-            };
-            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#changeRating">
                 Change rating
             </button>
-            <partial name="_ChangeRatingModal" model="@vehicleRatingModel" />
+            <partial name="_ChangeRatingModal" model="@Model.VehicleChangeRatingModel" />
         }
     </div>
     <div>
