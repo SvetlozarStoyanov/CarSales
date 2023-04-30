@@ -15,6 +15,7 @@ namespace CarSales.Infrastructure.Data
         public DbSet<Owner> Owners { get; set; } = null!;
         public DbSet<Vehicle> Vehicles { get; set; } = null!;
         public DbSet<Sale> Sales { get; set; } = null!;
+        public DbSet<RoleRequest> RoleRequests { get; set; } = null!;
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.Entity<Vehicle>()
