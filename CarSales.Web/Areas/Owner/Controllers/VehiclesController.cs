@@ -35,6 +35,7 @@ namespace CarSales.Web.Areas.Owner.Controllers
             var model = await vehicleService.GetOwnerVehiclesAsync(User.Id());
             return View(model);
         }
+
         [HttpPost]
         public async Task<IActionResult> ChangeRating(VehicleChangeRatingModel model)
         {
