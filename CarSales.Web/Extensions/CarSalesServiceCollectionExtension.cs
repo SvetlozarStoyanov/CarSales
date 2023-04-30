@@ -12,6 +12,9 @@ namespace CarSales.Web.Extensions
             services.AddScoped<IVehicleService, VehicleService>();
             services.AddScoped<IOwnerService, OwnerService>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IRoleService, RoleService>();
+            services.AddScoped<IRoleRequestService, RoleRequestService>();
+            services.AddScoped<ISalesmanService, SalesmanService>();
 
             return services;
         }
