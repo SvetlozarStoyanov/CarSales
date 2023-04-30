@@ -14,6 +14,7 @@ namespace CarSales.Infrastructure.Data.Entities
 
         [Key]
         public int Id { get; set; }
+        public bool IsActive { get; set; } = true;
         [ForeignKey(nameof(Entities.User.Id))]
         public string UserId { get; set; } = null!;
         public virtual User User { get; set; }
