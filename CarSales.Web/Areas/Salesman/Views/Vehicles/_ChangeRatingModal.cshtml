@@ -1,0 +1,51 @@
+﻿@model VehicleChangeRatingModel
+
+<!-- Modal -->
+<form asp-area="Salesman" asp-controller="Vehicles" asp-action="ChangeRating" asp-route-id="@Model.Id" method="post">
+    <div class="modal fade" id="changeRating" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="changeRatingLabel">Change Rating</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    @{
+                        var ratingAsInt = (int)Model.OldRating + 1;
+                        var defaultInputValue = ratingAsInt - 1;
+                        var counter = 0;
+                        <input id="newRating" value="@defaultInputValue" asp-for="@Model.NewRating" hidden />
+                        for (int i = 0; i < ratingAsInt; i++)
+                        {
+                            <span class="m-2 p-2">
+                                <button class="rating-change-button bg-transparent border-0" id="star-@counter" value="@counter">
+                                    <i style="font-size:36px;color:goldenrod" class="bi bi-star-fill"></i>
+                                </button>
+                            </span>
+                            counter++;
+                        }
+                        for (int i = 0; i < 5 - ratingAsInt; i++)
+                        {
+                            <span class="m-2 p-2">
+                                <button class="rating-change-button bg-transparent border-0" id="star-@counter" value="@counter">
+                                    <i style="font-size:36px;color:goldenrod" class="bi bi-star"></i>
+                                </button>
+                            </span>
+                            counter++;
+                        }
+                        <h2 class="mt-5 mb-5" id="currRating">@Model.OldRating</h2>
+
+                    }
+                </div>
+                <div class="modal-footer text-center">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Confirm</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<script src="~/js/Vehicles/changeVehicleRating.js">
+
+</script>
