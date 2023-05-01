@@ -85,10 +85,15 @@
             </tr>
         </tbody>
     </table>
-    @*@if (Model.SalesmanId != null)
+    @if (Model.SalesmanId != null)
     {
-    <a class="btn btn-success" asp-controller="Vehicles" asp-action="Buy" asp-route-id="@Model.Id">
-    Buy
-    </a>
-    }*@
+        <form asp-area="Owner" asp-controller="Vehicles" asp-action="Buy" asp-route-id="@Model.Id" method="post">
+
+            <div class="text-center">
+                <button type="submit" class="btn btn-success btn-lg" >
+                    Buy
+                </button>
+            </div>
+        </form>
+    }
 </section>
