@@ -42,6 +42,20 @@ namespace CarSales.Web.Areas.Owner.Controllers
             await vehicleService.ChangeVehicleRatingAsync(model.Id, (int)model.NewRating);
             return RedirectToAction(nameof(Details), new { id = model.Id });
         }
+
+        [HttpPost]
+        public async Task<IActionResult> Buy(int id)
+        {
+            try
+            {
+                await vehicleService.BuyVehicleAsync(id, User.Id());
+            }
+            catch (Exception e)
+            {
+                TempData["error"] = e.Message;
+            }
+            return RedirectToAction(nameof(Index));
+        }
     }
 
 }
