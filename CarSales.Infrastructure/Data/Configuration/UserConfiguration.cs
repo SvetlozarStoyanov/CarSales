@@ -40,6 +40,7 @@ namespace CarSales.Infrastructure.Data.Configuration
                     UserName = name,
                     NormalizedUserName = name.ToUpper(),
                     Email = $"{name}@gmail.com",
+                    Credits = 50000m,
                     NormalizedEmail = $"{name.ToUpper()}@GMAIL.COM",
                 };
                 user.PasswordHash = hasher.HashPassword(user, password);
