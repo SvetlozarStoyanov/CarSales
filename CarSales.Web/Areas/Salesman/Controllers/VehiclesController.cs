@@ -49,5 +49,27 @@ namespace CarSales.Web.Areas.Salesman.Controllers
             await vehicleService.ChangeVehicleRatingAsync(model.Id, (int)model.NewRating);
             return RedirectToAction(nameof(Details), new { id = model.Id });
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Sell(int id)
+        {
+            var model = await vehicleService.CreateVehicleSellModel(id);
+            
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Sell(VehicleSellModel model)
+        {
+            try
+            {
+                await vehicleService.PutVehicleForSaleAsync(model);
+            }
+            catch (Exception e)
+            {
+
+            }
+            return RedirectToAction(nameof(MyVehiclesOnSale));
+        }
     }
 }
