@@ -33,6 +33,28 @@ namespace CarSales.Core.Contracts
         /// <returns><see cref="ICollection{VehicleListViewModel}"/></returns>
         Task<ICollection<VehicleListViewModel>> GetSalesmanVehiclesAsync(string userId);
 
+        /// <summary>
+        /// Changes the <see cref="VehicleRating"/> of vehicle with given <paramref name="id"/>
+        /// with <paramref name="newRating"/>
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="newRating"></param>
+        /// <returns></returns>
         Task ChangeVehicleRatingAsync(int id, int newRating);
+
+        /// <summary>
+        /// <see cref="Vehicle"/> with <paramref name="id"/> is purchased by 
+        /// <see cref="Owner"/> with <paramref name="buyerUserId"/> and added to his <see cref="Owner.Vehicles"/> collection
+        /// <see cref="User.Credits"/> are transferred from <see cref="Owner"/> to <see cref="Salesman"/> 
+        /// who was selling the <see cref="Vehicle"/>
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="buyerUserId"></param>
+        /// <returns></returns>
+        Task BuyVehicleAsync(int id, string buyerUserId);
+
+        Task<VehicleSellModel> CreateVehicleSellModel(int id);
+
+        Task PutVehicleForSaleAsync(VehicleSellModel model);
     }
 }
