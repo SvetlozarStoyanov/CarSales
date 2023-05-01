@@ -240,8 +240,8 @@ namespace CarSales.Infrastructure.Data.Migrations
                         {
                             Id = "cbed6d2a-e60a-49df-a6e3-982ccd980393",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "8aa5bbd9-8179-45a7-8303-d299c3986f01",
-                            Credits = 0m,
+                            ConcurrencyStamp = "eabdbbf4-cc43-460a-a2ca-f4ba8c60c463",
+                            Credits = 50000m,
                             Email = "Admin@gmail.com",
                             EmailConfirmed = false,
                             FirstName = "Admin",
@@ -249,9 +249,9 @@ namespace CarSales.Infrastructure.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@GMAIL.COM",
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAIAAYagAAAAEKiGQhcfyaASUyV+IvIxbMU4n8O30fpGe05iKKVjpsH06xkk42NsPh7FRf/XUHOwxA==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEGDgD9x8+X2reb6qT+dbFK1YtafluoIFPtgnh8RcXhRY/P18URvsGEU3CBjAwbc6cg==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "fb19cdbc-1ec9-443e-a23a-43849223dbef",
+                            SecurityStamp = "d047adca-9f7f-4181-8727-4225c8c4a88b",
                             TwoFactorEnabled = false,
                             UserName = "Admin"
                         },
@@ -259,8 +259,8 @@ namespace CarSales.Infrastructure.Data.Migrations
                         {
                             Id = "b5fef437-f504-46d2-926d-3158e54e1932",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "308c3470-8607-46a2-b5d3-9bf19ce628fc",
-                            Credits = 0m,
+                            ConcurrencyStamp = "a47dd363-09d2-4d29-8445-58e86650fc8a",
+                            Credits = 50000m,
                             Email = "Owner@gmail.com",
                             EmailConfirmed = false,
                             FirstName = "Owner",
@@ -268,9 +268,9 @@ namespace CarSales.Infrastructure.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "OWNER@GMAIL.COM",
                             NormalizedUserName = "OWNER",
-                            PasswordHash = "AQAAAAIAAYagAAAAECcNy6aprgv4Y7LReTRw7uaVFYHApUaEnkx5DybtqLhC4K6FZK4JhPXq6j1LO4gfzw==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEE4TqVvmkwLirgBQgBdiXKCugX5mJeVJSpiMtuHIgm38P1bsRodAjpXRmzieOYCnzQ==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "25b51e02-320a-4a79-ad4c-ed5fca145216",
+                            SecurityStamp = "ebcc4264-98e3-4b41-8753-b7883d4082f3",
                             TwoFactorEnabled = false,
                             UserName = "Owner"
                         },
@@ -278,8 +278,8 @@ namespace CarSales.Infrastructure.Data.Migrations
                         {
                             Id = "926bee86-8bbd-43f6-bc1c-9639d43531a4",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "32342018-d1ca-4afb-ac40-19a596ff7de7",
-                            Credits = 0m,
+                            ConcurrencyStamp = "81c23125-067d-4161-8ddb-6dfcd88451e4",
+                            Credits = 50000m,
                             Email = "Owner2@gmail.com",
                             EmailConfirmed = false,
                             FirstName = "Owner2",
@@ -287,9 +287,9 @@ namespace CarSales.Infrastructure.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "OWNER2@GMAIL.COM",
                             NormalizedUserName = "OWNER2",
-                            PasswordHash = "AQAAAAIAAYagAAAAEH1TFipE7N1SCY3zIB5kzOkgPxR6z89dizGzYvye3TInTAPgvCIoye4loqjs1VGRwQ==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEObv5FCyWhP7rWxvZknG7HEqndeeVRKHSoTe8NGPKTXFSSfLE//wCHXpb5US3HYNlg==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "9b2a5058-0121-4173-be53-372d7ba1a780",
+                            SecurityStamp = "8bb6ca25-14d4-4489-aa62-fa64dc07aae8",
                             TwoFactorEnabled = false,
                             UserName = "Owner2"
                         },
@@ -297,8 +297,8 @@ namespace CarSales.Infrastructure.Data.Migrations
                         {
                             Id = "66ccb670-f0dd-4aa1-a83d-8b2a0003bb50",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "88b91544-538e-4b8a-84d2-35e62bf32de2",
-                            Credits = 0m,
+                            ConcurrencyStamp = "69d1fd2c-89f3-4041-972b-1197d2756f3b",
+                            Credits = 50000m,
                             Email = "Salesman@gmail.com",
                             EmailConfirmed = false,
                             FirstName = "Salesman",
@@ -306,9 +306,9 @@ namespace CarSales.Infrastructure.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "SALESMAN@GMAIL.COM",
                             NormalizedUserName = "SALESMAN",
-                            PasswordHash = "AQAAAAIAAYagAAAAEFv6wcI6HdN7zfZSfB2dRQ5B+DLBWztUfA0VHhjn1IjEGEa0CLniBAYkrv9Rw+QP/Q==",
+                            PasswordHash = "AQAAAAIAAYagAAAAECYKtjl+aSptD7zQ5Z0ILM2pffljIXhTRdC5SjVBPfFbIVuerdeNAHctWzqFf5TSGA==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "63eca998-dbce-44b3-bb29-82b42bb24e27",
+                            SecurityStamp = "315db7d9-cbd5-41bb-a7df-0c9b15c51bf1",
                             TwoFactorEnabled = false,
                             UserName = "Salesman"
                         });
@@ -328,7 +328,8 @@ namespace CarSales.Infrastructure.Data.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("ImageUrl")
                         .HasColumnType("nvarchar(max)");
