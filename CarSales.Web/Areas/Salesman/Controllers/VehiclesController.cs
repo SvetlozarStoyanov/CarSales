@@ -50,11 +50,18 @@ namespace CarSales.Web.Areas.Salesman.Controllers
             return RedirectToAction(nameof(Details), new { id = model.Id });
         }
 
+        public async Task<IActionResult> Buy(int id)
+        {
+            await vehicleService.BuyVehicleAsync(id, User.Id());
+            return RedirectToAction(nameof(Details), new { id = id });
+        }
+
+
         [HttpGet]
         public async Task<IActionResult> Sell(int id)
         {
             var model = await vehicleService.CreateVehicleSellModel(id);
-            
+
             return View(model);
         }
 
@@ -63,6 +70,11 @@ namespace CarSales.Web.Areas.Salesman.Controllers
         {
             try
             {
+                if (model.OldPrice > model.Price)
+                {
+                    model = await vehicleService.CreateVehicleSellModel(model.Id);
+                    return View(model);
+                }
                 await vehicleService.PutVehicleForSaleAsync(model);
             }
             catch (Exception e)
