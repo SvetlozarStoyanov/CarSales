@@ -85,10 +85,16 @@
             </tr>
         </tbody>
     </table>
-    @if (Model.OwnerUserId != User.Id())
+    @if (Model.OwnerUserId == User.Id() && Model.OwnerId != null)
     {
         <a class="btn btn-success" asp-area="Salesman" asp-controller="Vehicles" asp-action="Sell" asp-route-id="@Model.Id">
             Sell
+        </a>
+    }
+    else if (Model.OwnerUserId != User.Id() && Model.SalesmanUserId != User.Id())
+    {
+        <a class="btn btn-success" asp-area="Salesman" asp-controller="Vehicles" asp-action="Buy" asp-route-id="@Model.Id">
+            Buy
         </a>
     }
 
