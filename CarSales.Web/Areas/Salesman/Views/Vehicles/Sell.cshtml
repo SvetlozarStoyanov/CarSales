@@ -15,8 +15,9 @@
                 </div>
                 <div class="form-group">
                     <label asp-for="@Model.Price" class="form-label col-form-label-lg"></label>
-                    <input type="number" asp-for="@Model.Price" value="@Model.OldPrice" class="form-control" data-val="true" data-val-number="The field Price must be a number." data-val-range="Price cannot be greater than the original price!" data-val-range-max="@Model.OldPrice" data-val-range-min="1" data-val-required="The Price field is required." id="Price" name="Price" />
-                    <span asp-validation-for="@Model.Price" class="small text-danger"></span>
+                    <input value="@Model.OldPrice" asp-for="@Model.OldPrice" id="oldPrice" hidden/>
+                    <input type="number" asp-for="@Model.Price" value="@Model.OldPrice" class="form-control" data-val="true" data-val-number="The field Price must be a number." data-val-range="Price cannot be greater than the original price!" data-val-range-max="@Model.OldPrice" data-val-range-min="1" data-val-required="The Price field is required." id="price" name="Price" />
+                    <span asp-validation-for="@Model.Price" class="small text-danger" id="priceValidation"></span>
                 </div>
                 <div class="form-group">
                     <label asp-for="@Model.VehicleRating" class="form-label col-form-label-lg">Rating</label>
@@ -28,9 +29,10 @@
                     </select>
                 </div>
                 <div class="text-center mt-4 mb-4">
-                    <button class="btn btn-lg btn-success">Sell</button>
+                    <button class="btn btn-lg btn-success" id="submitBtn">Sell</button>
                 </div>
             </form>
         </section>
     </div>
 </div>
+<script src="~/js/Vehicles/sellVehicle.js"></script>
