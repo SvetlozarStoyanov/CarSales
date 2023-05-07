@@ -15,10 +15,10 @@ namespace CarSales.Core.Services
         {
             this.repository = repository;
         }
-        public async Task<ICollection<VehicleListViewModel>> GetAllVehiclesWhichAreForSaleAsync()
+        public async Task<ICollection<VehicleListViewModel>> GetAllVehiclesForSaleAsync()
         {
             var vehicles = await repository.AllReadOnly<Vehicle>()
-                .Where(v => v.OwnerId == null)
+                .Where(v => v.SalesmanId != null)
                 .Select(v => new VehicleListViewModel()
                 {
                     Id = v.Id,
@@ -27,7 +27,29 @@ namespace CarSales.Core.Services
                     VehicleType = v.VehicleType,
                     VehicleRating = v.VehicleRating,
                     Price = v.Price,
+                    SalesmanId = v.SalesmanId,
+                    SalesmanUserId = v.Salesman.UserId,
                     SalesmanName = $"{v.Salesman.User.FirstName} {v.Salesman.User.LastName}"
+                })
+                .ToListAsync();
+            return vehicles;
+        }
+
+        public async Task<ICollection<VehicleListViewModel>> GetAllImportedVehiclesAsync()
+        {
+            var vehicles = await repository.AllReadOnly<Vehicle>()
+                .Where(v => v.ImporterId != null)
+                .Select(v => new VehicleListViewModel()
+                {
+                    Id = v.Id,
+                    Name = $"{v.Brand} {v.Model} {v.YearProduced}",
+                    ImageUrl = v.ImageUrl,
+                    VehicleType = v.VehicleType,
+                    VehicleRating = v.VehicleRating,
+                    Price = v.Price,
+                    ImporterId = v.ImporterId,
+                    ImporterUserId = v.Importer.UserId,
+                    ImporterName = $"{v.Importer.User.FirstName} {v.Importer.User.LastName}"
                 })
                 .ToListAsync();
             return vehicles;
@@ -56,6 +78,9 @@ namespace CarSales.Core.Services
                     SalesmanId = v.SalesmanId,
                     SalesmanUserId = v.Salesman != null ? v.Salesman.UserId : null,
                     SalesmanName = v.Salesman != null ? $"{v.Salesman.User.FirstName} {v.Salesman.User.LastName}" : null,
+                    ImporterId = v.SalesmanId,
+                    ImporterUserId = v.Importer != null ? v.Importer.UserId : null,
+                    ImporterName = v.Importer != null ? $"{v.Importer.User.FirstName} {v.Importer.User.LastName}" : null,
                     VehicleChangeRatingModel = new VehicleChangeRatingModel(v.Id, v.VehicleRating)
                 })
                 .FirstOrDefaultAsync();
@@ -101,6 +126,26 @@ namespace CarSales.Core.Services
             return salesmanVehicles;
         }
 
+        public async Task<ICollection<VehicleListViewModel>> GetImporterVehiclesAsync(string userId)
+        {
+            var importer = await repository.AllReadOnly<Importer>()
+                .FirstOrDefaultAsync(o => o.UserId == userId);
+
+            var importerVehicles = await repository.AllReadOnly<Vehicle>()
+                .Where(v => v.SalesmanId == importer.Id).
+                Select(v => new VehicleListViewModel()
+                {
+                    Id = v.Id,
+                    Name = $"{v.Brand} {v.Model} {v.YearProduced}",
+                    ImageUrl = v.ImageUrl,
+                    VehicleType = v.VehicleType,
+                    VehicleRating = v.VehicleRating,
+                    Price = v.Price,
+                    SalesmanName = $"{v.Importer.User.FirstName} {v.Importer.User.LastName}"
+                }).ToListAsync();
+
+            return importerVehicles;
+        }
 
 
         public async Task ChangeVehicleRatingAsync(int id, int newRating)
@@ -111,7 +156,7 @@ namespace CarSales.Core.Services
             await repository.SaveChangesAsync();
         }
 
-        public async Task BuyVehicleAsync(int id, string buyerUserId)
+        public async Task BuyVehicleFromSalesmanAsync(int id, string buyerUserId)
         {
             var vehicle = await repository.All<Vehicle>()
                 .Where(v => v.Id == id)
@@ -148,9 +193,44 @@ namespace CarSales.Core.Services
             await repository.SaveChangesAsync();
         }
 
+        public async Task BuyVehicleFromImporterAsync(int id, string buyerUserId)
+        {
+            var vehicle = await repository.All<Vehicle>()
+                .Where(v => v.Id == id)
+                .Include(v => v.Importer)
+                .ThenInclude(i => i.User)
+                .FirstOrDefaultAsync();
+            var importer = vehicle.Importer;
+            var buyer = await repository.All<Owner>()
+                .Where(b => b.UserId == buyerUserId)
+                .Include(o => o.User)
+                .FirstOrDefaultAsync();
 
+            if (buyer.User.Credits < vehicle.Price)
+            {
+                throw new InsufficientCreditsException("You do not have enough credits to purchase this item!");
+            }
+            if (importer == null)
+            {
+                throw new ArgumentNullException("Item is not for sale!");
+            }
+            vehicle.OwnerId = buyer.Id;
+            vehicle.ImporterId = null;
 
-        public async Task<VehicleSellModel> CreateVehicleSellModel(int id)
+            buyer.User.Credits -= vehicle.Price;
+            importer.User.Credits += vehicle.Price;
+            var sale = new Sale()
+            {
+                OwnerId = buyer.Id,
+                ImporterId = importer.Id,
+                VehicleId = vehicle.Id,
+                SalePrice = vehicle.Price,
+            };
+            await repository.AddAsync<Sale>(sale);
+            await repository.SaveChangesAsync();
+        }
+
+        public async Task<VehicleSellModel> CreateVehicleSellModelAsync(int id)
         {
             var vehicle = await repository.AllReadOnly<Vehicle>()
                 .Where(v => v.Id == id)
@@ -188,6 +268,58 @@ namespace CarSales.Core.Services
             vehicle.OwnerId = null;
             vehicle.SalesmanId = salesman.Id;
 
+            await repository.SaveChangesAsync();
+        }
+
+        public async Task EditVehicleForSaleAsync(VehicleSellModel model)
+        {
+            var vehicle = await repository.All<Vehicle>()
+                .Where(v => v.Id == model.Id)
+                .Include(v => v.Owner)
+                .ThenInclude(sm => sm.User)
+                .FirstOrDefaultAsync();
+
+            vehicle.Description = model.Description;
+            vehicle.Price = model.Price;
+            vehicle.VehicleRating = model.VehicleRating;
+
+            await repository.SaveChangesAsync();
+        }
+
+        public async Task<VehicleImportModel> CreateVehicleImportModelAsync(string userId)
+        {
+            var importer = await repository.AllReadOnly<Importer>()
+                .FirstOrDefaultAsync(i => i.UserId == userId);
+            var vehicle = new VehicleImportModel()
+            {
+                ImporterId = importer.Id,
+                VehicleTypes = Enum.GetValues<VehicleType>().ToList(),
+                VehicleRatings = Enum.GetValues<VehicleRating>().ToList()
+            };
+            return vehicle;
+        }
+
+        public async Task ImportVehicleAsync(VehicleImportModel model)
+        {
+            var vehicle = new Vehicle()
+            {
+                Brand = model.Brand,
+                Model = model.ModelName,
+                Description = model.Description,
+                YearProduced = model.YearProduced,
+                TopSpeed = model.TopSpeed,
+                KilometersDriven = model.KilometersDriven,
+                Price = model.Price,
+                VehicleType = model.VehicleType,
+                VehicleRating = model.VehicleRating,
+                ImporterId = model.ImporterId
+            };
+            var importer = await repository.All<Importer>()
+                .Where(i => i.Id == model.ImporterId)
+                .Include(i => i.User)
+                .FirstOrDefaultAsync();
+            importer.User.Credits -= model.Price / 2;
+            await repository.AddAsync<Vehicle>(vehicle);
             await repository.SaveChangesAsync();
         }
     }
