@@ -13,6 +13,7 @@ namespace CarSales.Infrastructure.Data
         }
         public DbSet<Salesman> Salesmen { get; set; } = null!;
         public DbSet<Owner> Owners { get; set; } = null!;
+        public DbSet<Importer> Importers { get; set; } = null!;
         public DbSet<Vehicle> Vehicles { get; set; } = null!;
         public DbSet<Sale> Sales { get; set; } = null!;
         public DbSet<RoleRequest> RoleRequests { get; set; } = null!;
@@ -28,6 +29,11 @@ namespace CarSales.Infrastructure.Data
                 .WithMany(v => v.Vehicles)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            builder.Entity<Vehicle>()
+                .HasOne(b => b.Importer)
+                .WithMany(v => v.Vehicles)
+                .OnDelete(DeleteBehavior.Restrict);
+
             builder.Entity<Owner>()
                 .HasMany(b => b.Vehicles)
                 .WithOne(v => v.Owner)
@@ -36,6 +42,11 @@ namespace CarSales.Infrastructure.Data
             builder.Entity<Salesman>()
                 .HasMany(b => b.Vehicles)
                 .WithOne(v => v.Salesman)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<Importer>()
+                .HasMany(b => b.Vehicles)
+                .WithOne(v => v.Importer)
                 .OnDelete(DeleteBehavior.Restrict);
 
             builder.Entity<Sale>()
@@ -61,6 +72,7 @@ namespace CarSales.Infrastructure.Data
             builder.ApplyConfiguration(new UserRoleConfiguration());
             builder.ApplyConfiguration(new SalesmanConfiguration());
             builder.ApplyConfiguration(new OwnerConfiguration());
+            builder.ApplyConfiguration(new ImporterConfiguration());
             builder.ApplyConfiguration(new VehicleConfiguration());
             builder.ApplyConfiguration(new SaleConfiguration());
 
