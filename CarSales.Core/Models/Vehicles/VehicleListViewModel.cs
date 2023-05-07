@@ -12,6 +12,9 @@ namespace CarSales.Core.Models.Vehicles
         public decimal Price { get; set; }
         public int? SalesmanId { get; set; }
         public string? SalesmanName { get; set; }
-
+        public string? SalesmanUserId { get; set; }
+        public int? ImporterId { get; set; }
+        public string? ImporterName { get; set; }
+        public string? ImporterUserId { get; set; }
     }
 }

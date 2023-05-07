@@ -26,10 +26,12 @@ namespace CarSales.Core.Models.Vehicles
         public int? OwnerId { get; set; }
         public string? OwnerUserId { get; set; }
         public string? OwnerName { get; set; }
-        public VehicleChangeRatingModel? VehicleChangeRatingModel { get; set; }
         public int? SalesmanId { get; set; }
         public string? SalesmanUserId { get; set; }
-
         public string? SalesmanName { get; set; }
+        public int? ImporterId { get; set; }
+        public string? ImporterUserId { get; set; }
+        public string? ImporterName { get; set; }
+        public VehicleChangeRatingModel? VehicleChangeRatingModel { get; set; }
     }
 }
