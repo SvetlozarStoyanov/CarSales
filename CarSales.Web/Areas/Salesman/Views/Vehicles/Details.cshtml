@@ -46,7 +46,7 @@
         <h4>
             @Model.VehicleRating
         </h4>
-        @if (Model.SalesmanUserId == User.Id())
+        @if (Model.OwnerUserId == User.Id() || Model.SalesmanUserId == User.Id())
         {
             <button type="button" class="btn btn-primary mt-3 mb-3" data-bs-toggle="modal" data-bs-target="#changeRating">
                 Change rating
@@ -91,9 +91,15 @@
             Sell
         </a>
     }
-    else if (Model.OwnerUserId != User.Id() && Model.SalesmanUserId != User.Id())
+    else if (Model.SalesmanUserId != null && Model.SalesmanUserId != User.Id())
     {
-        <a class="btn btn-success" asp-area="Salesman" asp-controller="Vehicles" asp-action="Buy" asp-route-id="@Model.Id">
+        <a class="btn btn-success" asp-area="Salesman" asp-controller="Vehicles" asp-action="BuyFromSalesman" asp-route-id="@Model.Id">
+            Buy
+        </a>
+    }
+    else if (Model.ImporterUserId != null && Model.ImporterUserId != User.Id())
+    {
+        <a class="btn btn-success" asp-area="Salesman" asp-controller="Vehicles" asp-action="BuyFromImporter" asp-route-id="@Model.Id">
             Buy
         </a>
     }

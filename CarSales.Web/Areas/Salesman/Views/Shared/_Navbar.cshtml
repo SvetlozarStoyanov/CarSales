@@ -1,4 +1,4 @@
-﻿<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-primary  box-shadow mb-3">
+﻿<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-primary box-shadow mb-3">
     <div class="container-fluid">
         <a class="navbar-brand" asp-area="Salesman" asp-controller="Home" asp-action="Index">Car Sales</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
@@ -10,8 +10,15 @@
                 <li class="nav-item">
                     <a class="nav-link" asp-area="Salesman" asp-controller="Home" asp-action="Index">Home</a>
                 </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Vehicles</a>
+                    <div class="dropdown-menu">
+                        <a class="nav-link" asp-area="Salesman" asp-controller="Vehicles" asp-action="Index">For sale</a>
+                        <a class="nav-link" asp-area="Salesman" asp-controller="Vehicles" asp-action="AllImportedVehicles">Imported</a>
+                    </div>
+                </li>
                 <li class="nav-item">
-                    <a class="nav-link" asp-area="Salesman" asp-controller="Vehicles" asp-action="Index">Vehicles</a>
+                    <a class="nav-link" asp-area="Salesman" asp-controller="RoleRequests" asp-action="Index">Request role</a>
                 </li>
             </ul>
             <partial name="_LoginPartial" />

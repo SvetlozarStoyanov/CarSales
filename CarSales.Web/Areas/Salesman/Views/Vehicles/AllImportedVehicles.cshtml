@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<VehicleListViewModel>
 @{
-    ViewData["Title"] = "All Vehicles for sale";
+    ViewData["Title"] = "All Imported Vehicles";
 }
 
 <h1 class="text-center">@ViewData["Title"]</h1>
@@ -20,10 +20,9 @@
                 Price
             </td>
             <td>
-                Seller
+                Importer
             </td>
             <td>
-                
             </td>
         </tr>
     </thead>
@@ -44,7 +43,7 @@
                     @vehicle.Price
                 </td>
                 <td>
-                    @vehicle.SalesmanName
+                    @vehicle.ImporterName
                 </td>
                 <td>
                     <a class="btn btn-primary" asp-area="Salesman" asp-controller="Vehicles" asp-action="Details" asp-route-id="@vehicle.Id">
