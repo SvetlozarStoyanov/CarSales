@@ -1,0 +1,96 @@
+﻿@model VehicleViewModel
+@{
+    ViewData["Title"] = $"{Model.Brand} {Model.Model}";
+    string imageUrl = Model.ImageUrl ?? $"/img/VehicleTypes/{Model.VehicleType}.png";
+}
+
+<section class="text-center">
+    <h1>
+        @Model.Brand @Model.Model
+    </h1>
+    <div class="mt-3 mb-3">
+        <p>
+            @Model.Description
+        </p>
+        <p>
+            @Model.VehicleType
+        </p>
+    </div>
+    <div class="mt-3 mb-3">
+        @if (Model.SalesmanId != null)
+        {
+            <h2>Seller: @Model.SalesmanName</h2>
+            <h3 class="mt-3 mb-3">@Model.Price credits</h3>
+        }
+        else if (Model.OwnerId != null)
+        {
+            <h2>Owner: @Model.OwnerName</h2>
+        }
+    </div>
+    <div class="text-center">
+        @{
+            var ratingAsInt = (int)Model.VehicleRating + 1;
+            for (int i = 0; i < ratingAsInt; i++)
+            {
+                <span class="m-2 p-2">
+                    <i style="font-size:45px;color:goldenrod" class="bi bi-star-fill"></i>
+                </span>
+            }
+            for (int i = 0; i < 5 - ratingAsInt; i++)
+            {
+                <span class="m-2 p-2">
+                    <i style="font-size:45px;color:goldenrod" class="bi bi-star"></i>
+                </span>
+            }
+        }
+        <h4>
+            @Model.VehicleRating
+        </h4>
+        @if (Model.OwnerUserId == User.Id() || Model.SalesmanUserId == User.Id() || Model.ImporterUserId == User.Id())
+        {
+            <button type="button" class="btn btn-primary mt-3 mb-3" data-bs-toggle="modal" data-bs-target="#changeRating">
+                Change rating
+            </button>
+            <partial name="_ChangeRatingModal" model="@Model.VehicleChangeRatingModel" />
+        }
+    </div>
+    <div class="mt-3 mb-3">
+        <img style="width:500px;height:400px" src="@imageUrl" />
+    </div>
+    <table class="table mt-3 mb-3">
+        <thead>
+            <tr>
+                <td>
+                    Year produced
+                </td>
+                <td>
+                    Kilometers
+                </td>
+                <td>
+                    Top speed
+                </td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    @Model.YearProduced
+                </td>
+                <td>
+                    @Model.KilometersDriven
+                </td>
+                <td>
+                    @Model.TopSpeed
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    @if (Model.OwnerUserId != User.Id() && Model.SalesmanUserId != User.Id())
+    {
+        <a class="btn btn-success" asp-area="Importer" asp-controller="Vehicles" asp-action="Buy" asp-route-id="@Model.Id">
+            Buy
+        </a>
+    }
+
+</section>

@@ -1,0 +1,70 @@
+﻿@model VehicleImportModel
+@{
+    ViewData["Title"] = "Import Vehicle";
+}
+<h1 class="text-center mt-4 mb-4">@ViewData["Title"]</h1>
+<div class="row">
+    <div class="text-center col-sm-12 offset-lg-2 col-lg-8 offset-xl-3 col-xl-6">
+        <section>
+            <form asp-area="Importer" asp-controller="Vehicles" asp-action="Import" method="post">
+                <div class="form-group">
+                    <label asp-for="@Model.Brand" class="form-label col-form-label-lg"></label>
+                    <input asp-for="@Model.Brand" class="form-control" />
+                    <span asp-validation-for="@Model.Brand" class="small text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="@Model.ModelName" class="form-label col-form-label-lg"></label>
+                    <input asp-for="@Model.ModelName" class="form-control" />
+                    <span asp-validation-for="@Model.ModelName" class="small text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="@Model.ImageUrl" class="form-label col-form-label-lg">Image URL(not required)</label>
+                    <input asp-for="@Model.ImageUrl" class="form-control" />
+                    <span asp-validation-for="@Model.ImageUrl" class="small text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="@Model.YearProduced" class="form-label col-form-label-lg"></label>
+                    <input type="number" asp-for="@Model.YearProduced" class="form-control" />
+                    <span asp-validation-for="@Model.YearProduced" class="small text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="@Model.TopSpeed" class="form-label col-form-label-lg">Top speed</label>
+                    <input type="number" asp-for="@Model.TopSpeed" class="form-control" />
+                    <span asp-validation-for="@Model.TopSpeed" class="small text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="@Model.Description" class="form-label col-form-label-lg"></label>
+                    <textarea style="resize:none" asp-for="@Model.Description" class="form-control"></textarea>
+                    <span asp-validation-for="@Model.Description" class="small text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="@Model.Price" class="form-label col-form-label-lg"></label>
+                    <input type="number" asp-for="@Model.Price" class="form-control" id="price" name="Price" />
+                    <span asp-validation-for="@Model.Price" class="small text-danger" id="priceValidation"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="@Model.VehicleType" class="form-label col-form-label-lg">Vehicle Type</label>
+                    <select asp-for="@Model.VehicleType" class="form-control">
+                        @foreach (var type in Model.VehicleTypes)
+                        {
+                            <option value="@type">@type</option>
+                        }
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label asp-for="@Model.VehicleRating" class="form-label col-form-label-lg">Rating</label>
+                    <select asp-for="@Model.VehicleRating" class="form-control">
+                        @foreach (var rating in Model.VehicleRatings)
+                        {
+                            <option value="@rating">@rating</option>
+                        }
+                    </select>
+                </div>
+                <input asp-for="ImporterId" hidden/>
+                <div class="text-center mt-4 mb-4">
+                    <button class="btn btn-lg btn-success" id="submitBtn">Import</button>
+                </div>
+            </form>
+        </section>
+    </div>
+</div>

@@ -1,0 +1,57 @@
+﻿@model IEnumerable<VehicleListViewModel>
+@{
+    ViewData["Title"] = "All Vehicles for sale";
+}
+
+<h1 class="text-center">@ViewData["Title"]</h1>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <td>
+                Name
+            </td>
+            <td>
+                Type
+            </td>
+            <td>
+                Rating
+            </td>
+            <td>
+                Price
+            </td>
+            <td>
+                Seller
+            </td>
+            <td>
+                
+            </td>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var vehicle in Model)
+        {
+            <tr>
+                <td>
+                    @vehicle.Name
+                </td>
+                <td>
+                    @vehicle.VehicleType
+                </td>
+                <td>
+                    @vehicle.VehicleRating
+                </td>
+                <td>
+                    @vehicle.Price
+                </td>
+                <td>
+                    @vehicle.SalesmanName
+                </td>
+                <td>
+                    <a class="btn btn-primary" asp-area="Importer" asp-controller="Vehicles" asp-action="Details" asp-route-id="@vehicle.Id">
+                        Details
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,38 @@
+﻿@model VehicleSellModel
+@{
+    ViewData["Title"] = $"Edit {Model.Name}";
+}
+<h1 class="text-center mt-4 mb-4">@ViewData["Title"]</h1>
+<div class="row">
+    <div class="text-center col-sm-12 offset-lg-2 col-lg-8 offset-xl-3 col-xl-6">
+
+        <section>
+            <form asp-area="Importer" asp-controller="Vehicles" asp-action="Edit" method="post">
+                <div class="form-group">
+                    <label asp-for="@Model.Description" class="form-label col-form-label-lg"></label>
+                    <textarea style="resize:none" asp-for="@Model.Description" value="@Model.Description" class="form-control"></textarea>
+                    <span asp-validation-for="@Model.Description" class="small text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="@Model.Price" class="form-label col-form-label-lg"></label>
+                    <input value="@Model.OldPrice" asp-for="@Model.OldPrice" id="oldPrice" hidden/>
+                    <input type="number" asp-for="@Model.Price" value="@Model.OldPrice" class="form-control" data-val="true" data-val-number="The field Price must be a number." data-val-range="Price cannot be greater than the original price!" data-val-range-max="@Model.OldPrice" data-val-range-min="1" data-val-required="The Price field is required." id="price" name="Price" />
+                    <span asp-validation-for="@Model.Price" class="small text-danger" id="priceValidation"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="@Model.VehicleRating" class="form-label col-form-label-lg">Rating</label>
+                    <select asp-for="@Model.VehicleRating" class="form-control">
+                        @foreach (var rating in Model.VehicleRatings)
+                        {
+                            <option value="@rating">@rating</option>
+                        }
+                    </select>
+                </div>
+                <div class="text-center mt-4 mb-4">
+                    <button class="btn btn-lg btn-success" id="submitBtn">Save</button>
+                </div>
+            </form>
+        </section>
+    </div>
+</div>
+<script src="~/js/Vehicles/validateVehiclePrice.js"></script>
