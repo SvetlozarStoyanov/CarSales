@@ -7,10 +7,12 @@ namespace CarSales.Web.Areas.Admin.Controllers
     public class SalesmenController : BaseController
     {
         private readonly ISalesmanService salesmanService;
+
         public SalesmenController(ISalesmanService salesmanService)
         {
             this.salesmanService = salesmanService;
         }
+
         public async Task<IActionResult> GrantSalesmanRole(string userId, int roleRequestId)
         {
             await salesmanService.CreateOrRenewSalesmanAsync(userId);
@@ -23,5 +25,7 @@ namespace CarSales.Web.Areas.Admin.Controllers
             };
             return RedirectToAction("GrantRole", "RoleRequests", model);
         }
+
+
     }
 }
