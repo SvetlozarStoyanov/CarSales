@@ -15,7 +15,7 @@ namespace CarSales.Web.Areas.Owner.Controllers
         }
         public async Task<IActionResult> Index()
         {
-            var model = await vehicleService.GetAllVehiclesWhichAreForSaleAsync();
+            var model = await vehicleService.GetAllVehiclesForSaleAsync();
             return View(model);
         }
 
@@ -48,7 +48,7 @@ namespace CarSales.Web.Areas.Owner.Controllers
         {
             try
             {
-                await vehicleService.BuyVehicleAsync(id, User.Id());
+                await vehicleService.BuyVehicleFromSalesmanAsync(id, User.Id());
             }
             catch (Exception e)
             {

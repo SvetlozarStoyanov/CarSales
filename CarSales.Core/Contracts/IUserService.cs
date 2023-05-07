@@ -1,14 +1,14 @@
 ﻿using CarSales.Infrastructure.Data.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CarSales.Core.Contracts
 {
     public interface IUserService
     {
+        /// <summary>
+        /// Gets <see cref="User"/> with given <paramref name="userId"/>
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns><see cref="User"/></returns>
         Task<User> GetUserByIdAsync(string userId);
     }
 }

@@ -16,10 +16,11 @@ namespace CarSales.Core.Services
 
         public async Task<IEnumerable<RoleListModel>> GetRequestableRolesAsync(IEnumerable<string> roleNames)
         {
-            if (roleNames.Any(r => r == "Administrator" || r == "Salesman"))
+            if (roleNames.Any(r => r == "Administrator" || r == "Salesman" || r == "Importer"))
             {
                 return new List<RoleListModel>();
             }
+            
             var roles = await roleManager.Roles
                 .Where(r => !roleNames.Contains(r.Name))
                 .Select(r => new RoleListModel()

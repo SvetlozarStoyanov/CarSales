@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace CarSales.Core.Models.RoleRequests
+﻿namespace CarSales.Core.Models.RoleRequests
 {
     public class RoleRequestRouteModel
     {

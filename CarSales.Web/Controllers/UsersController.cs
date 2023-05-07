@@ -98,7 +98,11 @@ namespace CarSales.Web.Controllers
         public async Task<IActionResult> LoginRedirect()
         {
             var user = await userManager.GetUserAsync(User);
-            if (await userManager.IsInRoleAsync(user, "Salesman"))
+            if (await userManager.IsInRoleAsync(user, "Importer"))
+            {
+                return Redirect("/Importer/Home/Index");
+            }
+            else if (await userManager.IsInRoleAsync(user, "Salesman"))
             {
                 return Redirect("/Salesman/Home/Index");
             }
@@ -126,8 +130,9 @@ namespace CarSales.Web.Controllers
             var user = await userManager.GetUserAsync(User);
             await signInManager.SignOutAsync();
             await signInManager.SignInAsync(user, false);
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction(nameof(LoginRedirect));
         }
+
         public IActionResult AccessDenied()
         {
             return View();

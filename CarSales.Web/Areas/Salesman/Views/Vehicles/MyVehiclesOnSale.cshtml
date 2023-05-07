@@ -45,8 +45,11 @@ else
                         @vehicle.Price
                     </td>
                     <td>
-                        <a class="btn btn-primary" asp-area="Salesman" asp-controller="Vehicles" asp-action="Details" asp-route-id="@vehicle.Id">
+                        <a class="btn btn-primary m-3" asp-area="Salesman" asp-controller="Vehicles" asp-action="Details" asp-route-id="@vehicle.Id">
                             Details
+                        </a>
+                        <a class="btn btn-secondary m-3" asp-area="Salesman" asp-controller="Vehicles" asp-action="Edit" asp-route-id="@vehicle.Id">
+                            Edit
                         </a>
                     </td>
                 </tr>

@@ -29,6 +29,7 @@ namespace CarSales.Infrastructure.Data.Configuration
                     Price = 9000,
                     SalesmanId = 1,
                     OwnerId = null,
+                    ImporterId = null,
                     VehicleType = VehicleType.Car,
                     VehicleRating = VehicleRating.Reliable,
                     YearProduced = 2016
@@ -43,8 +44,9 @@ namespace CarSales.Infrastructure.Data.Configuration
                     TopSpeed = 240,
                     KilometersDriven = 0,
                     Price = 5000,
-                    SalesmanId = 1,
+                    SalesmanId = null,
                     OwnerId = null,
+                    ImporterId = 1,
                     VehicleType = VehicleType.Car,
                     VehicleRating = VehicleRating.Reliable,
                     YearProduced = 2004
