@@ -35,7 +35,8 @@ namespace CarSales.Infrastructure.Data.Entities
         [ForeignKey(nameof(Entities.Salesman.Id))]
         public int? SalesmanId { get; set; }
         public Salesman? Salesman { get; set; }
-
+        public int? ImporterId { get; set; }
+        public Importer? Importer { get; set; }
         public virtual ICollection<Sale> Sales { get; set; }
     }
 }

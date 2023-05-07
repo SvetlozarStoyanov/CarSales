@@ -14,7 +14,7 @@ namespace CarSales.Web.Controllers
         }
         public async Task<IActionResult> Index()
         {
-            var model = await vehicleService.GetAllVehiclesWhichAreForSaleAsync();
+            var model = await vehicleService.GetAllVehiclesForSaleAsync();
             return View(model);
         }
 
