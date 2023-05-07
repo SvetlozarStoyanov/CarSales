@@ -16,7 +16,13 @@ namespace CarSales.Web.Areas.Salesman.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var model = await vehicleService.GetAllVehiclesWhichAreForSaleAsync();
+            var model = await vehicleService.GetAllVehiclesForSaleAsync();
+            return View(model);
+        }
+
+        public async Task<IActionResult> AllImportedVehicles()
+        {
+            var model = await vehicleService.GetAllImportedVehiclesAsync();
             return View(model);
         }
 
@@ -50,9 +56,14 @@ namespace CarSales.Web.Areas.Salesman.Controllers
             return RedirectToAction(nameof(Details), new { id = model.Id });
         }
 
-        public async Task<IActionResult> Buy(int id)
+        public async Task<IActionResult> BuyFromSalesman(int id)
         {
-            await vehicleService.BuyVehicleAsync(id, User.Id());
+            await vehicleService.BuyVehicleFromSalesmanAsync(id, User.Id());
+            return RedirectToAction(nameof(Details), new { id = id });
+        }
+        public async Task<IActionResult> BuyFromImporter(int id)
+        {
+            await vehicleService.BuyVehicleFromImporterAsync(id, User.Id());
             return RedirectToAction(nameof(Details), new { id = id });
         }
 
@@ -60,7 +71,7 @@ namespace CarSales.Web.Areas.Salesman.Controllers
         [HttpGet]
         public async Task<IActionResult> Sell(int id)
         {
-            var model = await vehicleService.CreateVehicleSellModel(id);
+            var model = await vehicleService.CreateVehicleSellModelAsync(id);
 
             return View(model);
         }
@@ -70,12 +81,38 @@ namespace CarSales.Web.Areas.Salesman.Controllers
         {
             try
             {
-                if (model.OldPrice > model.Price)
+                if (model.OldPrice < model.Price)
                 {
-                    model = await vehicleService.CreateVehicleSellModel(model.Id);
+                    model = await vehicleService.CreateVehicleSellModelAsync(model.Id);
                     return View(model);
                 }
                 await vehicleService.PutVehicleForSaleAsync(model);
+            }
+            catch (Exception e)
+            {
+
+            }
+            return RedirectToAction(nameof(MyVehiclesOnSale));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Edit(int id)
+        {
+            var model = await vehicleService.CreateVehicleSellModelAsync(id);
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(VehicleSellModel model)
+        {
+            try
+            {
+                if (model.OldPrice < model.Price)
+                {
+                    model = await vehicleService.CreateVehicleSellModelAsync(model.Id);
+                    return View(model);
+                }
+                await vehicleService.EditVehicleForSaleAsync(model);
             }
             catch (Exception e)
             {
