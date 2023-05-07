@@ -37,11 +37,22 @@ namespace CarSales.Infrastructure.Data.Configuration
                     UserId = "66ccb670-f0dd-4aa1-a83d-8b2a0003bb50",
                     RoleId = "bbea2448-c801-43d1-8b05-e3a2c22338d9"
                 },
+                new IdentityUserRole<string>()
+                {
+                    UserId = "10933c11-ac2a-410d-b60a-8b1d97324975",
+                    RoleId = "bbea2448-c801-43d1-8b05-e3a2c22338d9"
+                },
                 //Salesmen
                 new IdentityUserRole<string>()
                 {
                     UserId = "66ccb670-f0dd-4aa1-a83d-8b2a0003bb50",
                     RoleId = "c63016c0-e087-43dc-bb9c-a8958a05cbdd"
+                },
+                //Importers
+                new IdentityUserRole<string>()
+                {
+                    UserId = "10933c11-ac2a-410d-b60a-8b1d97324975",
+                    RoleId = "9cbd5531-0c49-4889-95b9-b81fc1e7653a"
                 }
             };
 

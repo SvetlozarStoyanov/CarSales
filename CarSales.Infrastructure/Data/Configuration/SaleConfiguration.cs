@@ -19,7 +19,17 @@ namespace CarSales.Infrastructure.Data.Configuration
                 {
                     Id = 1,
                     SalesmanId = 1,
+                    OwnerId = null,
+                    ImporterId = 1,
+                    VehicleId = 1,
+                    SalePrice = 10000
+                },
+                new Sale()
+                {
+                    Id = 2,
+                    SalesmanId = 1,
                     OwnerId = 1,
+                    ImporterId = null,
                     VehicleId = 3,
                     SalePrice = 20000
                 }

@@ -17,7 +17,7 @@ namespace CarSales.Infrastructure.Data.Configuration
         {
             var hasher = new PasswordHasher<IdentityUser>();
             List<User> users = new List<User>();
-            string[] names = { "Admin", "Owner", "Owner2", "Salesman" };
+            string[] names = { "Admin", "Owner", "Owner2", "Salesman", "Importer" };
             string[] guids =
                 {
                     //Admins
@@ -27,6 +27,8 @@ namespace CarSales.Infrastructure.Data.Configuration
                     "926bee86-8bbd-43f6-bc1c-9639d43531a4",
                     //Salesmen
                     "66ccb670-f0dd-4aa1-a83d-8b2a0003bb50",
+                    //Importer
+                    "10933c11-ac2a-410d-b60a-8b1d97324975"
                 };
             var password = "password";
             int i = 0;
@@ -48,6 +50,6 @@ namespace CarSales.Infrastructure.Data.Configuration
             }
             return users;
         }
-        
+
     }
 }
