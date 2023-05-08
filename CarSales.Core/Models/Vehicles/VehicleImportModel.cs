@@ -20,7 +20,7 @@ namespace CarSales.Core.Models.Vehicles
         public VehicleRating VehicleRating { get; set; }
         public decimal Price { get; set; }
         public int? ImporterId { get; set; }
-        public List<VehicleType> VehicleTypes { get; set; }
-        public List<VehicleRating> VehicleRatings { get; set; }
+        public VehicleType[]? VehicleTypes { get; set; }
+        public VehicleRating[]? VehicleRatings { get; set; }
     }
 }

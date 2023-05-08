@@ -58,7 +58,15 @@ namespace CarSales.Web.Areas.Importer.Controllers
 
         public async Task<IActionResult> Buy(int id)
         {
-            await vehicleService.BuyVehicleFromSalesmanAsync(id, User.Id());
+            try
+            {
+                await vehicleService.BuyVehicleFromSalesmanAsync(id, User.Id());
+            }
+            catch (Exception e)
+            {
+                TempData["error"] = e.Message;
+                return RedirectToAction(nameof(Index));
+            }
             return RedirectToAction(nameof(Details), new { id = id });
         }
 
