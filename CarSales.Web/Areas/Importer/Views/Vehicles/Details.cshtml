@@ -5,6 +5,7 @@
 }
 
 <section class="text-center">
+    <input id="price" value="@Model.Price" hidden />
     <h1>
         @Model.Brand @Model.Model
     </h1>
@@ -86,11 +87,11 @@
         </tbody>
     </table>
 
-    @if (Model.OwnerUserId != User.Id() && Model.SalesmanUserId != User.Id())
+    @if (Model.OwnerUserId == null && Model.SalesmanUserId != User.Id() && Model.ImporterUserId != User.Id())
     {
-        <a class="btn btn-success" asp-area="Importer" asp-controller="Vehicles" asp-action="Buy" asp-route-id="@Model.Id">
+        <a id="buyBtn" class="btn btn-lg btn-success" asp-area="Importer" asp-controller="Vehicles" asp-action="Buy" asp-route-id="@Model.Id">
             Buy
         </a>
     }
-
 </section>
+<script src="~/js/Vehicles/canBuyVehicle.js"></script>

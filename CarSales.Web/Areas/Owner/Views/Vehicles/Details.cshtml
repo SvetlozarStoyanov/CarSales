@@ -5,6 +5,7 @@
 }
 
 <section class="text-center">
+    <input value="@Model.Price" id="price" hidden />
     <h1>
         @Model.Brand @Model.Model
     </h1>
@@ -90,10 +91,11 @@
         <form asp-area="Owner" asp-controller="Vehicles" asp-action="Buy" asp-route-id="@Model.Id" method="post">
 
             <div class="text-center">
-                <button type="submit" class="btn btn-success btn-lg" >
+                <button id="buyBtn" type="submit" class="btn btn-success btn-lg">
                     Buy
                 </button>
             </div>
         </form>
     }
 </section>
+<script src="~/js/Vehicles/canBuyVehicle.js"></script>
