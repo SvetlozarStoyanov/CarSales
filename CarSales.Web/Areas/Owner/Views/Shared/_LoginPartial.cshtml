@@ -8,7 +8,7 @@
     {
         var user = await UserManager.GetUserAsync(User);
         <li class="nav-item">
-            <a class="nav-link active" disabled>@user.Credits credits</a>
+            <a class="nav-link active" disabled><span id="userCredits">@user.Credits</span> credits</a>
         </li>
         <li class="nav-item">
             <a class="nav-link active" asp-area="Owner" asp-controller="Vehicles" asp-action="Mine">My vehicles</a>
