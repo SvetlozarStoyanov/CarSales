@@ -306,6 +306,7 @@ namespace CarSales.Core.Services
                 Brand = model.Brand,
                 Model = model.ModelName,
                 Description = model.Description,
+                ImageUrl = model.ImageUrl,
                 YearProduced = model.YearProduced,
                 TopSpeed = model.TopSpeed,
                 KilometersDriven = model.KilometersDriven,
