@@ -78,7 +78,7 @@ namespace CarSales.Core.Services
                     SalesmanId = v.SalesmanId,
                     SalesmanUserId = v.Salesman != null ? v.Salesman.UserId : null,
                     SalesmanName = v.Salesman != null ? $"{v.Salesman.User.FirstName} {v.Salesman.User.LastName}" : null,
-                    ImporterId = v.SalesmanId,
+                    ImporterId = v.ImporterId,
                     ImporterUserId = v.Importer != null ? v.Importer.UserId : null,
                     ImporterName = v.Importer != null ? $"{v.Importer.User.FirstName} {v.Importer.User.LastName}" : null,
                     VehicleChangeRatingModel = new VehicleChangeRatingModel(v.Id, v.VehicleRating)
@@ -132,7 +132,7 @@ namespace CarSales.Core.Services
                 .FirstOrDefaultAsync(o => o.UserId == userId);
 
             var importerVehicles = await repository.AllReadOnly<Vehicle>()
-                .Where(v => v.SalesmanId == importer.Id).
+                .Where(v => v.ImporterId == importer.Id).
                 Select(v => new VehicleListViewModel()
                 {
                     Id = v.Id,
@@ -141,7 +141,7 @@ namespace CarSales.Core.Services
                     VehicleType = v.VehicleType,
                     VehicleRating = v.VehicleRating,
                     Price = v.Price,
-                    SalesmanName = $"{v.Importer.User.FirstName} {v.Importer.User.LastName}"
+                    ImporterName = $"{v.Importer.User.FirstName} {v.Importer.User.LastName}"
                 }).ToListAsync();
 
             return importerVehicles;
@@ -293,8 +293,8 @@ namespace CarSales.Core.Services
             var vehicle = new VehicleImportModel()
             {
                 ImporterId = importer.Id,
-                VehicleTypes = Enum.GetValues<VehicleType>().ToList(),
-                VehicleRatings = Enum.GetValues<VehicleRating>().ToList()
+                VehicleTypes = Enum.GetValues<VehicleType>(),
+                VehicleRatings = Enum.GetValues<VehicleRating>()
             };
             return vehicle;
         }
@@ -318,7 +318,7 @@ namespace CarSales.Core.Services
                 .Where(i => i.Id == model.ImporterId)
                 .Include(i => i.User)
                 .FirstOrDefaultAsync();
-            importer.User.Credits -= model.Price / 2;
+            importer.User.Credits -= model.Price * 0.90m;
             await repository.AddAsync<Vehicle>(vehicle);
             await repository.SaveChangesAsync();
         }
