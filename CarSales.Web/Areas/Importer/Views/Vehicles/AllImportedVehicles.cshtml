@@ -1,9 +1,12 @@
-﻿@model IEnumerable<VehicleListViewModel>
+﻿@model IEnumerable<VehicleListModel>
 @{
     ViewData["Title"] = "All Imported Vehicles";
 }
 
 <h1 class="text-center">@ViewData["Title"]</h1>
+<div class="text-center mb-4 mt-4">
+    <a class="btn btn-lg btn-primary" asp-area="Importer" asp-controller="Vehicles" asp-action="Import">Import</a>
+</div>
 <table class="table table-striped">
     <thead>
         <tr>
