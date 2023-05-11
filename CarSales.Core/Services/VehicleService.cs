@@ -15,11 +15,11 @@ namespace CarSales.Core.Services
         {
             this.repository = repository;
         }
-        public async Task<ICollection<VehicleListViewModel>> GetAllVehiclesForSaleAsync()
+        public async Task<ICollection<VehicleListModel>> GetAllVehiclesForSaleAsync()
         {
             var vehicles = await repository.AllReadOnly<Vehicle>()
                 .Where(v => v.SalesmanId != null)
-                .Select(v => new VehicleListViewModel()
+                .Select(v => new VehicleListModel()
                 {
                     Id = v.Id,
                     Name = $"{v.Brand} {v.Model} {v.YearProduced}",
@@ -35,11 +35,11 @@ namespace CarSales.Core.Services
             return vehicles;
         }
 
-        public async Task<ICollection<VehicleListViewModel>> GetAllImportedVehiclesAsync()
+        public async Task<ICollection<VehicleListModel>> GetAllImportedVehiclesAsync()
         {
             var vehicles = await repository.AllReadOnly<Vehicle>()
                 .Where(v => v.ImporterId != null)
-                .Select(v => new VehicleListViewModel()
+                .Select(v => new VehicleListModel()
                 {
                     Id = v.Id,
                     Name = $"{v.Brand} {v.Model} {v.YearProduced}",
@@ -88,13 +88,13 @@ namespace CarSales.Core.Services
             return vehicle;
         }
 
-        public async Task<ICollection<VehicleListViewModel>> GetOwnerVehiclesAsync(string userId)
+        public async Task<ICollection<VehicleListModel>> GetOwnerVehiclesAsync(string userId)
         {
             var owner = await repository.AllReadOnly<Owner>()
                 .FirstOrDefaultAsync(o => o.UserId == userId);
             var ownerVehicles = await repository.AllReadOnly<Vehicle>()
                 .Where(v => v.OwnerId == owner.Id)
-                .Select(v => new VehicleListViewModel()
+                .Select(v => new VehicleListModel()
                 {
                     Id = v.Id,
                     Name = $"{v.Brand} {v.Model} {v.YearProduced}",
@@ -102,18 +102,20 @@ namespace CarSales.Core.Services
                     VehicleType = v.VehicleType,
                     VehicleRating = v.VehicleRating,
                     Price = v.Price,
-                    SalesmanName = $"{v.Salesman.User.FirstName} {v.Salesman.User.LastName}"
+                    OwnerId = v.OwnerId,
+                    OwnerName = $"{v.Owner.User.FirstName} {v.Owner.User.LastName}",
+                    OwnerUserId = v.Owner.User.Id
                 }).ToListAsync();
             return ownerVehicles;
         }
 
-        public async Task<ICollection<VehicleListViewModel>> GetSalesmanVehiclesAsync(string userId)
+        public async Task<ICollection<VehicleListModel>> GetSalesmanVehiclesAsync(string userId)
         {
             var salesman = await repository.AllReadOnly<Salesman>()
                 .FirstOrDefaultAsync(o => o.UserId == userId);
             var salesmanVehicles = await repository.AllReadOnly<Vehicle>()
                 .Where(v => v.SalesmanId == salesman.Id).
-                Select(v => new VehicleListViewModel()
+                Select(v => new VehicleListModel()
                 {
                     Id = v.Id,
                     Name = $"{v.Brand} {v.Model} {v.YearProduced}",
@@ -126,14 +128,14 @@ namespace CarSales.Core.Services
             return salesmanVehicles;
         }
 
-        public async Task<ICollection<VehicleListViewModel>> GetImporterVehiclesAsync(string userId)
+        public async Task<ICollection<VehicleListModel>> GetImporterVehiclesAsync(string userId)
         {
             var importer = await repository.AllReadOnly<Importer>()
                 .FirstOrDefaultAsync(o => o.UserId == userId);
 
             var importerVehicles = await repository.AllReadOnly<Vehicle>()
                 .Where(v => v.ImporterId == importer.Id).
-                Select(v => new VehicleListViewModel()
+                Select(v => new VehicleListModel()
                 {
                     Id = v.Id,
                     Name = $"{v.Brand} {v.Model} {v.YearProduced}",

@@ -10,13 +10,13 @@ namespace CarSales.Core.Contracts
         /// Returns all <see cref="Vehicle"/> which are for sale
         /// </summary>
         /// <returns><see cref="ICollection{VehicleListViewModel}"/></returns>
-        Task<ICollection<VehicleListViewModel>> GetAllVehiclesForSaleAsync();
+        Task<ICollection<VehicleListModel>> GetAllVehiclesForSaleAsync();
 
         /// <summary>
         /// Returns all <see cref="Vehicle"/> which are for imported
         /// </summary>
         /// <returns><see cref="ICollection{VehicleListViewModel}"/></returns>
-        Task<ICollection<VehicleListViewModel>> GetAllImportedVehiclesAsync();
+        Task<ICollection<VehicleListModel>> GetAllImportedVehiclesAsync();
 
         /// <summary>
         /// Returns <see cref="Vehicle"/> by given <paramref name="id"/>
@@ -30,21 +30,21 @@ namespace CarSales.Core.Contracts
         /// </summary>
         /// <param name="userId"></param>
         /// <returns><see cref="ICollection{VehicleListViewModel}"/></returns>
-        Task<ICollection<VehicleListViewModel>> GetOwnerVehiclesAsync(string userId);
+        Task<ICollection<VehicleListModel>> GetOwnerVehiclesAsync(string userId);
 
         /// <summary>
         /// Returns all <see cref="Vehicle"/> belonging to <see cref="Salesman"/> with given <paramref name="userId"/>
         /// </summary>
         /// <param name="userId"></param>
         /// <returns><see cref="ICollection{VehicleListViewModel}"/></returns>
-        Task<ICollection<VehicleListViewModel>> GetSalesmanVehiclesAsync(string userId);
+        Task<ICollection<VehicleListModel>> GetSalesmanVehiclesAsync(string userId);
 
         /// <summary>
         /// Returns all <see cref="Vehicle"/> belonging to <see cref="Importer"/> with given <paramref name="userId"/>
         /// </summary>
         /// <param name="userId"></param>
         /// <returns><see cref="ICollection{VehicleListViewModel}"/></returns>
-        Task<ICollection<VehicleListViewModel>> GetImporterVehiclesAsync(string userId);
+        Task<ICollection<VehicleListModel>> GetImporterVehiclesAsync(string userId);
 
         /// <summary>
         /// Changes the <see cref="VehicleRating"/> of vehicle with given <paramref name="id"/>
