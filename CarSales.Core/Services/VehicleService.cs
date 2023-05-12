@@ -1,5 +1,6 @@
 ﻿using AirsoftMatchMaker.Infrastructure.Data.Common.Repository;
 using CarSales.Core.Contracts;
+using CarSales.Core.Enums;
 using CarSales.Core.Exceptions;
 using CarSales.Core.Models.Vehicles;
 using CarSales.Infrastructure.Data.Entities;
@@ -15,10 +16,53 @@ namespace CarSales.Core.Services
         {
             this.repository = repository;
         }
-        public async Task<ICollection<VehicleListModel>> GetAllVehiclesForSaleAsync()
+        public async Task<VehiclesQueryModel> GetAllVehiclesForSaleAsync(string searchTerm = null,
+            int vehiclesPerPage = 6,
+            int currentPage = 1,
+            VehicleSorting sorting = VehicleSorting.Alphabetically
+            //IEnumerable<VehicleType>? selectedVehicleTypes = null
+            )
         {
+
             var vehicles = await repository.AllReadOnly<Vehicle>()
                 .Where(v => v.SalesmanId != null)
+                .Include(v => v.Salesman)
+                .ThenInclude(s => s.User)
+                .ToListAsync();
+
+            if (!string.IsNullOrWhiteSpace(searchTerm))
+            {
+                vehicles = vehicles.Where(v => v.Brand.Contains(searchTerm)
+                || v.Model.Contains(searchTerm))
+                .ToList();
+            }
+            //if (selectedVehicleTypes.Count() > 0)
+            //{
+            //    vehicles = vehicles.Where(v => selectedVehicleTypes.Contains(v.VehicleType))
+            //        .ToList();
+            //}
+            switch (sorting)
+            {
+                case VehicleSorting.Alphabetically:
+                    vehicles = vehicles.OrderBy(v => v.Brand).ToList();
+                    break;
+                case VehicleSorting.PriceAscending:
+                    vehicles = vehicles.OrderBy(v => v.Price).ToList();
+                    break;
+                case VehicleSorting.PriceDescending:
+                    vehicles = vehicles.OrderByDescending(v => v.Price).ToList();
+                    break;
+                case VehicleSorting.RatingAscending:
+                    vehicles = vehicles.OrderBy(v => v.VehicleRating).ToList();
+                    break;
+                case VehicleSorting.RatingDescending:
+                    vehicles = vehicles.OrderByDescending(v => v.VehicleRating).ToList();
+                    break;
+            }
+
+            var sortedVehicles = vehicles
+                .Skip((currentPage - 1) * vehiclesPerPage)
+                .Take(vehiclesPerPage)
                 .Select(v => new VehicleListModel()
                 {
                     Id = v.Id,
@@ -30,9 +74,11 @@ namespace CarSales.Core.Services
                     SalesmanId = v.SalesmanId,
                     SalesmanUserId = v.Salesman.UserId,
                     SalesmanName = $"{v.Salesman.User.FirstName} {v.Salesman.User.LastName}"
-                })
-                .ToListAsync();
-            return vehicles;
+                });
+
+            var queryModel = CreateVehiclesQueryModel(searchTerm, vehiclesPerPage, currentPage, sortedVehicles, vehicles.Count);
+
+            return queryModel;
         }
 
         public async Task<ICollection<VehicleListModel>> GetAllImportedVehiclesAsync()
@@ -324,6 +370,21 @@ namespace CarSales.Core.Services
             importer.User.Credits -= model.Price * 0.90m;
             await repository.AddAsync<Vehicle>(vehicle);
             await repository.SaveChangesAsync();
+        }
+
+        private VehiclesQueryModel CreateVehiclesQueryModel(string searchTerm, int vehiclesPerPage, int currentPage, IEnumerable<VehicleListModel> vehicles, int count)
+        {
+            var model = new VehiclesQueryModel()
+            {
+                SearchTerm = searchTerm,
+                VehiclesPerPage = vehiclesPerPage,
+                CurrentPage = currentPage,
+                SortingOptions = Enum.GetValues<VehicleSorting>().ToHashSet(),
+                VehicleTypes = Enum.GetValues<VehicleType>().ToHashSet(),
+                VehiclesCount = count,
+                Vehicles = vehicles
+            };
+            return model;
         }
     }
 }

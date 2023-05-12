@@ -1,4 +1,5 @@
-﻿using CarSales.Core.Models.Vehicles;
+﻿using CarSales.Core.Enums;
+using CarSales.Core.Models.Vehicles;
 using CarSales.Infrastructure.Data.Entities;
 using CarSales.Infrastructure.Data.Enums;
 
@@ -7,10 +8,20 @@ namespace CarSales.Core.Contracts
     public interface IVehicleService
     {
         /// <summary>
-        /// Returns all <see cref="Vehicle"/> which are for sale
+        /// Returns all <see cref="Vehicle"/> which match the given criteria
         /// </summary>
-        /// <returns><see cref="ICollection{VehicleListViewModel}"/></returns>
-        Task<ICollection<VehicleListModel>> GetAllVehiclesForSaleAsync();
+        /// <param name="searchTerm"></param>
+        /// <param name="vehiclesPerPage"></param>
+        /// <param name="currentPage"></param>
+        /// <param name="sorting"></param>
+        /// <param name="selectedVehicleTypes"></param>
+        /// <returns></returns>
+        Task<VehiclesQueryModel> GetAllVehiclesForSaleAsync(string searchTerm = null,
+            int vehiclesPerPage = 6,
+            int currentPage = 1,
+            VehicleSorting sorting = VehicleSorting.Alphabetically
+            //IEnumerable<VehicleType> selectedVehicleTypes = null
+            );
 
         /// <summary>
         /// Returns all <see cref="Vehicle"/> which are for imported
@@ -99,10 +110,23 @@ namespace CarSales.Core.Contracts
         /// <returns></returns>
         Task EditVehicleForSaleAsync(VehicleSellModel model);
 
-
+        /// <summary>
+        /// Creates <see cref="VehicleImportModel"/> and sets the <see cref="VehicleImportModel.ImporterId"/>
+        /// to <see cref="Importer.Id"/> of <see cref="User"/> with given <paramref name="userId"/>
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns><see cref="VehicleImportModel"/></returns>
         Task<VehicleImportModel> CreateVehicleImportModelAsync(string userId);
 
-
+        /// <summary>
+        /// Creates a <see cref="Vehicle"/> from given <paramref name="model"/>
+        /// and adds it to the database
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         Task ImportVehicleAsync(VehicleImportModel model);
+
+
+        //Task<VehiclesQueryModel> CreateVehiclesQueryModel();
     }
 }
