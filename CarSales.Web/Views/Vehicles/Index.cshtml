@@ -1,13 +1,91 @@
-﻿@model IEnumerable<VehicleListModel>
+﻿@model VehiclesQueryModel
 @{
     ViewData["Title"] = "All Vehicles";
+    var previousPage = Model.CurrentPage - 1;
+    if (previousPage < 1)
+    {
+        previousPage = 1;
+    }
+
+    var maxPage = Math.Ceiling((double)Model.VehiclesCount /
+    Model.VehiclesPerPage);
+    var shouldButtonBeDisabled = Model.CurrentPage == maxPage;
+
 }
 
 <h1 class="text-center">@ViewData["Title"]</h1>
-@if (Model.Count() > 0)
+
+
+<form method="get">
+    <div class="row mt-5 mb-5">
+        <div class="d-flex justify-content-between">
+
+            <div class="form-group">
+                <label asp-for="@Model.SearchTerm">Search Term</label>
+                <input asp-for="@Model.SearchTerm" class="form-control" />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="@Model.VehiclesPerPage">Vehicles Per Page</label>
+                <input type="number" asp-for="@Model.VehiclesPerPage" class="form-control" />
+            </div>
+            @*            <div class="form-group">
+            <label class="form-label">Vehicle Types</label>
+            <label>All</label>
+            <input type="checkbox" id="all" value="@null" name="all" class="checkbox" />
+            @foreach (var vehicleType in Model.VehicleTypes)
+            {
+            <label>@vehicleType</label>
+            <input type="checkbox" id="@vehicleType" value="@vehicleType" name="@vehicleType" class="checkbox" />
+            }
+            </div>*@
+            <div class="form-group">
+                <label asp-for="@Model.VehicleSorting">Sorting</label>
+                <select asp-for="@Model.VehicleSorting" class="form-select">
+                    @foreach (var sortingOption in Model.SortingOptions)
+                    {
+                        <option value="@sortingOption">@sortingOption</option>
+                    }
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-5">
+        <div class="col-md-6 d-grid gap-2 d-md-flex justify-content-md-start">
+            <a class="btn btn-primary btn-lg @(Model.CurrentPage == 1 ? "disabled" : string.Empty)"
+               asp-controller="Vehicles"
+               asp-action="Index"
+               asp-route-searchTerm="@Model.SearchTerm"
+               asp-route-vehiclesPerPage="@Model.VehiclesPerPage"
+               asp-route-currentPage="@previousPage"
+               asp-route-vehicleSorting="@((int)Model.VehicleSorting)"><i class="bi bi-arrow-left-square"></i></a>
+        </div>
+
+        <div class="col-md-6 d-grid gap-2 d-md-flex justify-content-md-end">
+            <a class="btn btn-primary btn-lg @(shouldButtonBeDisabled ? "disabled" : string.Empty)"
+               asp-controller="Vehicles"
+               asp-action="Index"
+               asp-route-searchTerm="@Model.SearchTerm"
+               asp-route-vehiclesPerPage="@Model.VehiclesPerPage"
+               asp-route-currentPage="@(Model.CurrentPage + 1)"
+               asp-route-vehicleSorting="@((int)Model.VehicleSorting)"><i class="bi bi-arrow-right-square"></i></a>
+        </div>
+    </div>
+    @*asp-route-selectedVehicleTypes="@null"*@
+
+    <div class="text-center btn-lg">
+        <button type="submit" class="btn btn-primary btn-lg">Filter</button>
+    </div>
+
+</form>
+
+
+
+@if (Model.VehiclesCount > 0)
 {
     <section class="row">
-        @foreach (var vehicle in Model)
+        @foreach (var vehicle in Model.Vehicles)
         {
             <partial name="_VehiclePartial" model="@vehicle" />
         }
