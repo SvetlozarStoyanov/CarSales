@@ -20,8 +20,8 @@ namespace CarSales.Web.Controllers
                 model.SearchTerm,
                 model.VehiclesPerPage,
                 model.CurrentPage,
-                model.VehicleSorting
-                /*model.SelectedVehicleTypes*/);
+                model.SelectedVehicleTypes,
+                model.VehicleSorting);
 
             model.SearchTerm = queryResult.SearchTerm;
             model.VehiclesPerPage = queryResult.VehiclesPerPage;
@@ -30,7 +30,7 @@ namespace CarSales.Web.Controllers
             model.VehicleSorting = queryResult.VehicleSorting;
             model.SortingOptions = queryResult.SortingOptions;
             model.VehicleTypes = queryResult.VehicleTypes;
-            //model.SelectedVehicleTypes = queryResult.SelectedVehicleTypes;
+            model.SelectedVehicleTypes = queryResult.SelectedVehicleTypes;
             model.Vehicles = queryResult.Vehicles;
 
             return View(model);
