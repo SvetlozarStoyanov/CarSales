@@ -19,6 +19,7 @@ namespace CarSales.Core.Models.Vehicles
         public int VehiclesPerPage { get; set; } = 6;
         public int VehiclesCount { get; set; }
         public int CurrentPage { get; set; } = 1;
+        public string? SelectedVehicleTypes { get; set; }
         public VehicleSorting VehicleSorting { get; set; }
         public IEnumerable<VehicleSorting> SortingOptions { get; set; }
         public IEnumerable<VehicleType> VehicleTypes { get; set; }
