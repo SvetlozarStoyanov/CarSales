@@ -23,7 +23,6 @@ namespace CarSales.Core.Models.Vehicles
         public VehicleSorting VehicleSorting { get; set; }
         public IEnumerable<VehicleSorting> SortingOptions { get; set; }
         public IEnumerable<VehicleType> VehicleTypes { get; set; }
-        //public IEnumerable<VehicleType>? SelectedVehicleTypes { get; set; }
         public IEnumerable<VehicleListModel> Vehicles { get; set; }
     }
 }
