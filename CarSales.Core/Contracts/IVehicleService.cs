@@ -19,8 +19,8 @@ namespace CarSales.Core.Contracts
         Task<VehiclesQueryModel> GetAllVehiclesForSaleAsync(string searchTerm = null,
             int vehiclesPerPage = 6,
             int currentPage = 1,
+            string selectedVehicleTypes = null,
             VehicleSorting sorting = VehicleSorting.Alphabetically
-            //IEnumerable<VehicleType> selectedVehicleTypes = null
             );
 
         /// <summary>

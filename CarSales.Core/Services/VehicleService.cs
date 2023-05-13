@@ -19,8 +19,8 @@ namespace CarSales.Core.Services
         public async Task<VehiclesQueryModel> GetAllVehiclesForSaleAsync(string searchTerm = null,
             int vehiclesPerPage = 6,
             int currentPage = 1,
+            string? selectedVehicleTypes = null,
             VehicleSorting sorting = VehicleSorting.Alphabetically
-            //IEnumerable<VehicleType>? selectedVehicleTypes = null
             )
         {
 
@@ -36,11 +36,14 @@ namespace CarSales.Core.Services
                 || v.Model.Contains(searchTerm))
                 .ToList();
             }
-            //if (selectedVehicleTypes.Count() > 0)
-            //{
-            //    vehicles = vehicles.Where(v => selectedVehicleTypes.Contains(v.VehicleType))
-            //        .ToList();
-            //}
+            if (!string.IsNullOrEmpty(selectedVehicleTypes))
+            {
+                var selectedTypes = selectedVehicleTypes.Split(';', StringSplitOptions.RemoveEmptyEntries)
+                    .Select(vt => Enum.Parse<VehicleType>(vt))
+                    .ToList();
+                vehicles = vehicles.Where(v => selectedTypes.Contains(v.VehicleType))
+                    .ToList();
+            }
             switch (sorting)
             {
                 case VehicleSorting.Alphabetically:
@@ -75,8 +78,11 @@ namespace CarSales.Core.Services
                     SalesmanUserId = v.Salesman.UserId,
                     SalesmanName = $"{v.Salesman.User.FirstName} {v.Salesman.User.LastName}"
                 });
-
-            var queryModel = CreateVehiclesQueryModel(searchTerm, vehiclesPerPage, currentPage, sortedVehicles, vehicles.Count);
+            if (!sortedVehicles.Any())
+            {
+                currentPage = 1;
+            }
+            var queryModel = CreateVehiclesQueryModel(searchTerm, vehiclesPerPage, currentPage, selectedVehicleTypes, sortedVehicles, vehicles.Count);
 
             return queryModel;
         }
@@ -372,13 +378,14 @@ namespace CarSales.Core.Services
             await repository.SaveChangesAsync();
         }
 
-        private VehiclesQueryModel CreateVehiclesQueryModel(string searchTerm, int vehiclesPerPage, int currentPage, IEnumerable<VehicleListModel> vehicles, int count)
+        private VehiclesQueryModel CreateVehiclesQueryModel(string? searchTerm, int vehiclesPerPage, int currentPage, string? selectedVehicleTypes, IEnumerable<VehicleListModel> vehicles, int count)
         {
             var model = new VehiclesQueryModel()
             {
                 SearchTerm = searchTerm,
                 VehiclesPerPage = vehiclesPerPage,
                 CurrentPage = currentPage,
+                SelectedVehicleTypes = selectedVehicleTypes,
                 SortingOptions = Enum.GetValues<VehicleSorting>().ToHashSet(),
                 VehicleTypes = Enum.GetValues<VehicleType>().ToHashSet(),
                 VehiclesCount = count,
