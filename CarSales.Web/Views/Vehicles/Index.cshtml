@@ -9,14 +9,14 @@
 
     var maxPage = Math.Ceiling((double)Model.VehiclesCount /
     Model.VehiclesPerPage);
-    var shouldButtonBeDisabled = Model.CurrentPage == maxPage;
-
+    var shouldButtonBeDisabled = Model.CurrentPage >= maxPage;
+    var testVar = Model.SelectedVehicleTypes;
 }
 
 <h1 class="text-center">@ViewData["Title"]</h1>
 
 
-<form method="get">
+<form id="form" method="get">
     <div class="row mt-5 mb-5">
         <div class="d-flex justify-content-between">
 
@@ -29,16 +29,24 @@
                 <label asp-for="@Model.VehiclesPerPage">Vehicles Per Page</label>
                 <input type="number" asp-for="@Model.VehiclesPerPage" class="form-control" />
             </div>
-            @*            <div class="form-group">
-            <label class="form-label">Vehicle Types</label>
-            <label>All</label>
-            <input type="checkbox" id="all" value="@null" name="all" class="checkbox" />
-            @foreach (var vehicleType in Model.VehicleTypes)
-            {
-            <label>@vehicleType</label>
-            <input type="checkbox" id="@vehicleType" value="@vehicleType" name="@vehicleType" class="checkbox" />
-            }
-            </div>*@
+            <div class="form-group">
+                <label class="form-label">Vehicle Types</label>
+                <div id="vehicleTypesDiv">
+
+                    <input id="selectedVehicleTypes" asp-for="@Model.SelectedVehicleTypes" hidden />
+                    <div class="form-check">
+                        <input type="checkbox" id="all" value="@null" name="all" class="form-check-input" />
+                        <label>All</label>
+                    </div>
+                    @foreach (var vehicleType in Model.VehicleTypes)
+                    {
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input vehicle-types" id="@vehicleType.ToString().ToLower()" value="@vehicleType" name="@vehicleType.ToString().ToLower()" />
+                            <label>@vehicleType</label>
+                        </div>
+                    }
+                </div>
+            </div>
             <div class="form-group">
                 <label asp-for="@Model.VehicleSorting">Sorting</label>
                 <select asp-for="@Model.VehicleSorting" class="form-select">
@@ -59,7 +67,8 @@
                asp-route-searchTerm="@Model.SearchTerm"
                asp-route-vehiclesPerPage="@Model.VehiclesPerPage"
                asp-route-currentPage="@previousPage"
-               asp-route-vehicleSorting="@((int)Model.VehicleSorting)"><i class="bi bi-arrow-left-square"></i></a>
+               asp-route-vehicleSorting="@((int)Model.VehicleSorting)"
+               asp-route-selectedVehicleTypes="@Model.SelectedVehicleTypes"><i class="bi bi-arrow-left-square"></i></a>
         </div>
 
         <div class="col-md-6 d-grid gap-2 d-md-flex justify-content-md-end">
@@ -69,13 +78,14 @@
                asp-route-searchTerm="@Model.SearchTerm"
                asp-route-vehiclesPerPage="@Model.VehiclesPerPage"
                asp-route-currentPage="@(Model.CurrentPage + 1)"
-               asp-route-vehicleSorting="@((int)Model.VehicleSorting)"><i class="bi bi-arrow-right-square"></i></a>
+               asp-route-vehicleSorting="@((int)Model.VehicleSorting)"
+               asp-route-selectedVehicleTypes="@Model.SelectedVehicleTypes"><i class="bi bi-arrow-right-square"></i></a>
         </div>
     </div>
-    @*asp-route-selectedVehicleTypes="@null"*@
+
 
     <div class="text-center btn-lg">
-        <button type="submit" class="btn btn-primary btn-lg">Filter</button>
+        <button type="submit" id="submitBtn" class="btn btn-primary btn-lg">Filter</button>
     </div>
 
 </form>
@@ -95,3 +105,5 @@ else
 {
     <h4 class="text-center">No vehicles for sale!</h4>
 }
+
+<script src="~/js/Vehicles/selectVehicleTypes.js"></script>
