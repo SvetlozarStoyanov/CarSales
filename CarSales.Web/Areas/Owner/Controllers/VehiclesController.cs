@@ -13,9 +13,25 @@ namespace CarSales.Web.Areas.Owner.Controllers
         {
             this.vehicleService = vehicleService;
         }
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index([FromQuery] VehiclesQueryModel model)
         {
-            var model = await vehicleService.GetAllVehiclesForSaleAsync();
+            var queryResult = await vehicleService.GetAllVehiclesForSaleAsync(
+                model.SearchTerm,
+                model.VehiclesPerPage,
+                model.CurrentPage,
+                model.SelectedVehicleTypes,
+                model.VehicleSorting);
+
+            model.SearchTerm = queryResult.SearchTerm;
+            model.VehiclesPerPage = queryResult.VehiclesPerPage;
+            model.CurrentPage = queryResult.CurrentPage;
+            model.VehiclesCount = queryResult.VehiclesCount;
+            model.VehicleSorting = queryResult.VehicleSorting;
+            model.SortingOptions = queryResult.SortingOptions;
+            model.VehicleTypes = queryResult.VehicleTypes;
+            model.SelectedVehicleTypes = queryResult.SelectedVehicleTypes;
+            model.Vehicles = queryResult.Vehicles;
+
             return View(model);
         }
 
