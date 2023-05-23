@@ -36,9 +36,25 @@ namespace CarSales.Web.Areas.Importer.Controllers
             return View(model);
         }
 
-        public async Task<IActionResult> AllImportedVehicles()
+        public async Task<IActionResult> ImportedVehicles([FromQuery] VehiclesQueryModel model)
         {
-            var model = await vehicleService.GetAllImportedVehiclesAsync();
+            var queryResult = await vehicleService.GetImportedVehicles(
+                model.SearchTerm,
+                model.VehiclesPerPage,
+                model.CurrentPage,
+                model.SelectedVehicleTypes,
+                model.VehicleSorting);
+
+            model.SearchTerm = queryResult.SearchTerm;
+            model.VehiclesPerPage = queryResult.VehiclesPerPage;
+            model.CurrentPage = queryResult.CurrentPage;
+            model.VehiclesCount = queryResult.VehiclesCount;
+            model.VehicleSorting = queryResult.VehicleSorting;
+            model.SortingOptions = queryResult.SortingOptions;
+            model.VehicleTypes = queryResult.VehicleTypes;
+            model.SelectedVehicleTypes = queryResult.SelectedVehicleTypes;
+            model.Vehicles = queryResult.Vehicles;
+
             return View(model);
         }
 
@@ -53,15 +69,49 @@ namespace CarSales.Web.Areas.Importer.Controllers
             return View(model);
         }
 
-        public async Task<IActionResult> Mine()
+        public async Task<IActionResult> Mine([FromQuery] VehiclesQueryModel model)
         {
-            var model = await vehicleService.GetOwnerVehiclesAsync(User.Id());
+            var queryResult = await vehicleService.GetOwnerVehiclesAsync(
+                 User.Id(),
+                 model.SearchTerm,
+                 model.VehiclesPerPage,
+                 model.CurrentPage,
+                 model.SelectedVehicleTypes,
+                 model.VehicleSorting);
+
+            model.SearchTerm = queryResult.SearchTerm;
+            model.VehiclesPerPage = queryResult.VehiclesPerPage;
+            model.CurrentPage = queryResult.CurrentPage;
+            model.VehiclesCount = queryResult.VehiclesCount;
+            model.VehicleSorting = queryResult.VehicleSorting;
+            model.SortingOptions = queryResult.SortingOptions;
+            model.VehicleTypes = queryResult.VehicleTypes;
+            model.SelectedVehicleTypes = queryResult.SelectedVehicleTypes;
+            model.Vehicles = queryResult.Vehicles;
+
             return View(model);
         }
 
-        public async Task<IActionResult> MyImportedVehicles()
+        public async Task<IActionResult> MyImportedVehicles([FromQuery] VehiclesQueryModel model)
         {
-            var model = await vehicleService.GetImporterVehiclesAsync(User.Id());
+            var queryResult = await vehicleService.GetImporterVehiclesAsync(
+            User.Id(),
+            model.SearchTerm,
+            model.VehiclesPerPage,
+            model.CurrentPage,
+            model.SelectedVehicleTypes,
+            model.VehicleSorting);
+
+            model.SearchTerm = queryResult.SearchTerm;
+            model.VehiclesPerPage = queryResult.VehiclesPerPage;
+            model.CurrentPage = queryResult.CurrentPage;
+            model.VehiclesCount = queryResult.VehiclesCount;
+            model.VehicleSorting = queryResult.VehicleSorting;
+            model.SortingOptions = queryResult.SortingOptions;
+            model.VehicleTypes = queryResult.VehicleTypes;
+            model.SelectedVehicleTypes = queryResult.SelectedVehicleTypes;
+            model.Vehicles = queryResult.Vehicles;
+
             return View(model);
         }
 

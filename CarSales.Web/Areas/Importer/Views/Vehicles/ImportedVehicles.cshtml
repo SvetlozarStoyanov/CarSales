@@ -1,6 +1,6 @@
 ﻿@model VehiclesQueryModel
 @{
-    ViewData["Title"] = "All Vehicles for sale";
+    ViewData["Title"] = "Imported vehicles";
     var previousPage = Model.CurrentPage - 1;
     if (previousPage < 1)
     {
@@ -29,7 +29,7 @@
             <div class="form-group">
                 <label asp-for="@Model.VehiclesPerPage" class="form-label custom-label">Vehicles Per Page</label>
                 <select asp-for="@Model.VehiclesPerPage" class="form-select">
-                    @for (int i = 1; i <= 12; i++)
+                    @for (int i = 1; i < 12; i++)
                     {
                         <option value="@i">@i</option>
                     }
@@ -112,7 +112,7 @@
 }
 else
 {
-    <h3 class="text-center mt-5">No vehicles for sale!</h3>
+    <h3 class="text-center mt-5">No imported vehicles!</h3>
 }
 
 <script src="~/js/Vehicles/selectVehicleTypes.js"></script>
