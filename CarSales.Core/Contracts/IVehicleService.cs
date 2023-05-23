@@ -15,7 +15,7 @@ namespace CarSales.Core.Contracts
         /// <param name="currentPage"></param>
         /// <param name="sorting"></param>
         /// <param name="selectedVehicleTypes"></param>
-        /// <returns></returns>
+        /// <returns><see cref="VehiclesQueryModel"/></returns>
         Task<VehiclesQueryModel> GetAllVehiclesForSaleAsync(string searchTerm = null,
             int vehiclesPerPage = 6,
             int currentPage = 1,
@@ -24,10 +24,20 @@ namespace CarSales.Core.Contracts
             );
 
         /// <summary>
-        /// Returns all <see cref="Vehicle"/> which are for imported
+        /// Returns all imported <see cref="Vehicle"/> which match the given criteria
         /// </summary>
-        /// <returns><see cref="ICollection{VehicleListViewModel}"/></returns>
-        Task<ICollection<VehicleListModel>> GetAllImportedVehiclesAsync();
+        /// <param name="searchTerm"></param>
+        /// <param name="vehiclesPerPage"></param>
+        /// <param name="currentPage"></param>
+        /// <param name="sorting"></param>
+        /// <param name="selectedVehicleTypes"></param>
+        /// <returns><see cref="VehiclesQueryModel"/></returns>
+        Task<VehiclesQueryModel> GetImportedVehicles(string searchTerm = null,
+            int vehiclesPerPage = 6,
+            int currentPage = 1,
+            string selectedVehicleTypes = null,
+            VehicleSorting sorting = VehicleSorting.Alphabetically
+            );
 
         /// <summary>
         /// Returns <see cref="Vehicle"/> by given <paramref name="id"/>
@@ -40,22 +50,52 @@ namespace CarSales.Core.Contracts
         /// Returns all <see cref="Vehicle"/>belonging to <see cref="Owner"/> with given <paramref name="userId"/>
         /// </summary>
         /// <param name="userId"></param>
-        /// <returns><see cref="ICollection{VehicleListViewModel}"/></returns>
-        Task<ICollection<VehicleListModel>> GetOwnerVehiclesAsync(string userId);
+        /// <param name="searchTerm"></param>
+        /// <param name="vehiclesPerPage"></param>
+        /// <param name="currentPage"></param>
+        /// <param name="selectedVehicleTypes"></param>
+        /// <param name="sorting"></param>
+        /// <returns><see cref="VehiclesQueryModel"/></returns>
+        Task<VehiclesQueryModel> GetOwnerVehiclesAsync(string userId,
+            string searchTerm = null,
+            int vehiclesPerPage = 6,
+            int currentPage = 1,
+            string selectedVehicleTypes = null,
+            VehicleSorting sorting = VehicleSorting.Alphabetically);
 
         /// <summary>
-        /// Returns all <see cref="Vehicle"/> belonging to <see cref="Salesman"/> with given <paramref name="userId"/>
+        /// Returns all <see cref="Vehicle"/> being sold by <see cref="Salesman"/> with given <paramref name="userId"/>
         /// </summary>
         /// <param name="userId"></param>
-        /// <returns><see cref="ICollection{VehicleListViewModel}"/></returns>
-        Task<ICollection<VehicleListModel>> GetSalesmanVehiclesAsync(string userId);
+        /// <param name="searchTerm"></param>
+        /// <param name="vehiclesPerPage"></param>
+        /// <param name="currentPage"></param>
+        /// <param name="selectedVehicleTypes"></param>
+        /// <param name="sorting"></param>
+        /// <returns><see cref="VehiclesQueryModel"/></returns>
+        Task<VehiclesQueryModel> GetSalesmanVehiclesAsync(string userId,
+            string searchTerm = null,
+            int vehiclesPerPage = 6,
+            int currentPage = 1,
+            string selectedVehicleTypes = null,
+            VehicleSorting sorting = VehicleSorting.Alphabetically);
 
         /// <summary>
-        /// Returns all <see cref="Vehicle"/> belonging to <see cref="Importer"/> with given <paramref name="userId"/>
+        /// Returns all <see cref="Vehicle"/> imported by <see cref="Importer"/> with given <paramref name="userId"/>
         /// </summary>
         /// <param name="userId"></param>
-        /// <returns><see cref="ICollection{VehicleListViewModel}"/></returns>
-        Task<ICollection<VehicleListModel>> GetImporterVehiclesAsync(string userId);
+        /// <param name="searchTerm"></param>
+        /// <param name="vehiclesPerPage"></param>
+        /// <param name="currentPage"></param>
+        /// <param name="selectedVehicleTypes"></param>
+        /// <param name="sorting"></param>
+        /// <returns><see cref="VehiclesQueryModel"/></returns>
+        Task<VehiclesQueryModel> GetImporterVehiclesAsync(string userId,
+            string searchTerm = null,
+            int vehiclesPerPage = 6,
+            int currentPage = 1,
+            string selectedVehicleTypes = null,
+            VehicleSorting sorting = VehicleSorting.Alphabetically);
 
         /// <summary>
         /// Changes the <see cref="VehicleRating"/> of vehicle with given <paramref name="id"/>

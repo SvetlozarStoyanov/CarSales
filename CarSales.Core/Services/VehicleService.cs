@@ -29,38 +29,40 @@ namespace CarSales.Core.Services
                 .Include(v => v.Salesman)
                 .ThenInclude(s => s.User)
                 .ToListAsync();
-
-            if (!string.IsNullOrWhiteSpace(searchTerm))
+            if (vehicles.Count > 0)
             {
-                vehicles = vehicles.Where(v => v.Brand.Contains(searchTerm)
-                || v.Model.Contains(searchTerm))
-                .ToList();
-            }
-            if (!string.IsNullOrEmpty(selectedVehicleTypes))
-            {
-                var selectedTypes = selectedVehicleTypes.Split(';', StringSplitOptions.RemoveEmptyEntries)
-                    .Select(vt => Enum.Parse<VehicleType>(vt))
+                if (!string.IsNullOrWhiteSpace(searchTerm))
+                {
+                    vehicles = vehicles.Where(v => v.Brand.Contains(searchTerm)
+                    || v.Model.Contains(searchTerm))
                     .ToList();
-                vehicles = vehicles.Where(v => selectedTypes.Contains(v.VehicleType))
-                    .ToList();
-            }
-            switch (sorting)
-            {
-                case VehicleSorting.Alphabetically:
-                    vehicles = vehicles.OrderBy(v => v.Brand).ToList();
-                    break;
-                case VehicleSorting.PriceAscending:
-                    vehicles = vehicles.OrderBy(v => v.Price).ToList();
-                    break;
-                case VehicleSorting.PriceDescending:
-                    vehicles = vehicles.OrderByDescending(v => v.Price).ToList();
-                    break;
-                case VehicleSorting.RatingAscending:
-                    vehicles = vehicles.OrderBy(v => v.VehicleRating).ToList();
-                    break;
-                case VehicleSorting.RatingDescending:
-                    vehicles = vehicles.OrderByDescending(v => v.VehicleRating).ToList();
-                    break;
+                }
+                if (!string.IsNullOrEmpty(selectedVehicleTypes))
+                {
+                    var selectedTypes = selectedVehicleTypes.Split(';', StringSplitOptions.RemoveEmptyEntries)
+                        .Select(vt => Enum.Parse<VehicleType>(vt))
+                        .ToList();
+                    vehicles = vehicles.Where(v => selectedTypes.Contains(v.VehicleType))
+                        .ToList();
+                }
+                switch (sorting)
+                {
+                    case VehicleSorting.Alphabetically:
+                        vehicles = vehicles.OrderBy(v => v.Brand).ToList();
+                        break;
+                    case VehicleSorting.PriceAscending:
+                        vehicles = vehicles.OrderBy(v => v.Price).ToList();
+                        break;
+                    case VehicleSorting.PriceDescending:
+                        vehicles = vehicles.OrderByDescending(v => v.Price).ToList();
+                        break;
+                    case VehicleSorting.RatingAscending:
+                        vehicles = vehicles.OrderBy(v => v.VehicleRating).ToList();
+                        break;
+                    case VehicleSorting.RatingDescending:
+                        vehicles = vehicles.OrderByDescending(v => v.VehicleRating).ToList();
+                        break;
+                }
             }
 
             var sortedVehicles = vehicles
@@ -87,10 +89,56 @@ namespace CarSales.Core.Services
             return queryModel;
         }
 
-        public async Task<ICollection<VehicleListModel>> GetAllImportedVehiclesAsync()
+        public async Task<VehiclesQueryModel> GetImportedVehicles(string searchTerm = null,
+            int vehiclesPerPage = 6,
+            int currentPage = 1,
+            string selectedVehicleTypes = null,
+            VehicleSorting sorting = VehicleSorting.Alphabetically
+            )
         {
             var vehicles = await repository.AllReadOnly<Vehicle>()
-                .Where(v => v.ImporterId != null)
+            .Where(v => v.ImporterId != null)
+            .Include(v => v.Importer)
+            .ThenInclude(i => i.User)
+            .ToListAsync();
+            if (vehicles.Count > 0)
+            {
+                if (!string.IsNullOrWhiteSpace(searchTerm))
+                {
+                    vehicles = vehicles.Where(v => v.Brand.Contains(searchTerm)
+                    || v.Model.Contains(searchTerm))
+                    .ToList();
+                }
+                if (!string.IsNullOrEmpty(selectedVehicleTypes))
+                {
+                    var selectedTypes = selectedVehicleTypes.Split(';', StringSplitOptions.RemoveEmptyEntries)
+                        .Select(vt => Enum.Parse<VehicleType>(vt))
+                        .ToList();
+                    vehicles = vehicles.Where(v => selectedTypes.Contains(v.VehicleType))
+                        .ToList();
+                }
+                switch (sorting)
+                {
+                    case VehicleSorting.Alphabetically:
+                        vehicles = vehicles.OrderBy(v => v.Brand).ToList();
+                        break;
+                    case VehicleSorting.PriceAscending:
+                        vehicles = vehicles.OrderBy(v => v.Price).ToList();
+                        break;
+                    case VehicleSorting.PriceDescending:
+                        vehicles = vehicles.OrderByDescending(v => v.Price).ToList();
+                        break;
+                    case VehicleSorting.RatingAscending:
+                        vehicles = vehicles.OrderBy(v => v.VehicleRating).ToList();
+                        break;
+                    case VehicleSorting.RatingDescending:
+                        vehicles = vehicles.OrderByDescending(v => v.VehicleRating).ToList();
+                        break;
+                }
+            }
+            var sortedVehicles = vehicles
+                .Skip((currentPage - 1) * vehiclesPerPage)
+                .Take(vehiclesPerPage)
                 .Select(v => new VehicleListModel()
                 {
                     Id = v.Id,
@@ -102,9 +150,14 @@ namespace CarSales.Core.Services
                     ImporterId = v.ImporterId,
                     ImporterUserId = v.Importer.UserId,
                     ImporterName = $"{v.Importer.User.FirstName} {v.Importer.User.LastName}"
-                })
-                .ToListAsync();
-            return vehicles;
+                });
+            if (!sortedVehicles.Any())
+            {
+                currentPage = 1;
+            }
+            var queryModel = CreateVehiclesQueryModel(searchTerm, vehiclesPerPage, currentPage, selectedVehicleTypes, sortedVehicles, vehicles.Count);
+
+            return queryModel;
         }
 
         public async Task<VehicleViewModel> GetVehicleByIdAsync(int id)
@@ -140,12 +193,58 @@ namespace CarSales.Core.Services
             return vehicle;
         }
 
-        public async Task<ICollection<VehicleListModel>> GetOwnerVehiclesAsync(string userId)
+        public async Task<VehiclesQueryModel> GetOwnerVehiclesAsync(string userId,
+            string searchTerm = null,
+            int vehiclesPerPage = 6,
+            int currentPage = 1,
+            string selectedVehicleTypes = null,
+            VehicleSorting sorting = VehicleSorting.Alphabetically)
         {
-            var owner = await repository.AllReadOnly<Owner>()
-                .FirstOrDefaultAsync(o => o.UserId == userId);
-            var ownerVehicles = await repository.AllReadOnly<Vehicle>()
-                .Where(v => v.OwnerId == owner.Id)
+            var vehicles = await repository.AllReadOnly<Vehicle>()
+                .Where(v => v.Owner.UserId == userId)
+                .Include(v => v.Owner)
+                .ThenInclude(o => o.User)
+                .ToListAsync();
+
+            if (vehicles.Count > 0)
+            {
+                if (!string.IsNullOrWhiteSpace(searchTerm))
+                {
+                    vehicles = vehicles.Where(v => v.Brand.Contains(searchTerm)
+                    || v.Model.Contains(searchTerm))
+                    .ToList();
+                }
+                if (!string.IsNullOrEmpty(selectedVehicleTypes))
+                {
+                    var selectedTypes = selectedVehicleTypes.Split(';', StringSplitOptions.RemoveEmptyEntries)
+                        .Select(vt => Enum.Parse<VehicleType>(vt))
+                        .ToList();
+                    vehicles = vehicles.Where(v => selectedTypes.Contains(v.VehicleType))
+                        .ToList();
+                }
+                switch (sorting)
+                {
+                    case VehicleSorting.Alphabetically:
+                        vehicles = vehicles.OrderBy(v => v.Brand).ToList();
+                        break;
+                    case VehicleSorting.PriceAscending:
+                        vehicles = vehicles.OrderBy(v => v.Price).ToList();
+                        break;
+                    case VehicleSorting.PriceDescending:
+                        vehicles = vehicles.OrderByDescending(v => v.Price).ToList();
+                        break;
+                    case VehicleSorting.RatingAscending:
+                        vehicles = vehicles.OrderBy(v => v.VehicleRating).ToList();
+                        break;
+                    case VehicleSorting.RatingDescending:
+                        vehicles = vehicles.OrderByDescending(v => v.VehicleRating).ToList();
+                        break;
+                }
+            }
+
+            var sortedVehicles = vehicles
+                .Skip((currentPage - 1) * vehiclesPerPage)
+                .Take(vehiclesPerPage)
                 .Select(v => new VehicleListModel()
                 {
                     Id = v.Id,
@@ -155,19 +254,71 @@ namespace CarSales.Core.Services
                     VehicleRating = v.VehicleRating,
                     Price = v.Price,
                     OwnerId = v.OwnerId,
-                    OwnerName = $"{v.Owner.User.FirstName} {v.Owner.User.LastName}",
-                    OwnerUserId = v.Owner.User.Id
-                }).ToListAsync();
-            return ownerVehicles;
+                    OwnerUserId = v.Owner.UserId,
+                    OwnerName = $"{v.Owner.User.FirstName} {v.Owner.User.LastName}"
+                });
+            if (!sortedVehicles.Any())
+            {
+                currentPage = 1;
+            }
+            var queryModel = CreateVehiclesQueryModel(searchTerm, vehiclesPerPage, currentPage, selectedVehicleTypes, sortedVehicles, vehicles.Count);
+
+            return queryModel;
         }
 
-        public async Task<ICollection<VehicleListModel>> GetSalesmanVehiclesAsync(string userId)
+        public async Task<VehiclesQueryModel> GetSalesmanVehiclesAsync(string userId,
+            string searchTerm = null,
+            int vehiclesPerPage = 6,
+            int currentPage = 1,
+            string selectedVehicleTypes = null,
+            VehicleSorting sorting = VehicleSorting.Alphabetically)
         {
-            var salesman = await repository.AllReadOnly<Salesman>()
-                .FirstOrDefaultAsync(o => o.UserId == userId);
-            var salesmanVehicles = await repository.AllReadOnly<Vehicle>()
-                .Where(v => v.SalesmanId == salesman.Id).
-                Select(v => new VehicleListModel()
+            var vehicles = await repository.AllReadOnly<Vehicle>()
+                .Where(v => v.Salesman.UserId == userId)
+                .Include(v => v.Salesman)
+                .ThenInclude(s => s.User)
+                .ToListAsync();
+
+            if (vehicles.Count > 0)
+            {
+                if (!string.IsNullOrWhiteSpace(searchTerm))
+                {
+                    vehicles = vehicles.Where(v => v.Brand.Contains(searchTerm)
+                    || v.Model.Contains(searchTerm))
+                    .ToList();
+                }
+                if (!string.IsNullOrEmpty(selectedVehicleTypes))
+                {
+                    var selectedTypes = selectedVehicleTypes.Split(';', StringSplitOptions.RemoveEmptyEntries)
+                        .Select(vt => Enum.Parse<VehicleType>(vt))
+                        .ToList();
+                    vehicles = vehicles.Where(v => selectedTypes.Contains(v.VehicleType))
+                        .ToList();
+                }
+                switch (sorting)
+                {
+                    case VehicleSorting.Alphabetically:
+                        vehicles = vehicles.OrderBy(v => v.Brand).ToList();
+                        break;
+                    case VehicleSorting.PriceAscending:
+                        vehicles = vehicles.OrderBy(v => v.Price).ToList();
+                        break;
+                    case VehicleSorting.PriceDescending:
+                        vehicles = vehicles.OrderByDescending(v => v.Price).ToList();
+                        break;
+                    case VehicleSorting.RatingAscending:
+                        vehicles = vehicles.OrderBy(v => v.VehicleRating).ToList();
+                        break;
+                    case VehicleSorting.RatingDescending:
+                        vehicles = vehicles.OrderByDescending(v => v.VehicleRating).ToList();
+                        break;
+                }
+            }
+
+            var sortedVehicles = vehicles
+                .Skip((currentPage - 1) * vehiclesPerPage)
+                .Take(vehiclesPerPage)
+                .Select(v => new VehicleListModel()
                 {
                     Id = v.Id,
                     Name = $"{v.Brand} {v.Model} {v.YearProduced}",
@@ -175,19 +326,72 @@ namespace CarSales.Core.Services
                     VehicleType = v.VehicleType,
                     VehicleRating = v.VehicleRating,
                     Price = v.Price,
+                    SalesmanId = v.SalesmanId,
+                    SalesmanUserId = v.Salesman.UserId,
                     SalesmanName = $"{v.Salesman.User.FirstName} {v.Salesman.User.LastName}"
-                }).ToListAsync();
-            return salesmanVehicles;
+                });
+            if (!sortedVehicles.Any())
+            {
+                currentPage = 1;
+            }
+            var queryModel = CreateVehiclesQueryModel(searchTerm, vehiclesPerPage, currentPage, selectedVehicleTypes, sortedVehicles, vehicles.Count);
+
+            return queryModel;
         }
 
-        public async Task<ICollection<VehicleListModel>> GetImporterVehiclesAsync(string userId)
+        public async Task<VehiclesQueryModel> GetImporterVehiclesAsync(string userId,
+            string searchTerm = null,
+            int vehiclesPerPage = 6,
+            int currentPage = 1,
+            string selectedVehicleTypes = null,
+            VehicleSorting sorting = VehicleSorting.Alphabetically)
         {
-            var importer = await repository.AllReadOnly<Importer>()
-                .FirstOrDefaultAsync(o => o.UserId == userId);
+            var vehicles = await repository.AllReadOnly<Vehicle>()
+                .Where(v => v.Salesman.UserId == userId)
+                .Include(v => v.Salesman)
+                .ThenInclude(s => s.User)
+                .ToListAsync();
 
-            var importerVehicles = await repository.AllReadOnly<Vehicle>()
-                .Where(v => v.ImporterId == importer.Id).
-                Select(v => new VehicleListModel()
+            if (vehicles.Count > 0)
+            {
+                if (!string.IsNullOrWhiteSpace(searchTerm))
+                {
+                    vehicles = vehicles.Where(v => v.Brand.Contains(searchTerm)
+                    || v.Model.Contains(searchTerm))
+                    .ToList();
+                }
+                if (!string.IsNullOrEmpty(selectedVehicleTypes))
+                {
+                    var selectedTypes = selectedVehicleTypes.Split(';', StringSplitOptions.RemoveEmptyEntries)
+                        .Select(vt => Enum.Parse<VehicleType>(vt))
+                        .ToList();
+                    vehicles = vehicles.Where(v => selectedTypes.Contains(v.VehicleType))
+                        .ToList();
+                }
+                switch (sorting)
+                {
+                    case VehicleSorting.Alphabetically:
+                        vehicles = vehicles.OrderBy(v => v.Brand).ToList();
+                        break;
+                    case VehicleSorting.PriceAscending:
+                        vehicles = vehicles.OrderBy(v => v.Price).ToList();
+                        break;
+                    case VehicleSorting.PriceDescending:
+                        vehicles = vehicles.OrderByDescending(v => v.Price).ToList();
+                        break;
+                    case VehicleSorting.RatingAscending:
+                        vehicles = vehicles.OrderBy(v => v.VehicleRating).ToList();
+                        break;
+                    case VehicleSorting.RatingDescending:
+                        vehicles = vehicles.OrderByDescending(v => v.VehicleRating).ToList();
+                        break;
+                }
+            }
+
+            var sortedVehicles = vehicles
+                .Skip((currentPage - 1) * vehiclesPerPage)
+                .Take(vehiclesPerPage)
+                .Select(v => new VehicleListModel()
                 {
                     Id = v.Id,
                     Name = $"{v.Brand} {v.Model} {v.YearProduced}",
@@ -195,10 +399,17 @@ namespace CarSales.Core.Services
                     VehicleType = v.VehicleType,
                     VehicleRating = v.VehicleRating,
                     Price = v.Price,
-                    ImporterName = $"{v.Importer.User.FirstName} {v.Importer.User.LastName}"
-                }).ToListAsync();
+                    SalesmanId = v.SalesmanId,
+                    SalesmanUserId = v.Salesman.UserId,
+                    SalesmanName = $"{v.Salesman.User.FirstName} {v.Salesman.User.LastName}"
+                });
+            if (!sortedVehicles.Any())
+            {
+                currentPage = 1;
+            }
+            var queryModel = CreateVehiclesQueryModel(searchTerm, vehiclesPerPage, currentPage, selectedVehicleTypes, sortedVehicles, vehicles.Count);
 
-            return importerVehicles;
+            return queryModel;
         }
 
 
