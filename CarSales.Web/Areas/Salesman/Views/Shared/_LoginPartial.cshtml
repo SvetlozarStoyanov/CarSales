@@ -17,6 +17,13 @@
                 <a class="nav-link" asp-area="Salesman" asp-controller="Vehicles" asp-action="MyVehiclesOnSale">On Sale</a>
             </div>
         </li>
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">My offers</a>
+            <div class="dropdown-menu">
+                <a class="nav-link" asp-area="Salesman" asp-controller="Offers" asp-action="Outgoing">Outgoing</a>
+                <a class="nav-link" asp-area="Salesman" asp-controller="Offers" asp-action="Incoming">Incoming</a>
+            </div>
+        </li>
 
         @*<li class="nav-item">
     <a class="nav-link">My account</a>
