@@ -1,0 +1,54 @@
+﻿@model IEnumerable<OfferListModel>
+@{
+    ViewData["Title"] = "My incoming offers";
+}
+
+<h1 class="text-center mt-3 mb-3">
+    @ViewData["Title"]
+</h1>
+
+@if (Model.Count() > 0)
+{
+    <table class="table table-bordered  table-striped" style="width:100%">
+        <thead>
+            <tr>
+                <th>
+                    Vehicle
+                </th>
+                <th>
+                    Offeror
+                </th>
+                <th>
+
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var offer in Model)
+            {
+                <tr>
+                    <td width="30%">
+                        @offer.VehicleName
+                    </td>
+                    <td width="50%">
+                        @offer.OfferorName
+                    </td>
+                    <td>
+                        <div class="w-75 btn-group" role="group">
+                            <a asp-area="Salesman" asp-controller="Offers" asp-action="Details" asp-route-id="@offer.Id" class="btn btn-primary mx-2">
+                                <i class="bi bi-info"></i>
+                                Details
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <h2 class="text-center mt-3 mb-3">
+        You don't have any offers!
+    </h2>
+}
