@@ -8,10 +8,12 @@ namespace CarSales.Web.Areas.Owner.Controllers
     public class VehiclesController : BaseController
     {
         private readonly IVehicleService vehicleService;
+        private readonly IOfferService offerService;
 
-        public VehiclesController(IVehicleService vehicleService)
+        public VehiclesController(IVehicleService vehicleService, IOfferService offerService)
         {
             this.vehicleService = vehicleService;
+            this.offerService = offerService;
         }
         public async Task<IActionResult> Index([FromQuery] VehiclesQueryModel model)
         {
@@ -43,6 +45,7 @@ namespace CarSales.Web.Areas.Owner.Controllers
                 TempData["error"] = "Vehicle does not exist!";
                 return RedirectToAction("Index");
             }
+            ViewBag.CanMakeOffer = await offerService.CanCreateOfferAsync(User.Id(), id);
             return View(model);
         }
 
