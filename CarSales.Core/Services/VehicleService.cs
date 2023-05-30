@@ -454,6 +454,8 @@ namespace CarSales.Core.Services
                 VehicleId = vehicle.Id,
                 SalePrice = vehicle.Price,
             };
+
+            await DeclineAllOffersForVehicleAsync(id);
             await repository.AddAsync<Sale>(sale);
             await repository.SaveChangesAsync();
         }
@@ -603,6 +605,17 @@ namespace CarSales.Core.Services
                 Vehicles = vehicles
             };
             return model;
+        }
+
+        private async Task DeclineAllOffersForVehicleAsync(int vehicleId)
+        {
+            var offers = await repository.All<Offer>()
+                .Where(o => o.VehicleId == vehicleId && o.Status == OfferStatus.Pending)
+                .ToListAsync();
+            foreach (var offer in offers)
+            {
+                offer.Status = OfferStatus.Declined;
+            } 
         }
     }
 }
