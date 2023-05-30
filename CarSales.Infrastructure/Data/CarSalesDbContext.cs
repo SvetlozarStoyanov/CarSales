@@ -17,6 +17,8 @@ namespace CarSales.Infrastructure.Data
         public DbSet<Vehicle> Vehicles { get; set; } = null!;
         public DbSet<Sale> Sales { get; set; } = null!;
         public DbSet<RoleRequest> RoleRequests { get; set; } = null!;
+        public DbSet<Offer> Offers { get; set; } = null!;
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.Entity<Vehicle>()
@@ -63,8 +65,24 @@ namespace CarSales.Infrastructure.Data
 
             builder.Entity<Sale>()
                 .HasOne(s => s.Vehicle)
-                .WithMany(sm => sm.Sales)
+                .WithMany(v => v.Sales)
                 .HasForeignKey(s => s.VehicleId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<Offer>()
+                .HasOne(o => o.Offeror)
+                .WithMany(o => o.Offers)
+                .HasForeignKey(o => o.OfferorId)
+                .OnDelete(DeleteBehavior.Restrict);
+            builder.Entity<Offer>()
+                .HasOne(o => o.Salesman)
+                .WithMany(o => o.Offers)
+                .HasForeignKey(o => o.SalesmanId)
+                .OnDelete(DeleteBehavior.Restrict);
+            builder.Entity<Offer>()
+                .HasOne(o => o.Vehicle)
+                .WithMany(o => o.Offers)
+                .HasForeignKey(o => o.VehicleId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             builder.ApplyConfiguration(new UserConfiguration());
