@@ -13,6 +13,6 @@ namespace CarSales.Infrastructure.Data.Entities
         [MinLength(3), MaxLength(30)]
         public string LastName { get; set; }
 
-        public decimal Credits { get; set; }
+        public decimal Credits { get; set; } = 50000;
     }
 }
