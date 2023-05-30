@@ -180,6 +180,42 @@ namespace CarSales.Web.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Offers",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    VehicleId = table.Column<int>(type: "int", nullable: false),
+                    OfferorId = table.Column<int>(type: "int", nullable: false),
+                    SalesmanId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Offers", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Offers_Owners_OfferorId",
+                        column: x => x.OfferorId,
+                        principalTable: "Owners",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Offers_Salesmen_SalesmanId",
+                        column: x => x.SalesmanId,
+                        principalTable: "Salesmen",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Offers_Vehicles_VehicleId",
+                        column: x => x.VehicleId,
+                        principalTable: "Vehicles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Sales",
                 columns: table => new
                 {
@@ -235,11 +271,11 @@ namespace CarSales.Web.Data.Migrations
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Credits", "Email", "EmailConfirmed", "FirstName", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
                 values: new object[,]
                 {
-                    { "10933c11-ac2a-410d-b60a-8b1d97324975", 0, "0a3e56de-ec35-4b01-87e9-10049de3efbb", 50000m, "Importer@gmail.com", false, "Importer", "Test", false, null, "IMPORTER@GMAIL.COM", "IMPORTER", "AQAAAAIAAYagAAAAEJ8TqtM59hn06HRsU+0NEOVfVHXREsMuiu3/FfrMpzsQx/nOpOuQRRofZrwjzmrL/w==", null, false, "5d818ece-5ed1-4e3e-ba18-60fe89ebb0a1", false, "Importer" },
-                    { "66ccb670-f0dd-4aa1-a83d-8b2a0003bb50", 0, "666b4e38-173a-4628-b0ea-c4ff741ee438", 50000m, "Salesman@gmail.com", false, "Salesman", "Test", false, null, "SALESMAN@GMAIL.COM", "SALESMAN", "AQAAAAIAAYagAAAAEMzwjBfTcmh8OxEUiX7PbWfwYuKiZnyzcTkuqaTMRScbLXb1ZEt1vcGBpD7Xe5Ahqg==", null, false, "05ce33ba-0da4-42c9-8695-c608ee7533b7", false, "Salesman" },
-                    { "926bee86-8bbd-43f6-bc1c-9639d43531a4", 0, "6fa25b91-01d8-4d80-83db-8367102e8901", 50000m, "Owner2@gmail.com", false, "Owner2", "Test", false, null, "OWNER2@GMAIL.COM", "OWNER2", "AQAAAAIAAYagAAAAEE0V35tdvOfMj29GPXOBl09jL55FGyrolejEJovGO45C7UcTq7qAqD6j2q7RTi8EpQ==", null, false, "b2845bd0-100f-44a4-8183-513bc2779874", false, "Owner2" },
-                    { "b5fef437-f504-46d2-926d-3158e54e1932", 0, "cf4237ec-5567-4cb3-ba84-699247a1e5d1", 50000m, "Owner@gmail.com", false, "Owner", "Test", false, null, "OWNER@GMAIL.COM", "OWNER", "AQAAAAIAAYagAAAAEAFRvXJxWeOmlLBc5jE21UzOI9owRVzt5jpNHUEbW1k5MKg3dIIT9MOWvJm6QJkr7Q==", null, false, "b7e276fd-38e7-43e4-857d-d1623217f067", false, "Owner" },
-                    { "cbed6d2a-e60a-49df-a6e3-982ccd980393", 0, "407c42ac-4f5f-4b23-b417-403c751dfdce", 50000m, "Admin@gmail.com", false, "Admin", "Test", false, null, "ADMIN@GMAIL.COM", "ADMIN", "AQAAAAIAAYagAAAAEAmgiGSA8OSUKxl97RY34sPOiPEHyZ9txjM7ou0WTL8pWhN3EHbIH+hK6T5f4mkXJg==", null, false, "7ea07e7e-6763-4088-9fbb-0988af81eaed", false, "Admin" }
+                    { "10933c11-ac2a-410d-b60a-8b1d97324975", 0, "a977b914-8e95-439f-b841-a4870091323d", 50000m, "Importer@gmail.com", false, "Importer", "Test", false, null, "IMPORTER@GMAIL.COM", "IMPORTER", "AQAAAAIAAYagAAAAEDatsYS5acirZQ7DiguZqA6U+lj3aDzrksG/X3t6EtNADtJgb7aNglnmumQMyJxKKQ==", null, false, "b97d2351-df7b-4978-8924-6981371b3aa2", false, "Importer" },
+                    { "66ccb670-f0dd-4aa1-a83d-8b2a0003bb50", 0, "deda3cde-153e-4c9b-b1d9-c6ea55952d35", 50000m, "Salesman@gmail.com", false, "Salesman", "Test", false, null, "SALESMAN@GMAIL.COM", "SALESMAN", "AQAAAAIAAYagAAAAEMlsQcj2Rx57Oi1JfkAvSxFtGlKCay/6VhG2rUWDJjI1TPbs0wCTgbt9BFV2Sw5Rtw==", null, false, "aa7124e8-250d-493f-b0c2-c2da171a94ee", false, "Salesman" },
+                    { "926bee86-8bbd-43f6-bc1c-9639d43531a4", 0, "bf24b9cc-fe2b-44ee-9862-948f1a06e2e2", 50000m, "Owner2@gmail.com", false, "Owner2", "Test", false, null, "OWNER2@GMAIL.COM", "OWNER2", "AQAAAAIAAYagAAAAEAfFyuTmV3HLoJ9DUMBu3o2yDGqXsLu3P7vpkrHAwZvxRjE1f3rVOxZBKYNqXhDAbQ==", null, false, "88cebf01-754e-4286-b85d-1b97eb9becac", false, "Owner2" },
+                    { "b5fef437-f504-46d2-926d-3158e54e1932", 0, "1d84faac-e4d8-4f14-b39a-11e5d11c262c", 50000m, "Owner@gmail.com", false, "Owner", "Test", false, null, "OWNER@GMAIL.COM", "OWNER", "AQAAAAIAAYagAAAAEFjVaY8fFR6fqpWeiINBVVruOatBfM81k/0cfFfVBKUqxn1/kGwfEZTk2f5l4khJYw==", null, false, "5d152545-e4c3-4ae6-8503-8638413e8cd1", false, "Owner" },
+                    { "cbed6d2a-e60a-49df-a6e3-982ccd980393", 0, "736b9c5c-d6f5-45e6-b38e-f70e28efdec2", 50000m, "Admin@gmail.com", false, "Admin", "Test", false, null, "ADMIN@GMAIL.COM", "ADMIN", "AQAAAAIAAYagAAAAENLoC3jNXxzBYWqgdixPmg4ZXCtHWDuJ0qw5hZmcE8sbrJunqZ4ODDZpYWyqJ94ojA==", null, false, "6ec37ee3-7d90-44c1-8f17-6f71d8031616", false, "Admin" }
                 });
 
             migrationBuilder.InsertData(
@@ -302,6 +338,21 @@ namespace CarSales.Web.Data.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Offers_OfferorId",
+                table: "Offers",
+                column: "OfferorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Offers_SalesmanId",
+                table: "Offers",
+                column: "SalesmanId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Offers_VehicleId",
+                table: "Offers",
+                column: "VehicleId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Owners_UserId",
                 table: "Owners",
                 column: "UserId");
@@ -360,6 +411,9 @@ namespace CarSales.Web.Data.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Offers");
+
             migrationBuilder.DropTable(
                 name: "RoleRequests");
 

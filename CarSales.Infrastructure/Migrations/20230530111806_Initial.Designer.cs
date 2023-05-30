@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CarSales.Web.Data.Migrations
 {
     [DbContext(typeof(CarSalesDbContext))]
-    [Migration("20230508130341_Initial")]
+    [Migration("20230530111806_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -57,6 +57,43 @@ namespace CarSales.Web.Data.Migrations
                             IsActive = true,
                             UserId = "10933c11-ac2a-410d-b60a-8b1d97324975"
                         });
+                });
+
+            modelBuilder.Entity("CarSales.Infrastructure.Data.Entities.Offer", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("OfferorId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("SalesmanId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<int>("VehicleId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OfferorId");
+
+                    b.HasIndex("SalesmanId");
+
+                    b.HasIndex("VehicleId");
+
+                    b.ToTable("Offers");
                 });
 
             modelBuilder.Entity("CarSales.Infrastructure.Data.Entities.Owner", b =>
@@ -295,7 +332,7 @@ namespace CarSales.Web.Data.Migrations
                         {
                             Id = "cbed6d2a-e60a-49df-a6e3-982ccd980393",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "407c42ac-4f5f-4b23-b417-403c751dfdce",
+                            ConcurrencyStamp = "736b9c5c-d6f5-45e6-b38e-f70e28efdec2",
                             Credits = 50000m,
                             Email = "Admin@gmail.com",
                             EmailConfirmed = false,
@@ -304,9 +341,9 @@ namespace CarSales.Web.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@GMAIL.COM",
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAIAAYagAAAAEAmgiGSA8OSUKxl97RY34sPOiPEHyZ9txjM7ou0WTL8pWhN3EHbIH+hK6T5f4mkXJg==",
+                            PasswordHash = "AQAAAAIAAYagAAAAENLoC3jNXxzBYWqgdixPmg4ZXCtHWDuJ0qw5hZmcE8sbrJunqZ4ODDZpYWyqJ94ojA==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "7ea07e7e-6763-4088-9fbb-0988af81eaed",
+                            SecurityStamp = "6ec37ee3-7d90-44c1-8f17-6f71d8031616",
                             TwoFactorEnabled = false,
                             UserName = "Admin"
                         },
@@ -314,7 +351,7 @@ namespace CarSales.Web.Data.Migrations
                         {
                             Id = "b5fef437-f504-46d2-926d-3158e54e1932",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "cf4237ec-5567-4cb3-ba84-699247a1e5d1",
+                            ConcurrencyStamp = "1d84faac-e4d8-4f14-b39a-11e5d11c262c",
                             Credits = 50000m,
                             Email = "Owner@gmail.com",
                             EmailConfirmed = false,
@@ -323,9 +360,9 @@ namespace CarSales.Web.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "OWNER@GMAIL.COM",
                             NormalizedUserName = "OWNER",
-                            PasswordHash = "AQAAAAIAAYagAAAAEAFRvXJxWeOmlLBc5jE21UzOI9owRVzt5jpNHUEbW1k5MKg3dIIT9MOWvJm6QJkr7Q==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEFjVaY8fFR6fqpWeiINBVVruOatBfM81k/0cfFfVBKUqxn1/kGwfEZTk2f5l4khJYw==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "b7e276fd-38e7-43e4-857d-d1623217f067",
+                            SecurityStamp = "5d152545-e4c3-4ae6-8503-8638413e8cd1",
                             TwoFactorEnabled = false,
                             UserName = "Owner"
                         },
@@ -333,7 +370,7 @@ namespace CarSales.Web.Data.Migrations
                         {
                             Id = "926bee86-8bbd-43f6-bc1c-9639d43531a4",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "6fa25b91-01d8-4d80-83db-8367102e8901",
+                            ConcurrencyStamp = "bf24b9cc-fe2b-44ee-9862-948f1a06e2e2",
                             Credits = 50000m,
                             Email = "Owner2@gmail.com",
                             EmailConfirmed = false,
@@ -342,9 +379,9 @@ namespace CarSales.Web.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "OWNER2@GMAIL.COM",
                             NormalizedUserName = "OWNER2",
-                            PasswordHash = "AQAAAAIAAYagAAAAEE0V35tdvOfMj29GPXOBl09jL55FGyrolejEJovGO45C7UcTq7qAqD6j2q7RTi8EpQ==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEAfFyuTmV3HLoJ9DUMBu3o2yDGqXsLu3P7vpkrHAwZvxRjE1f3rVOxZBKYNqXhDAbQ==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "b2845bd0-100f-44a4-8183-513bc2779874",
+                            SecurityStamp = "88cebf01-754e-4286-b85d-1b97eb9becac",
                             TwoFactorEnabled = false,
                             UserName = "Owner2"
                         },
@@ -352,7 +389,7 @@ namespace CarSales.Web.Data.Migrations
                         {
                             Id = "66ccb670-f0dd-4aa1-a83d-8b2a0003bb50",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "666b4e38-173a-4628-b0ea-c4ff741ee438",
+                            ConcurrencyStamp = "deda3cde-153e-4c9b-b1d9-c6ea55952d35",
                             Credits = 50000m,
                             Email = "Salesman@gmail.com",
                             EmailConfirmed = false,
@@ -361,9 +398,9 @@ namespace CarSales.Web.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "SALESMAN@GMAIL.COM",
                             NormalizedUserName = "SALESMAN",
-                            PasswordHash = "AQAAAAIAAYagAAAAEMzwjBfTcmh8OxEUiX7PbWfwYuKiZnyzcTkuqaTMRScbLXb1ZEt1vcGBpD7Xe5Ahqg==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEMlsQcj2Rx57Oi1JfkAvSxFtGlKCay/6VhG2rUWDJjI1TPbs0wCTgbt9BFV2Sw5Rtw==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "05ce33ba-0da4-42c9-8695-c608ee7533b7",
+                            SecurityStamp = "aa7124e8-250d-493f-b0c2-c2da171a94ee",
                             TwoFactorEnabled = false,
                             UserName = "Salesman"
                         },
@@ -371,7 +408,7 @@ namespace CarSales.Web.Data.Migrations
                         {
                             Id = "10933c11-ac2a-410d-b60a-8b1d97324975",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "0a3e56de-ec35-4b01-87e9-10049de3efbb",
+                            ConcurrencyStamp = "a977b914-8e95-439f-b841-a4870091323d",
                             Credits = 50000m,
                             Email = "Importer@gmail.com",
                             EmailConfirmed = false,
@@ -380,9 +417,9 @@ namespace CarSales.Web.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "IMPORTER@GMAIL.COM",
                             NormalizedUserName = "IMPORTER",
-                            PasswordHash = "AQAAAAIAAYagAAAAEJ8TqtM59hn06HRsU+0NEOVfVHXREsMuiu3/FfrMpzsQx/nOpOuQRRofZrwjzmrL/w==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEDatsYS5acirZQ7DiguZqA6U+lj3aDzrksG/X3t6EtNADtJgb7aNglnmumQMyJxKKQ==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "5d818ece-5ed1-4e3e-ba18-60fe89ebb0a1",
+                            SecurityStamp = "b97d2351-df7b-4978-8924-6981371b3aa2",
                             TwoFactorEnabled = false,
                             UserName = "Importer"
                         });
@@ -734,6 +771,33 @@ namespace CarSales.Web.Data.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("CarSales.Infrastructure.Data.Entities.Offer", b =>
+                {
+                    b.HasOne("CarSales.Infrastructure.Data.Entities.Owner", "Offeror")
+                        .WithMany("Offers")
+                        .HasForeignKey("OfferorId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("CarSales.Infrastructure.Data.Entities.Salesman", "Salesman")
+                        .WithMany("Offers")
+                        .HasForeignKey("SalesmanId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("CarSales.Infrastructure.Data.Entities.Vehicle", "Vehicle")
+                        .WithMany("Offers")
+                        .HasForeignKey("VehicleId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Offeror");
+
+                    b.Navigation("Salesman");
+
+                    b.Navigation("Vehicle");
+                });
+
             modelBuilder.Entity("CarSales.Infrastructure.Data.Entities.Owner", b =>
                 {
                     b.HasOne("CarSales.Infrastructure.Data.Entities.User", "User")
@@ -888,6 +952,8 @@ namespace CarSales.Web.Data.Migrations
 
             modelBuilder.Entity("CarSales.Infrastructure.Data.Entities.Owner", b =>
                 {
+                    b.Navigation("Offers");
+
                     b.Navigation("Sales");
 
                     b.Navigation("Vehicles");
@@ -895,6 +961,8 @@ namespace CarSales.Web.Data.Migrations
 
             modelBuilder.Entity("CarSales.Infrastructure.Data.Entities.Salesman", b =>
                 {
+                    b.Navigation("Offers");
+
                     b.Navigation("Sales");
 
                     b.Navigation("Vehicles");
@@ -902,6 +970,8 @@ namespace CarSales.Web.Data.Migrations
 
             modelBuilder.Entity("CarSales.Infrastructure.Data.Entities.Vehicle", b =>
                 {
+                    b.Navigation("Offers");
+
                     b.Navigation("Sales");
                 });
 #pragma warning restore 612, 618
