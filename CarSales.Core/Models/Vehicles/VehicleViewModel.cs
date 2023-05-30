@@ -1,12 +1,4 @@
-﻿using CarSales.Infrastructure.Data.Entities;
-using CarSales.Infrastructure.Data.Enums;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using CarSales.Infrastructure.Data.Enums;
 
 namespace CarSales.Core.Models.Vehicles
 {
