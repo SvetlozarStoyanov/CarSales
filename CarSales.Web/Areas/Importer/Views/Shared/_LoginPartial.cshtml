@@ -11,19 +11,20 @@
             <a class="nav-link" disabled><span id="userCredits">@user.Credits </span>credits</a>
         </li>
         <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">My vehicles</a>
+            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">My Account</a>
             <div class="dropdown-menu">
+                @*<a class="nav-link">My account</a>*@
+                <h5 class="p-2 text-white">My Vehicles</h5>
                 <a class="nav-link" asp-area="Importer" asp-controller="Vehicles" asp-action="Mine">Owned</a>
                 <a class="nav-link" asp-area="Importer" asp-controller="Vehicles" asp-action="MyImportedVehicles">Imported</a>
+                <div class="dropdown-divider"></div>
+                <h5 class="p-2 text-white">My offers</h5>
+                <a class="nav-link" asp-area="Importer" asp-controller="Offers" asp-action="Outgoing">Outgoing</a>
+                <div class="dropdown-divider"></div>
+                <a class="nav-link" asp-area="" asp-controller="Users" asp-action="Logout">Logout</a>
             </div>
         </li>
 
-        @*<li class="nav-item">
-    <a class="nav-link">My account</a>
-    </li>*@
-        <li class="nav-item">
-            <a class="nav-link" asp-area="" asp-controller="Users" asp-action="Logout">Logout</a>
-        </li>
     }
     else
     {
