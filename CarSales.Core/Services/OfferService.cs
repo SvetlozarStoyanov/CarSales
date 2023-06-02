@@ -36,8 +36,9 @@ namespace CarSales.Core.Services
             var offer = await repository.AllReadOnly<Offer>()
                 .Where(o => o.Id == offerId)
                 .Include(o => o.Offeror)
+                .Include(o => o.Salesman)
                 .FirstOrDefaultAsync();
-            if (offer.Offeror.UserId != userId)
+            if (offer.Offeror.UserId != userId && offer.Salesman.UserId != userId)
             {
                 return false;
             }
@@ -57,22 +58,17 @@ namespace CarSales.Core.Services
             return true;
         }
 
-        public async Task<IEnumerable<OfferListModel>> GetSalesmanOffersAsync(string userId)
+        public async Task<int> GetOfferIdAsync(string userId, int vehicleId)
         {
-            var offers = await repository.AllReadOnly<Salesman>()
-                .Where(s => s.UserId == userId)
-                .Select(s => s.Offers.Where(o => o.Status == OfferStatus.Pending).Select(o => new OfferListModel()
-                {
-                    Id = o.Id,
-                    VehicleId = o.VehicleId,
-                    VehicleName = $"{o.Vehicle.Brand} {o.Vehicle.Model}",
-                    OfferorId = o.OfferorId,
-                    OfferorName = $"{o.Offeror.User.FirstName} {o.Offeror.User.LastName}"
-                }))
+            var offerId = await repository.AllReadOnly<Offer>()
+                .Where(o => o.Offeror.UserId == userId && o.VehicleId == vehicleId)
+                .Select(o => o.Id)
                 .FirstOrDefaultAsync();
 
-            return offers;
+            return offerId;
         }
+
+
 
         public async Task<IEnumerable<OfferListModel>> GetOwnerOffersAsync(string userId)
         {
@@ -92,7 +88,22 @@ namespace CarSales.Core.Services
             return offers;
         }
 
+        public async Task<IEnumerable<OfferListModel>> GetSalesmanOffersAsync(string userId)
+        {
+            var offers = await repository.AllReadOnly<Salesman>()
+                .Where(s => s.UserId == userId)
+                .Select(s => s.Offers.Where(o => o.Status == OfferStatus.Pending).Select(o => new OfferListModel()
+                {
+                    Id = o.Id,
+                    VehicleId = o.VehicleId,
+                    VehicleName = $"{o.Vehicle.Brand} {o.Vehicle.Model}",
+                    OfferorId = o.OfferorId,
+                    OfferorName = $"{o.Offeror.User.FirstName} {o.Offeror.User.LastName}"
+                }))
+                .FirstOrDefaultAsync();
 
+            return offers;
+        }
 
         public async Task<OfferViewModel> GetOfferByIdAsync(int id)
         {
@@ -132,16 +143,23 @@ namespace CarSales.Core.Services
             {
                 throw new InvalidOperationException("Vehicle is not for sale!");
             }
-            var offerorId = await repository.AllReadOnly<Owner>()
+            var offeror = await repository.AllReadOnly<Owner>()
                 .Where(o => o.UserId == userId)
-                .Select(o => o.Id)
+                .Include(o => o.User)
+                .Include(o => o.Offers)
                 .FirstOrDefaultAsync();
+
+            var availableCredits = offeror.User.Credits - offeror.Offers
+                .Where(o => o.Status == OfferStatus.Pending)
+                .Sum(o => o.Price);
+
             var model = new OfferCreateModel()
             {
                 Price = vehicle.Price,
                 InitialPrice = vehicle.Price,
+                AvailableCredits = availableCredits,
                 VehicleId = vehicleId,
-                OfferorId = offerorId,
+                OfferorId = offeror.Id,
                 SalesmanId = (int)vehicle.SalesmanId
             };
             return model;
@@ -162,6 +180,52 @@ namespace CarSales.Core.Services
             await repository.SaveChangesAsync();
         }
 
+        public async Task<OfferEditModel> CreateOfferEditModelAsync(int id)
+        {
+            var offer = await repository.AllReadOnly<Offer>()
+                .Where(o => o.Id == id)
+                //.Select(o => new OfferEditModel()
+                //{
+                //    Id = o.Id,
+                //    Description = o.Description,
+                //    Price = o.Price,
+                //    OldPrice = o.Price
+                //})
+                .Include(o => o.Offeror)
+                .ThenInclude(o => o.User)
+                .FirstOrDefaultAsync();
+            var offeror = await repository.AllReadOnly<Owner>()
+                .Where(o => o.Id == offer.OfferorId)
+                .Include(o => o.User)
+                .Include(o => o.Offers)
+                .FirstOrDefaultAsync();
+
+            var offerSum = offeror.Offers
+                .Where(o => o.Status == OfferStatus.Pending && o.Id != id)
+                .Sum(o => o.Price);
+            var availableCredits = offeror.User.Credits - offerSum;
+            var model = new OfferEditModel()
+            {
+                Id = offer.Id,
+                Description = offer.Description,
+                Price = offer.Price,
+                OldPrice = offer.Price,
+                AvailableCredits = availableCredits
+            };
+
+            return model;
+        }
+
+        public async Task EditOfferAsync(OfferEditModel model)
+        {
+            var offer = await repository.GetByIdAsync<Offer>(model.Id);
+
+            offer.Description = model.Description;
+            offer.Price = model.Price;
+
+            await repository.SaveChangesAsync();
+        }
+
         public async Task AcceptOfferAsync(int id)
         {
             var offer = await repository.All<Offer>()
@@ -175,7 +239,7 @@ namespace CarSales.Core.Services
             offer.Status = OfferStatus.Accepted;
             offer.Offeror.User.Credits -= offer.Price;
             offer.Salesman.User.Credits += offer.Price;
-            offer.Vehicle.OwnerId = offer.VehicleId;
+            offer.Vehicle.OwnerId = offer.OfferorId;
             offer.Vehicle.SalesmanId = null;
             await repository.SaveChangesAsync();
 

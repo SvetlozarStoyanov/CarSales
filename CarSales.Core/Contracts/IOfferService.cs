@@ -6,12 +6,16 @@ namespace CarSales.Core.Contracts
     {
         Task<bool> CanCreateOfferAsync(string userId, int vehicleId);
 
+
         Task<bool> CanViewOfferAsync(string userId, int offerId);
+
 
         Task<bool> CanRespondToOfferAsync(string userId, int offerId);
 
+        Task<int> GetOfferIdAsync(string userId, int vehicleId);
 
         Task<IEnumerable<OfferListModel>> GetOwnerOffersAsync(string userId);
+
 
         Task<IEnumerable<OfferListModel>> GetSalesmanOffersAsync(string userId);
 
@@ -23,6 +27,12 @@ namespace CarSales.Core.Contracts
 
 
         Task CreateOfferAsync(OfferCreateModel model);
+
+
+        Task<OfferEditModel> CreateOfferEditModelAsync(int id);
+
+
+        Task EditOfferAsync(OfferEditModel model);
 
 
         Task AcceptOfferAsync(int id);
