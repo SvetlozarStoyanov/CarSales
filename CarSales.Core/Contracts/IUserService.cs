@@ -10,5 +10,9 @@ namespace CarSales.Core.Contracts
         /// <param name="userId"></param>
         /// <returns><see cref="User"/></returns>
         Task<User> GetUserByIdAsync(string userId);
+
+
+        Task<decimal> GetUserAvailableCreditsAsync(string userId);
+        Task<decimal> GetUserAvailableCreditsAsync(string userId, int offerId);
     }
 }
