@@ -1,12 +1,12 @@
-﻿const userCredits = parseFloat(document.querySelector('#userCredits').textContent);
+﻿const availableCredits = parseFloat(document.querySelector('#availableCredits').value);
 
 const price = parseFloat(document.querySelector('#price').value);
 
 const buyBtn = document.querySelector('#buyBtn');
 
 
-if (userCredits < price) {
-    buyBtn.disabled = true;
+if (availableCredits < price) {
+    buyBtn.classList.add('disabled');
 } else {
-    buyBtn.disabled = false;
+    buyBtn.classList.remove('disabled');
 }
