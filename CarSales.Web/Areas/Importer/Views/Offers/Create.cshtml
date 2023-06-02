@@ -21,10 +21,15 @@
                     <label asp-for="@Model.Price" class="form-label col-form-label-lg">Listed for</label>
                     <input type="number" asp-for="@Model.InitialPrice" disabled class="form-control"  name="InitialPrice" />
                 </div>
+                <div class="form-group">
+                    <label asp-for="@Model.AvailableCredits" class="form-label col-form-label-lg">Available credits</label>
+                    <input type="number" asp-for="@Model.AvailableCredits" disabled class="form-control" name="AvailableCredits" />
+                </div>
                 <input asp-for="OfferorId" hidden/>
                 <input asp-for="SalesmanId" hidden/>
                 <input asp-for="VehicleId" hidden/>
                 <input asp-for="InitialPrice" hidden/>
+                <input id="availableCredits" asp-for="@Model.AvailableCredits" hidden />
                 <div class="text-center mt-4 mb-4">
                     <button class="btn btn-lg btn-success" id="submitBtn">Send</button>
                 </div>

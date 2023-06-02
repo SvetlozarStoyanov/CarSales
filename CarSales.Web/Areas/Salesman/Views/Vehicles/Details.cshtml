@@ -5,7 +5,9 @@
 }
 
 <section class="text-center">
-    <input value="@Model.Price" id="price" hidden/>
+    <input value="@Model.Price" id="price" hidden />
+    <input value="@ViewBag.AvailableCredits" id="availableCredits" hidden />
+
     <h1>
         @ViewData["Title"]
     </h1>
@@ -94,9 +96,17 @@
     }
     else if (Model.SalesmanUserId != null && Model.SalesmanUserId != User.Id())
     {
-        <a id="buyBtn" class="btn btn-lg btn-success" asp-area="Salesman" asp-controller="Vehicles" asp-action="BuyFromSalesman" asp-route-id="@Model.Id">
-            Buy
-        </a>
+        <div class="text-center mt-3 mb-3">
+            <a id="buyBtn" class="btn btn-lg btn-success" asp-area="Salesman" asp-controller="Vehicles" asp-action="BuyFromSalesman" asp-route-id="@Model.Id">
+                Buy
+            </a>
+            @if (ViewBag.CanMakeOffer)
+            {
+                <a class="btn btn-lg btn-secondary" asp-area="Salesman" asp-controller="Offers" asp-action="Create" asp-route-vehicleId="@Model.Id">
+                    Make an offer
+                </a>
+            }
+        </div>
     }
     else if (Model.ImporterUserId != null && Model.ImporterUserId != User.Id())
     {

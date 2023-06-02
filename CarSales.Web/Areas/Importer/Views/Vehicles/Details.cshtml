@@ -6,6 +6,7 @@
 
 <section class="text-center">
     <input id="price" value="@Model.Price" hidden />
+    <input value="@ViewBag.AvailableCredits" id="availableCredits" hidden />
     <h1>
         @Model.Brand @Model.Model
     </h1>
@@ -95,11 +96,11 @@
     }
     @if (ViewBag.CanMakeOffer)
     {
-    <div class="text-center mt-3 mb-3">
-        <a class="btn btn-lg btn-secondary" asp-area="Importer" asp-controller="Offers" asp-action="Create" asp-route-vehicleId="@Model.Id">
-            Make an offer
-        </a>
-    </div>
+        <div class="text-center mt-3 mb-3">
+            <a class="btn btn-lg btn-secondary" asp-area="Importer" asp-controller="Offers" asp-action="Create" asp-route-vehicleId="@Model.Id">
+                Make an offer
+            </a>
+        </div>
     }
 </section>
 <script src="~/js/Vehicles/canBuyVehicle.js"></script>

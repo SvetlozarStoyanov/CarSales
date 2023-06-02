@@ -6,6 +6,7 @@
 
 <section class="text-center">
     <input value="@Model.Price" id="price" hidden />
+    <input value="@ViewBag.AvailableCredits" id="availableCredits" hidden />
     <h1>
         @Model.Brand @Model.Model
     </h1>
@@ -89,14 +90,11 @@
     </table>
     @if (Model.SalesmanId != null)
     {
-        <form asp-area="Owner" asp-controller="Vehicles" asp-action="Buy" asp-route-id="@Model.Id" method="post">
-
-            <div class="text-center mt-3 mb-3">
-                <button id="buyBtn" type="submit" class="btn btn-success btn-lg">
-                    Buy
-                </button>
-            </div>
-        </form>
+        <div class="text-center mt-3 mb-3">
+            <a id="buyBtn" class="btn btn-success btn-lg" asp-area="Owner" asp-controller="Vehicles" asp-action="Buy" asp-route-id="@Model.Id">
+                Buy
+            </a>
+        </div>
         if (ViewBag.CanMakeOffer)
         {
             <div class="text-center mt-3 mb-3">

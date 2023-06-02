@@ -49,6 +49,26 @@ namespace CarSales.Web.Areas.Importer.Controllers
             return RedirectToAction("Index", "Vehicles");
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Edit(int id)
+        {
+            var model = await offerService.CreateOfferEditModelAsync(id);
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(OfferEditModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            await offerService.EditOfferAsync(model);
+
+            return RedirectToAction("Details", "Offers", new { id = model.Id });
+        }
+
         public async Task<IActionResult> Cancel(int id)
         {
             await offerService.CancelOfferAsync(id);

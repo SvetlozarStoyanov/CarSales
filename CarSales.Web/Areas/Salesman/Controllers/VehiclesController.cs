@@ -1,6 +1,5 @@
 ﻿using CarSales.Core.Contracts;
 using CarSales.Core.Models.Vehicles;
-using CarSales.Core.Services;
 using CarSales.Web.Extensions;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,11 +9,13 @@ namespace CarSales.Web.Areas.Salesman.Controllers
     {
         private readonly IVehicleService vehicleService;
         private readonly IOfferService offerService;
+        private readonly IUserService userService;
 
-        public VehiclesController(IVehicleService vehicleService, IOfferService offerService)
+        public VehiclesController(IVehicleService vehicleService, IOfferService offerService, IUserService userService)
         {
             this.vehicleService = vehicleService;
             this.offerService = offerService;
+            this.userService = userService;
         }
 
         public async Task<IActionResult> Index([FromQuery] VehiclesQueryModel model)
@@ -70,7 +71,16 @@ namespace CarSales.Web.Areas.Salesman.Controllers
                 return RedirectToAction("Index");
             }
             ViewBag.CanMakeOffer = await offerService.CanCreateOfferAsync(User.Id(), id);
-
+            ViewBag.CanMakeOffer = await offerService.CanCreateOfferAsync(User.Id(), id);
+            if (!ViewBag.CanMakeOffer)
+            {
+                var offerId = await offerService.GetOfferIdAsync(User.Id(), id);
+                ViewBag.AvailableCredits = await userService.GetUserAvailableCreditsAsync(User.Id(), offerId);
+            }
+            else
+            {
+                ViewBag.AvailableCredits = await userService.GetUserAvailableCreditsAsync(User.Id());
+            }
             return View(model);
         }
 
