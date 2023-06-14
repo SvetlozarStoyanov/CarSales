@@ -1,0 +1,129 @@
+﻿@media screen and (max-width: 1114px) {
+    article .vehicle-image-container img {
+        height: 350px !important;
+        width: 400px !important;
+    }
+
+    article ul li h5 {
+        font-size: 1em;
+    }
+
+    article div span i {
+        font-size: 25px !important;
+    }
+
+    article h2 {
+        font-size: 1.15em;
+    }
+
+    article h3 {
+        font-size: 1.10em;
+    }
+}
+
+@media screen and (max-width: 960px) {
+    article .vehicle-image-container img {
+        height: 250px !important;
+        width: 300px !important;
+    }
+
+    article ul li h5 {
+        font-size: 0.75em;
+    }
+
+    article div .m-2 {
+        margin: 0px !important;
+    }
+
+    article div span i {
+        font-size: 15px !important;
+    }
+
+    article h2 {
+        font-size: 1.00em;
+    }
+
+    article h3 {
+        font-size: 0.95em;
+    }
+}
+
+@media screen and (max-width: 640px) {
+    article .vehicle-image-container img {
+        height: 200px !important;
+        width: 200px !important;
+    }
+
+    article ul li h5 {
+        font-size: 0.55em;
+    }
+
+    article div .m-2 {
+        margin: 0px !important;
+    }
+
+    article div span i {
+        font-size: 10px !important;
+    }
+
+    article h2 {
+        font-size: 0.80em;
+    }
+
+    article h3 {
+        font-size: 0.75em;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    article .vehicle-image-container img {
+        height: 150px !important;
+        width: 150px !important;
+    }
+
+    article.mx-5 {
+        margin-left: 30px !important;
+        margin-right: 30px !important;
+    }
+
+    h2,h3,h5.mt-3 {
+        margin-top: 10px !important;
+    }
+
+    h2,h3,h5.mb-3 {
+        margin-top: 10px !important;
+    }
+
+    section .p-2 {
+        padding: 2px !important;
+    }
+
+    article ul {
+        padding: 0px;
+        margin-bottom:0px;
+    }
+
+        article ul li::marker {
+            font-size: 5px;
+        }
+
+        article ul li h5 {
+            font-size: 0.35em;
+        }
+
+    article div .m-2 {
+        margin: 0px !important;
+    }
+
+    article div span i {
+        font-size: 5px !important;
+    }
+
+    article h2 {
+        font-size: 0.30em;
+    }
+
+    article h3 {
+        font-size: 0.25em;
+    }
+}
