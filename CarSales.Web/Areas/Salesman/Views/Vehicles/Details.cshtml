@@ -4,115 +4,106 @@
     string imageUrl = Model.ImageUrl ?? $"/img/VehicleTypes/{Model.VehicleType}.png";
 }
 
-<section class="text-center">
-    <input value="@Model.Price" id="price" hidden />
-    <input value="@ViewBag.AvailableCredits" id="availableCredits" hidden />
+<link href="~/css/vehicleDetails.css" rel="stylesheet" type="text/css" />
+<h1 class="text-center mt-3 mb-3">
+    @Model.Brand @Model.Model
+</h1>
+<section class="d-flex p-5">
+    <article class="mx-2">
+        <div class="vehicle-image-container">
+            <img style="width:500px;height:400px" class="border border-3 border-success" src="@imageUrl" />
+        </div>
+    </article>
+    <article class="mx-5">
 
-    <h1>
-        @ViewData["Title"]
-    </h1>
-    <div class="mt-3 mb-3">
-        <p>
-            @Model.Description
-        </p>
-        <p>
-            @Model.VehicleType
-        </p>
-    </div>
-    <div class="mt-3 mb-3">
-        @if (Model.SalesmanId != null)
-        {
-            <h2>Seller: @Model.SalesmanName</h2>
-            <h3 class="mt-3 mb-3">@Model.Price credits</h3>
-        }
-        else if (Model.OwnerId != null)
-        {
-            <h2>Owner: @Model.OwnerName</h2>
-        }
-    </div>
-    <div class="text-center">
-        @{
-            var ratingAsInt = (int)Model.VehicleRating + 1;
-            for (int i = 0; i < ratingAsInt; i++)
-            {
-                <span class="m-2 p-2">
-                    <i style="font-size:45px;color:goldenrod" class="bi bi-star-fill"></i>
-                </span>
+        <ul class="mt-3 mb-3">
+            <li>
+                <h5>
+                    @Model.Description
+                </h5>
+            </li>
+            <li>
+                <h5>
+                    Produced: @Model.YearProduced
+                </h5>
+            </li>
+            <li>
+                <h5>
+                    Kilometers: @Model.KilometersDriven
+                </h5>
+            </li>
+            <li>
+                <h5>
+                    Top speed: @Model.TopSpeed km/h
+                </h5>
+            </li>
+        </ul>
+        <div class="text-center">
+            @{
+                var ratingAsInt = (int)Model.VehicleRating + 1;
+                for (int i = 0; i < ratingAsInt; i++)
+                {
+                    <span class="m-2 p-2">
+                        <i style="font-size:45px;color:goldenrod" class="bi bi-star-fill"></i>
+                    </span>
+                }
+                for (int i = 0; i < 5 - ratingAsInt; i++)
+                {
+                    <span class="m-2 p-2">
+                        <i style="font-size:45px;color:goldenrod" class="bi bi-star"></i>
+                    </span>
+                }
             }
-            for (int i = 0; i < 5 - ratingAsInt; i++)
+
+        </div>
+        <div class="mt-3 mb-3 text-center">
+            @if (Model.SalesmanId != null)
             {
-                <span class="m-2 p-2">
-                    <i style="font-size:45px;color:goldenrod" class="bi bi-star"></i>
-                </span>
+                <h2 class="mt-3 mb-3">Seller: @Model.SalesmanName</h2>
+                <h3 class="mt-3 mb-3">@Model.Price credits</h3>
             }
-        }
-        <h4>
-            @Model.VehicleRating
-        </h4>
-        @if (Model.OwnerUserId == User.Id() || Model.SalesmanUserId == User.Id())
-        {
-            <button type="button" class="btn btn-primary mt-3 mb-3" data-bs-toggle="modal" data-bs-target="#changeRating">
-                Change rating
-            </button>
-            <partial name="_ChangeRatingModal" model="@Model.VehicleChangeRatingModel" />
-        }
-    </div>
-    <div class="mt-3 mb-3">
-        <img style="width:500px;height:400px" src="@imageUrl" />
-    </div>
-    <table class="table mt-3 mb-3">
-        <thead>
-            <tr>
-                <td>
-                    Year produced
-                </td>
-                <td>
-                    Kilometers
-                </td>
-                <td>
-                    Top speed
-                </td>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>
-                    @Model.YearProduced
-                </td>
-                <td>
-                    @Model.KilometersDriven
-                </td>
-                <td>
-                    @Model.TopSpeed
-                </td>
-            </tr>
-        </tbody>
-    </table>
-    @if (Model.OwnerUserId == User.Id() && Model.OwnerId != null)
-    {
-        <a class="btn btn-lg btn-success" asp-area="Salesman" asp-controller="Vehicles" asp-action="Sell" asp-route-id="@Model.Id">
-            Sell
-        </a>
-    }
-    else if (Model.SalesmanUserId != null && Model.SalesmanUserId != User.Id())
-    {
-        <div class="text-center mt-3 mb-3">
-            <a id="buyBtn" class="btn btn-lg btn-success" asp-area="Salesman" asp-controller="Vehicles" asp-action="BuyFromSalesman" asp-route-id="@Model.Id">
-                Buy
-            </a>
-            @if (ViewBag.CanMakeOffer)
+            else if (Model.OwnerId != null)
             {
-                <a class="btn btn-lg btn-secondary" asp-area="Salesman" asp-controller="Offers" asp-action="Create" asp-route-vehicleId="@Model.Id">
-                    Make an offer
-                </a>
+                <h2 class="mt-3 mb-3">Owner: @Model.OwnerName</h2>
             }
         </div>
-    }
-    else if (Model.ImporterUserId != null && Model.ImporterUserId != User.Id())
+    </article>
+</section>
+<div class="text-center mt-3 mb-3">
+    @if (Model.OwnerUserId == User.Id() || Model.SalesmanUserId == User.Id())
     {
+        <button type="button" class="btn btn-primary mt-3 mb-3" data-bs-toggle="modal" data-bs-target="#changeRating">
+            Change rating
+        </button>
+        <partial name="_ChangeRatingModal" model="@Model.VehicleChangeRatingModel" />
+    }
+</div>
+@if (Model.OwnerUserId == User.Id() && Model.OwnerId != null)
+{
+    <a class="btn btn-lg btn-success" asp-area="Salesman" asp-controller="Vehicles" asp-action="Sell" asp-route-id="@Model.Id">
+        Sell
+    </a>
+}
+else if (Model.SalesmanUserId != null && Model.SalesmanUserId != User.Id())
+{
+    <div class="text-center mt-3 mb-3">
+        <a id="buyBtn" class="btn btn-lg btn-success" asp-area="Salesman" asp-controller="Vehicles" asp-action="BuyFromSalesman" asp-route-id="@Model.Id">
+            Buy
+        </a>
+        @if (ViewBag.CanMakeOffer)
+        {
+            <a class="btn btn-lg btn-secondary" asp-area="Salesman" asp-controller="Offers" asp-action="Create" asp-route-vehicleId="@Model.Id">
+                Make an offer
+            </a>
+        }
+    </div>
+}
+else if (Model.ImporterUserId != null && Model.ImporterUserId != User.Id())
+{
+    <div class="text-center mt-3 mb-3">
         <a class="btn btn-lg btn-success" id="buyBtn" asp-area="Salesman" asp-controller="Vehicles" asp-action="BuyFromImporter" asp-route-id="@Model.Id">
             Buy
         </a>
-    }
-</section>
+    </div>
+}
 <script src="~/js/Vehicles/canBuyVehicle.js"></script>
