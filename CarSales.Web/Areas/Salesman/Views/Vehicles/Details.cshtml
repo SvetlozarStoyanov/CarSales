@@ -5,6 +5,10 @@
 }
 
 <link href="~/css/vehicleDetails.css" rel="stylesheet" type="text/css" />
+
+<input id="availableCredits" value="@ViewBag.AvailableCredits" hidden />
+<input id="price" value="@Model.Price" hidden />
+
 <h1 class="text-center mt-3 mb-3">
     @Model.Brand @Model.Model
 </h1>
@@ -69,20 +73,22 @@
         </div>
     </article>
 </section>
-<div class="text-center mt-3 mb-3">
-    @if (Model.OwnerUserId == User.Id() || Model.SalesmanUserId == User.Id())
-    {
+@if (Model.OwnerUserId == User.Id() || Model.SalesmanUserId == User.Id())
+{
+    <div class="text-center mt-3 mb-3">
         <button type="button" class="btn btn-primary mt-3 mb-3" data-bs-toggle="modal" data-bs-target="#changeRating">
             Change rating
         </button>
         <partial name="_ChangeRatingModal" model="@Model.VehicleChangeRatingModel" />
-    }
-</div>
+    </div>
+}
 @if (Model.OwnerUserId == User.Id() && Model.OwnerId != null)
 {
-    <a class="btn btn-lg btn-success" asp-area="Salesman" asp-controller="Vehicles" asp-action="Sell" asp-route-id="@Model.Id">
-        Sell
-    </a>
+    <div class="text-center mt-3 mb-3">
+        <a class="btn btn-lg btn-success" asp-area="Salesman" asp-controller="Vehicles" asp-action="Sell" asp-route-id="@Model.Id">
+            Sell
+        </a>
+    </div>
 }
 else if (Model.SalesmanUserId != null && Model.SalesmanUserId != User.Id())
 {
@@ -92,9 +98,11 @@ else if (Model.SalesmanUserId != null && Model.SalesmanUserId != User.Id())
         </a>
         @if (ViewBag.CanMakeOffer)
         {
-            <a class="btn btn-lg btn-secondary" asp-area="Salesman" asp-controller="Offers" asp-action="Create" asp-route-vehicleId="@Model.Id">
-                Make an offer
-            </a>
+            <div class="text-center mt-3 mb-3">
+                <a class="btn btn-lg btn-secondary" asp-area="Salesman" asp-controller="Offers" asp-action="Create" asp-route-vehicleId="@Model.Id">
+                    Make an offer
+                </a>
+            </div>
         }
     </div>
 }

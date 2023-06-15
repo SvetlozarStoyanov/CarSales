@@ -4,6 +4,10 @@
     string imageUrl = Model.ImageUrl ?? $"/img/VehicleTypes/{Model.VehicleType}.png";
 }
 <link href="~/css/vehicleDetails.css" rel="stylesheet" type="text/css" />
+
+<input id="availableCredits" value="@ViewBag.AvailableCredits" hidden />
+<input id="price" value="@Model.Price" hidden />
+
 <h1 class="text-center mt-3 mb-3">
     @Model.Brand @Model.Model
 </h1>

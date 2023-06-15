@@ -5,6 +5,10 @@
 }
 
 <link href="~/css/vehicleDetails.css" rel="stylesheet" type="text/css" />
+
+<input id="availableCredits" value="@ViewBag.AvailableCredits" hidden />
+<input id="price" value="@Model.Price" hidden />
+
 <h1 class="text-center mt-3 mb-3">
     @Model.Brand @Model.Model
 </h1>
@@ -70,15 +74,15 @@
     </article>
 </section>
 
-<div class="text-center mt-3 mb-3">
-    @if (Model.OwnerUserId == User.Id() || Model.SalesmanUserId == User.Id() || Model.ImporterUserId == User.Id())
-    {
+@if (Model.OwnerUserId == User.Id() || Model.SalesmanUserId == User.Id() || Model.ImporterUserId == User.Id())
+{
+    <div class="text-center mt-3 mb-3">
         <button type="button" class="btn btn-primary mt-3 mb-3" data-bs-toggle="modal" data-bs-target="#changeRating">
             Change rating
         </button>
         <partial name="_ChangeRatingModal" model="@Model.VehicleChangeRatingModel" />
-    }
-</div>
+    </div>
+}
 @if (Model.OwnerUserId == null && Model.SalesmanUserId != User.Id() && Model.ImporterUserId != User.Id())
 {
     <div class="text-center mt-3 mb-3">
