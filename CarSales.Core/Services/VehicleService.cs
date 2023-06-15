@@ -432,9 +432,10 @@ namespace CarSales.Core.Services
             var buyer = await repository.All<Owner>()
                 .Where(b => b.UserId == buyerUserId)
                 .Include(o => o.User)
+                .Include(o => o.Offers)
                 .FirstOrDefaultAsync();
-
-            if (buyer.User.Credits < vehicle.Price)
+            var buyerAvailableCredits = buyer.User.Credits - buyer.Offers.Where(o => o.Status == OfferStatus.Pending && o.VehicleId != id).Sum(o => o.Price);
+            if (buyerAvailableCredits < vehicle.Price)
             {
                 throw new InsufficientCreditsException("You do not have enough credits to purchase this item!");
             }
@@ -471,9 +472,10 @@ namespace CarSales.Core.Services
             var buyer = await repository.All<Owner>()
                 .Where(b => b.UserId == buyerUserId)
                 .Include(o => o.User)
+                .Include(o => o.Offers)
                 .FirstOrDefaultAsync();
-
-            if (buyer.User.Credits < vehicle.Price)
+            var buyerAvailableCredits = buyer.User.Credits - buyer.Offers.Where(o => o.Status == OfferStatus.Pending).Sum(o => o.Price);
+            if (buyerAvailableCredits < vehicle.Price)
             {
                 throw new InsufficientCreditsException("You do not have enough credits to purchase this item!");
             }
@@ -615,7 +617,7 @@ namespace CarSales.Core.Services
             foreach (var offer in offers)
             {
                 offer.Status = OfferStatus.Declined;
-            } 
+            }
         }
     }
 }
