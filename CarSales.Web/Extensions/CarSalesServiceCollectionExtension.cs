@@ -16,6 +16,7 @@ namespace CarSales.Web.Extensions
             services.AddScoped<IRoleRequestService, RoleRequestService>();
             services.AddScoped<ISalesmanService, SalesmanService>();
             services.AddScoped<IImporterService, ImporterService>();
+            services.AddScoped<IReviewerService, ReviewerService>();
             services.AddScoped<IOfferService, OfferService>();
 
             return services;
