@@ -1,0 +1,35 @@
+﻿@using CarSales.Infrastructure.Data.Entities;
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
+
+<ul class="navbar-nav">
+    @if (SignInManager.IsSignedIn(User))
+    {
+        var user = await UserManager.GetUserAsync(User);
+        <li class="nav-item">
+            <a class="nav-link active" disabled><span id="userCredits">@user.Credits</span> credits</a>
+        </li>
+        <li class="nav-item dropdown">
+            <a class="nav-link active dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">My Account</a>
+            <div class="dropdown-menu">
+                @*<a class="nav-link">My account</a>
+                <div class="dropdown-divider"></div>*@
+                <a class="nav-link active" asp-area="Reviewer" asp-controller="Vehicles" asp-action="Mine">My Vehicles</a>
+                <div class="dropdown-divider"></div>
+                <a class="nav-link active" asp-area="Reviewer" asp-controller="Offers" asp-action="Outgoing">My Offers</a>
+                <div class="dropdown-divider"></div>
+                <a class="nav-link active" asp-area="" asp-controller="Users" asp-action="Logout">Logout</a>
+            </div>
+        </li>
+    }
+    else
+    {
+        <li class="nav-item">
+            <a class="nav-link" asp-area="" asp-controller="Users" asp-action="Register">Register</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" asp-area="" asp-controller="Users" asp-action="Login">Login</a>
+        </li>
+    }
+</ul>

@@ -1,0 +1,56 @@
+﻿@model VehicleMinModel
+
+@{
+    string imageUrl = Model.ImageUrl ?? $"/img/VehicleTypes/{Model.VehicleType}.png";
+}
+
+<div class="col-md-4 mt-3">
+    <article class="card m-4">
+        <div class="text-center bg-dark bg-opacity-25" style="height:250px;">
+            <img class="card-img-top h-100" src="@imageUrl" alt="vehicleImg" />
+        </div>
+        <div class="card-body text-center bg-dark bg-opacity-10">
+            <h5 class="mt-1 mb-1 card-title">
+                @Model.Name
+            </h5>
+            @if (Model.SalesmanId != null)
+            {
+                <p>
+                    Sold by: @Model.SalesmanName
+                </p>
+            }
+            else if (Model.ImporterId != null)
+            {
+                <p>
+                    Imported by: @Model.ImporterName
+                </p>
+            }
+@*            else if (Model.OwnerId != null)
+            {
+                <p>
+                    @Model.OwnerName
+                </p>
+            }*@
+            <div>
+                @{
+                    var ratingAsInt = (int)Model.VehicleRating + 1;
+                    for (int i = 0; i < ratingAsInt; i++)
+                    {
+                        <span class="m-1 p-1">
+                            <i style="font-size:15px;color:goldenrod" class="bi bi-star-fill"></i>
+                        </span>
+                    }
+                    for (int i = 0; i < 5 - ratingAsInt; i++)
+                    {
+                        <span class="m-1 p-1">
+                            <i style="font-size:15px;color:goldenrod" class="bi bi-star"></i>
+                        </span>
+                    }
+                }
+            </div>
+            <div class="mt-2 mb-2">
+                @Model.Price credits
+            </div>
+        </div>
+    </article>
+</div>
