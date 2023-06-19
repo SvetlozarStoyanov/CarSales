@@ -13,24 +13,24 @@
             <h5 class="mt-1 mb-1 card-title">
                 @Model.Name
             </h5>
-            @if (Model.SalesmanName != null)
+            @if (Model.SalesmanId != null)
             {
                 <p>
                     Sold by: @Model.SalesmanName
                 </p>
             }
-            else if (Model.ImporterName != null)
+            else if (Model.ImporterId != null)
             {
                 <p>
                     Imported by: @Model.ImporterName
                 </p>
             }
-            else if (Model.OwnerName != null)
+@*            else if (Model.OwnerName != null)
             {
                 <p>
                     @Model.OwnerName
                 </p>
-            }
+            }*@
             <div>
                 @{
                     var ratingAsInt = (int)Model.VehicleRating + 1;
