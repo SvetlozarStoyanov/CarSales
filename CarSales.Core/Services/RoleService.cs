@@ -16,7 +16,7 @@ namespace CarSales.Core.Services
 
         public async Task<IEnumerable<RoleListModel>> GetRequestableRolesAsync(IEnumerable<string> roleNames)
         {
-            if (roleNames.Any(r => r == "Administrator" || r == "Salesman" || r == "Importer"))
+            if (roleNames.Any(r => r == "Administrator" || r == "Salesman" || r == "Importer" || r == "Reviewer"))
             {
                 return new List<RoleListModel>();
             }
