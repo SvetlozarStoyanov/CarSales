@@ -13,7 +13,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="7.0.5" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.5" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.5" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="7.0.6" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="7.0.7" />
   </ItemGroup>
 
   <ItemGroup>
@@ -28,6 +28,8 @@
     <Folder Include="Areas\Importer\Models\" />
     <Folder Include="Areas\Owner\Data\" />
     <Folder Include="Areas\Owner\Models\" />
+    <Folder Include="Areas\Reviewer\Data\" />
+    <Folder Include="Areas\Reviewer\Models\" />
     <Folder Include="Areas\Salesman\Data\" />
     <Folder Include="Areas\Salesman\Models\" />
   </ItemGroup>
