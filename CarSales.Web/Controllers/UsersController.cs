@@ -1,7 +1,6 @@
 ﻿using CarSales.Core.Contracts;
 using CarSales.Core.Models.Users;
 using CarSales.Infrastructure.Data.Entities;
-using CarSales.Web.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -105,6 +104,10 @@ namespace CarSales.Web.Controllers
             else if (await userManager.IsInRoleAsync(user, "Salesman"))
             {
                 return Redirect("/Salesman/Home/Index");
+            }
+            else if (await userManager.IsInRoleAsync(user, "Reviewer"))
+            {
+                return Redirect("/Reviewer/Home/Index");
             }
             else if (await userManager.IsInRoleAsync(user, "Owner"))
             {
