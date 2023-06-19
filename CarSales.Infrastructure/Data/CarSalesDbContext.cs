@@ -14,10 +14,12 @@ namespace CarSales.Infrastructure.Data
         public DbSet<Salesman> Salesmen { get; set; } = null!;
         public DbSet<Owner> Owners { get; set; } = null!;
         public DbSet<Importer> Importers { get; set; } = null!;
+        public DbSet<Reviewer> Reviewers { get; set; } = null!;
         public DbSet<Vehicle> Vehicles { get; set; } = null!;
         public DbSet<Sale> Sales { get; set; } = null!;
         public DbSet<RoleRequest> RoleRequests { get; set; } = null!;
         public DbSet<Offer> Offers { get; set; } = null!;
+        public DbSet<Review> Reviews { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -91,6 +93,8 @@ namespace CarSales.Infrastructure.Data
             builder.ApplyConfiguration(new SalesmanConfiguration());
             builder.ApplyConfiguration(new OwnerConfiguration());
             builder.ApplyConfiguration(new ImporterConfiguration());
+            builder.ApplyConfiguration(new ReviewerConfiguration());
+            builder.ApplyConfiguration(new ReviewConfiguration());
             builder.ApplyConfiguration(new VehicleConfiguration());
             builder.ApplyConfiguration(new SaleConfiguration());
 

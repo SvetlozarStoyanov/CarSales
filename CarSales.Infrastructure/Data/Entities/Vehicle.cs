@@ -10,6 +10,7 @@ namespace CarSales.Infrastructure.Data.Entities
         {
             Sales = new HashSet<Sale>();
             Offers = new HashSet<Offer>();
+            Reviews = new HashSet<Review>();
         }
 
         [Key]
@@ -40,5 +41,6 @@ namespace CarSales.Infrastructure.Data.Entities
         public Importer? Importer { get; set; }
         public virtual ICollection<Sale> Sales { get; set; }
         public virtual ICollection<Offer> Offers { get; set; }
+        public virtual ICollection<Review> Reviews { get; set; }
     }
 }

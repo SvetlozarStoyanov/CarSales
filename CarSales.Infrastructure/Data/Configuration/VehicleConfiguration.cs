@@ -1,4 +1,4 @@
-﻿using CarSales.Infrastructure.Data.Entities;
+﻿    using CarSales.Infrastructure.Data.Entities;
 using CarSales.Infrastructure.Data.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -37,13 +37,47 @@ namespace CarSales.Infrastructure.Data.Configuration
                 new Vehicle()
                 {
                     Id = 2,
+                    Brand = "Bugatti",
+                    Model = "Veyron",
+                    Description = "Fast sports car",
+                    ImageUrl = "https://i.ytimg.com/vi/rvn4lHrr6AQ/maxresdefault.jpg",
+                    TopSpeed = 350,
+                    KilometersDriven = 0,
+                    Price = 30000,
+                    SalesmanId = 1,
+                    OwnerId = null,
+                    ImporterId = null,
+                    VehicleType = VehicleType.Car,
+                    VehicleRating = VehicleRating.Good,
+                    YearProduced = 2011
+                },
+                new Vehicle()
+                {
+                    Id = 3,
+                    Brand = "Audi",
+                    Model = "A6",
+                    Description = "Fast modern car",
+                    ImageUrl = "https://cache1.24chasa.bg/Images/Cache/889/IMAGE_13981889_40_0.jpg",
+                    TopSpeed = 300,
+                    KilometersDriven = 0,
+                    Price = 20000,
+                    SalesmanId = 1,
+                    OwnerId = null,
+                    ImporterId = null,
+                    VehicleType = VehicleType.Car,
+                    VehicleRating = VehicleRating.Good,
+                    YearProduced = 2014
+                },
+                new Vehicle()
+                {
+                    Id = 4,
                     Brand = "BMW",
                     Model = "M3",
-                    Description = "Classic car",
-                    ImageUrl = null,
+                    Description = "Fast modern car",
+                    ImageUrl = "https://media.ed.edmunds-media.com/bmw/m3/2022/oem/2022_bmw_m3_sedan_competition_fq_oem_1_1600.jpg",
                     TopSpeed = 240,
                     KilometersDriven = 0,
-                    Price = 5000,
+                    Price = 10000,
                     SalesmanId = null,
                     OwnerId = null,
                     ImporterId = 1,
@@ -53,11 +87,11 @@ namespace CarSales.Infrastructure.Data.Configuration
                 },
                 new Vehicle()
                 {
-                    Id = 3,
+                    Id = 5,
                     Brand = "BMW",
                     Model = "X5",
                     Description = "Popular car",
-                    ImageUrl = null,
+                    ImageUrl = "https://media.ed.edmunds-media.com/bmw/x5/2024/oem/2024_bmw_x5_4dr-suv_xdrive50e_fq_oem_1_1600.jpg",
                     TopSpeed = 243,
                     KilometersDriven = 2000,
                     Price = 18000,

@@ -90,6 +90,29 @@ namespace CarSales.Web.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Reviewers",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ShortReviewPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    StandartReviewPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    PremiumReviewPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Reviewers", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Reviewers_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "RoleRequests",
                 columns: table => new
                 {
@@ -216,6 +239,39 @@ namespace CarSales.Web.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Reviews",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Overview = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: false),
+                    Performance = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: false),
+                    Interior = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true),
+                    Longevity = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true),
+                    Features = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true),
+                    ReviewType = table.Column<int>(type: "int", nullable: false),
+                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    ReviewerId = table.Column<int>(type: "int", nullable: false),
+                    VehicleId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Reviews", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Reviews_Reviewers_ReviewerId",
+                        column: x => x.ReviewerId,
+                        principalTable: "Reviewers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Reviews_Vehicles_VehicleId",
+                        column: x => x.VehicleId,
+                        principalTable: "Vehicles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Sales",
                 columns: table => new
                 {
@@ -260,7 +316,8 @@ namespace CarSales.Web.Data.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Description", "Discriminator", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "9cbd5531-0c49-4889-95b9-b81fc1e7653a", "9cbd5531-0c49-4889-95b9-b81fc1e7653a", "Imports vehicles.", "Role", "Importer", "IMPORTER" },
+                    { "2d1b88f7-208a-43de-bb14-aca56b43080c", "2d1b88f7-208a-43de-bb14-aca56b43080c", "Can buy and review vehicles.", "Role", "Reviewer", "REVIEWER" },
+                    { "9cbd5531-0c49-4889-95b9-b81fc1e7653a", "9cbd5531-0c49-4889-95b9-b81fc1e7653a", "Can buy and import vehicles.", "Role", "Importer", "IMPORTER" },
                     { "bbea2448-c801-43d1-8b05-e3a2c22338d9", "bbea2448-c801-43d1-8b05-e3a2c22338d9", "Can buy vehicles.", "Role", "Owner", "OWNER" },
                     { "c63016c0-e087-43dc-bb9c-a8958a05cbdd", "c63016c0-e087-43dc-bb9c-a8958a05cbdd", "Can buy and sell vehicles.", "Role", "Salesman", "SALESMAN" },
                     { "dacb7d40-e742-435c-b131-145300f3c97d", "dacb7d40-e742-435c-b131-145300f3c97d", "Admin", "Role", "Administrator", "ADMINISTRATOR" }
@@ -271,11 +328,12 @@ namespace CarSales.Web.Data.Migrations
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Credits", "Email", "EmailConfirmed", "FirstName", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
                 values: new object[,]
                 {
-                    { "10933c11-ac2a-410d-b60a-8b1d97324975", 0, "47e7f7d4-755a-4a87-82d1-a2ce1710559d", 50000m, "Importer@gmail.com", false, "Importer", "Test", false, null, "IMPORTER@GMAIL.COM", "IMPORTER", "AQAAAAIAAYagAAAAEHVKzUXFBysnWRnIdfaz7KtgC7310c6DwdXWvnzef0seBUw/QCGrDnhotBxnPnclgw==", null, false, "81aa0fa2-0070-45f1-86cb-561a3ef35c20", false, "Importer" },
-                    { "66ccb670-f0dd-4aa1-a83d-8b2a0003bb50", 0, "6d8c8655-a844-401d-b858-c7f6e94c1fdb", 50000m, "Salesman@gmail.com", false, "Salesman", "Test", false, null, "SALESMAN@GMAIL.COM", "SALESMAN", "AQAAAAIAAYagAAAAEBsSOWCqnhCWvJq1PIFI/rSRt37ZvbCSEGUZ8gT1+NsJjBorcQiTgTlYIXwux2DUtQ==", null, false, "6c248ecc-5dc7-4592-8a63-340bc5374c25", false, "Salesman" },
-                    { "926bee86-8bbd-43f6-bc1c-9639d43531a4", 0, "9c1d037f-05f5-4532-a5e0-93f2468efcd9", 50000m, "Owner2@gmail.com", false, "Owner2", "Test", false, null, "OWNER2@GMAIL.COM", "OWNER2", "AQAAAAIAAYagAAAAEL1bc/vm3uyeosPDPqIFFKa/PjX3E5WxyN+NdKKff7G2AKSp2hLtEGTohL8YHnDKFA==", null, false, "d4a93ef8-aefb-44f9-8ace-c8ad5ff99ef7", false, "Owner2" },
-                    { "b5fef437-f504-46d2-926d-3158e54e1932", 0, "e08bf27a-81a9-4c40-b324-749de182bc08", 50000m, "Owner@gmail.com", false, "Owner", "Test", false, null, "OWNER@GMAIL.COM", "OWNER", "AQAAAAIAAYagAAAAEAKy0zGEeyij29VrCdM3g9DfkkfT222hvFUdgvkkshiF0MiDCyC6eqksI9d1obYHGA==", null, false, "24d531c7-b543-4fb1-b4e8-9e9dddd1627f", false, "Owner" },
-                    { "cbed6d2a-e60a-49df-a6e3-982ccd980393", 0, "0f1d2c31-3194-4552-be58-4bccdb74115c", 50000m, "Admin@gmail.com", false, "Admin", "Test", false, null, "ADMIN@GMAIL.COM", "ADMIN", "AQAAAAIAAYagAAAAEJSwlvYUu9ivsVxETX4jgbVpri9xm+TMiY4G7kZ0tTFcstwKXhDHTSQCzSHLsV8JBA==", null, false, "c4ee7bc5-005f-42a0-aa23-4f1344e35495", false, "Admin" }
+                    { "10933c11-ac2a-410d-b60a-8b1d97324975", 0, "38b9966f-58d0-449e-8d8a-a923cedd0879", 50000m, "Importer@gmail.com", false, "Importer", "Test", false, null, "IMPORTER@GMAIL.COM", "IMPORTER", "AQAAAAIAAYagAAAAEBQvWie4yuPWw/bz3sTZlif4zpJt1QH12Ka+zVSUQio8NXBcKpqzaJB9tZreC/8IxA==", null, false, "d3f6d63b-aae6-4928-a2c5-23d875857490", false, "Importer" },
+                    { "4d693871-c20b-4e9f-8490-1c641b9e3a40", 0, "b5bf5d83-2c15-4c6e-96b0-ce47b8f7e78a", 50000m, "Reviewer@gmail.com", false, "Reviewer", "Test", false, null, "REVIEWER@GMAIL.COM", "REVIEWER", "AQAAAAIAAYagAAAAELHlM9twGvTnFhx023Z9FFES4LOcg7VRqul59VxDQk8UBFgYh+NKXkTxaYF5no0oLQ==", null, false, "3dcc3430-47d8-4326-b509-057320a13d63", false, "Reviewer" },
+                    { "66ccb670-f0dd-4aa1-a83d-8b2a0003bb50", 0, "af5c3311-2380-4626-8f71-faba7b606458", 50000m, "Salesman@gmail.com", false, "Salesman", "Test", false, null, "SALESMAN@GMAIL.COM", "SALESMAN", "AQAAAAIAAYagAAAAECYlnHqGwgzkKRiIdMd1CMWfI/o4aLdfhhwkhxy3zrq+09Wgx3x8VJfFDSsMZ8mvXA==", null, false, "acee83b9-7a9d-4eac-abca-f6bd2988c797", false, "Salesman" },
+                    { "926bee86-8bbd-43f6-bc1c-9639d43531a4", 0, "8e4b5ffd-925b-46cb-b916-3645476ba110", 50000m, "Owner2@gmail.com", false, "Owner2", "Test", false, null, "OWNER2@GMAIL.COM", "OWNER2", "AQAAAAIAAYagAAAAEPHk/RPuSKKNOUaD58RgCqfmZd04loddI+Pt7FgcPOqMlTUL6LUwzqCriwCnpdFpzA==", null, false, "f9b15af0-a556-4835-99a1-df7f29d08e52", false, "Owner2" },
+                    { "b5fef437-f504-46d2-926d-3158e54e1932", 0, "9acb5cc7-e280-4c9e-a255-00146bbac5a9", 50000m, "Owner@gmail.com", false, "Owner", "Test", false, null, "OWNER@GMAIL.COM", "OWNER", "AQAAAAIAAYagAAAAEJn6/158Kn6GKlkOem1+RyYQGncb/codJiQbqUvJw2MyiULQ34TxeOf4LmJtKEPNMg==", null, false, "673e5dc3-1536-4a3c-b89e-05b87b202213", false, "Owner" },
+                    { "cbed6d2a-e60a-49df-a6e3-982ccd980393", 0, "6d33136c-9592-4508-94f6-9cd3b94393de", 50000m, "Admin@gmail.com", false, "Admin", "Test", false, null, "ADMIN@GMAIL.COM", "ADMIN", "AQAAAAIAAYagAAAAEACPPzi+GikoV33KsVfk6bXZ48T245JWji0J9uJsAslFJhMos1cxc3Xd/IJFkChflg==", null, false, "310027ac-a518-43ca-9151-50aca4883ebb", false, "Admin" }
                 });
 
             migrationBuilder.InsertData(
@@ -285,6 +343,8 @@ namespace CarSales.Web.Data.Migrations
                 {
                     { "9cbd5531-0c49-4889-95b9-b81fc1e7653a", "10933c11-ac2a-410d-b60a-8b1d97324975" },
                     { "bbea2448-c801-43d1-8b05-e3a2c22338d9", "10933c11-ac2a-410d-b60a-8b1d97324975" },
+                    { "2d1b88f7-208a-43de-bb14-aca56b43080c", "4d693871-c20b-4e9f-8490-1c641b9e3a40" },
+                    { "bbea2448-c801-43d1-8b05-e3a2c22338d9", "4d693871-c20b-4e9f-8490-1c641b9e3a40" },
                     { "bbea2448-c801-43d1-8b05-e3a2c22338d9", "66ccb670-f0dd-4aa1-a83d-8b2a0003bb50" },
                     { "c63016c0-e087-43dc-bb9c-a8958a05cbdd", "66ccb670-f0dd-4aa1-a83d-8b2a0003bb50" },
                     { "bbea2448-c801-43d1-8b05-e3a2c22338d9", "926bee86-8bbd-43f6-bc1c-9639d43531a4" },
@@ -305,8 +365,14 @@ namespace CarSales.Web.Data.Migrations
                     { 1, "b5fef437-f504-46d2-926d-3158e54e1932" },
                     { 2, "926bee86-8bbd-43f6-bc1c-9639d43531a4" },
                     { 3, "66ccb670-f0dd-4aa1-a83d-8b2a0003bb50" },
-                    { 4, "10933c11-ac2a-410d-b60a-8b1d97324975" }
+                    { 4, "10933c11-ac2a-410d-b60a-8b1d97324975" },
+                    { 5, "4d693871-c20b-4e9f-8490-1c641b9e3a40" }
                 });
+
+            migrationBuilder.InsertData(
+                table: "Reviewers",
+                columns: new[] { "Id", "IsActive", "PremiumReviewPrice", "ShortReviewPrice", "StandartReviewPrice", "UserId" },
+                values: new object[] { 1, true, 200m, 100m, 150m, "4d693871-c20b-4e9f-8490-1c641b9e3a40" });
 
             migrationBuilder.InsertData(
                 table: "Salesmen",
@@ -319,8 +385,20 @@ namespace CarSales.Web.Data.Migrations
                 values: new object[,]
                 {
                     { 1, "BMW", "Fast car", "https://media.ed.edmunds-media.com/bmw/m5/2021/oem/2021_bmw_m5_sedan_base_fq_oem_8_815.jpg", null, 0.0, "M5", null, 9000m, 1, 250.0, 3, 1, 2016 },
-                    { 2, "BMW", "Classic car", null, 1, 0.0, "M3", null, 5000m, null, 240.0, 3, 1, 2004 },
-                    { 3, "BMW", "Popular car", null, null, 2000.0, "X5", 1, 18000m, null, 243.0, 4, 1, 2020 }
+                    { 2, "Bugatti", "Fast sports car", "https://i.ytimg.com/vi/rvn4lHrr6AQ/maxresdefault.jpg", null, 0.0, "Veyron", null, 30000m, 1, 350.0, 4, 1, 2011 },
+                    { 3, "Audi", "Fast modern car", "https://cache1.24chasa.bg/Images/Cache/889/IMAGE_13981889_40_0.jpg", null, 0.0, "A6", null, 20000m, 1, 300.0, 4, 1, 2014 },
+                    { 4, "BMW", "Fast modern car", "https://media.ed.edmunds-media.com/bmw/m3/2022/oem/2022_bmw_m3_sedan_competition_fq_oem_1_1600.jpg", 1, 0.0, "M3", null, 10000m, null, 240.0, 3, 1, 2004 },
+                    { 5, "BMW", "Popular car", "https://media.ed.edmunds-media.com/bmw/x5/2024/oem/2024_bmw_x5_4dr-suv_xdrive50e_fq_oem_1_1600.jpg", null, 2000.0, "X5", 1, 18000m, null, 243.0, 4, 1, 2020 }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Reviews",
+                columns: new[] { "Id", "Features", "Interior", "Longevity", "Overview", "Performance", "Price", "ReviewType", "ReviewerId", "VehicleId" },
+                values: new object[,]
+                {
+                    { 1, null, "he M5 has an elegant leather interior with supportive sport seats. Unlike many of its rivals, BMW hasn't gone the all-touchscreen route, so adjusting the air conditioning or radio (via physical controls) is easy to do while the vehicle is in motion. The M5 comes with a slew of desirable features such as customizable ambient interior lighting, a heated steering wheel, heated front seats, and a power-adjustable steering column. BMW offers ventilated front seats with massage functionality, heated rear seats, and four-zone automatic climate control for more coin. As for storage space, the M5 has useful cubbies in the cabin, and its trunk held six carry-on suitcases in our testing.", null, "Some cars are big-bodied and some are thrilling. The BMW M5 is both, with a body based on the regular 5-series and a heart-and-lung transplant courtesy of the brand's M performance division. Under the hood lives a spectacular 600-hp twin-turbo V-8 bolted to an eight-speed automatic transmission that powers all four wheels. An optional Competition package turns up the heat with 17 extra horsepower, a more soulful exhaust, stiffer suspension, and Competition badging and trim. That version rocketed to 60 mph in 2.8 seconds in our testing. Built to handle the rigors of mountain hairpins, blasts on the autobahn, and everyday life the M5 offers a premium experience with a penchant for fireworks. Unlike its closest competitor, the Cadillac CT5-V Blackwing, the Bimmer's stealthy packaging isn't offset by a thunderous exhaust but its impressive comfort and refinement make it among the best in the premium sports sedan segment.", "The M5 is mighty, boasting 600 horsepower from its twin-turbo 4.4-liter V-8 in base form. In the more track-focused Competition, that figure increases to 617 horses. Believing that the Competition's V-8 had even more power than that we took that model to a dynamometer, were our suspicions proved true. We've also strapped our testing gear to both the regular M5 as well as the Competition model. Both met our expectations with brutally quick acceleration, sports-car-like cornering grip, and amazing stopping power. Likewise, the Competition proved to be quicker than the regular M5 on Virginia International Raceway's Grand Course at the 2019 Lightning Lap competition. Driving enjoyment is maximized here with lively and direct steering and a well-controlled albeit stiff ride. That doesn't mean the M5 can't also do duty as a luxury sedan: In Comfort mode, it cruises placidly, the cabin whisper quiet.", 150m, 1, 1, 1 },
+                    { 2, null, null, null, "Driving a Bugatti Veyron is like carrying a 14.6-foot-long open wallet that is spewing 50-dollar bills. Drivers rush up from behind, tailgating before swerving into either of the Veyron’s rear-three-quarter blind spots, where they hang ape-like out of windows to snap photos with their cell phones. They won’t leave, either, because they know the Bugatti, averaging 11 mpg, can’t go far without refueling and that its driver will soon need to take a minute to compose himself. And when you open the Veyron’s door to exit—a gymnastic feat that requires grabbing one of your own ankles to drag it across that huge, hot sill—you will be greeted by 5 to 15 persons wielding cameras and asking questions. If you’re wearing shorts or a skirt, here’s a tip: Wear underwear.", "The somewhat disappointing news is that despite accurate, nicely weighted steering and 1.00 g of skidpad grip, the car isn’t particularly nimble in the hills, where it is taxed by its 4486-pound heft. It feels more like a Benz SL63 AMG than, say, a BMW M3.\r\n\r\nThe Veyron’s weird shifter, which we named Klaatu, is as alien as the rest of the car. Push down for park. Push once to the right for drive. Twice to the right for sport mode. Left for neutral. Left and down for reverse. No matter where you shove it, it instantly returns to its original position, à la BMW turn signals. This is annoying, but resist the urge to abuse any gears. A new transmission costs $123,200. Speaking of abuse, within the 366-page hardcover owner’s manual, there are 190 boxed messages headlined “WARNING!”\r\n", 100m, 0, 1, 2 },
+                    { 3, "Audi offers an average standard warranty that when compared with other premium brands, looks pretty basic. Jaguar offers more value here, with longer warranties and five years of complimentary scheduled maintenance", "The A6's interior design is sleek, modern, and nicely put together from excellent-quality materials. Soft leather adorns the seats and armrests, rich-looking wood and nickel-finished metal trim is tastefully applied to the dash and doors, and the majority of the A6's secondary controls—climate, drive mode, etc.—are handled by a large touch-sensitive panel underneath the main infotainment display. A similar system is used in the A8 luxury sedan and the Q8 crossover, and despite our usual griping about the takeover of touchscreen controls, it works well and provides satisfying haptic feedback. A large trunk and easy-to-fold rear seatbacks make the A6 great for hauling cargo. We fit six of our carry-on suitcases in the trunk, which ties both the E450 and the 540i. The Audi offered far more space than either of those two with the rear seats folded, managing to hold 20 cases; the Benz held 18 and the BMW 16.", "Audi offers quite a few standard and optional driver-assistance features, including a system that watches out for traffic to save you from stepping out of the car and into the path of a moving vehicle. For more information about the A6's crash-test results, visit the National Highway Traffic Safety Administration (NHTSA) and Insurance Institute for Highway Safety (IIHS) websites.", "With its subdued styling and straightforward-but-refined interior, the 2024 Audi A6 is a classic German luxury sedan. There's nothing garish or overtly flashy about its design, and its comfort-first demeanor means it's perfect for long-haul autobahn runs. Entry-level models are powered by a turbocharged four-cylinder, but we like the optional turbocharged V-6 which makes a potent 335 horsepower. The more powerful S6 model (reviewed separately) livens things up with 444 horsepower and a tauter suspension. Driving enthusiasts may want to go with the S6 for more on-road entertainment, but those seeking quiet luxury will find that in the A6. Rivals such as the BMW 5-series, the Genesis G80, and the Mercedes-Benz E-Classserve as natural comparisons to the Audi and all offer similar style, comfort, and quality.", "The A6's two powertrains—a 261-hp turbocharged 2.0-liter four-cylinder and a 335-hp turbocharged 3.0-liter V-6—are both more than enough to haul this mid-size sedan around town without undue strain. Both powertrains employ hybrid technology with a 12- or 48-volt starter/alternator that runs the engine's stop-start system and other ancillary equipment. A seven-speed automatic transmission and Quattro all-wheel drive are both standard. The V-6 delivers plenty of thrust for merging and passing on the highway: at our test track, it charged from zero to 60 mph in just 4.8 seconds. Despite this quick result, it's not quite enough to outrun its key rivals, the BMW 540i xDrive and the Mercedes-Benz E450 4Matic. The 540i managed a 4.5-second run, while the Benz did it in 4.6. Thanks to its absorbent ride the A6 performs better as a luxury car than a sports sedan. We enjoyed its balanced handling and precise steering but never felt totally engaged when attacking twisty sections of road.", 200m, 2, 1, 3 }
                 });
 
             migrationBuilder.InsertData(
@@ -356,6 +434,21 @@ namespace CarSales.Web.Data.Migrations
                 name: "IX_Owners_UserId",
                 table: "Owners",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Reviewers_UserId",
+                table: "Reviewers",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Reviews_ReviewerId",
+                table: "Reviews",
+                column: "ReviewerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Reviews_VehicleId",
+                table: "Reviews",
+                column: "VehicleId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_RoleRequests_RoleId",
@@ -415,10 +508,16 @@ namespace CarSales.Web.Data.Migrations
                 name: "Offers");
 
             migrationBuilder.DropTable(
+                name: "Reviews");
+
+            migrationBuilder.DropTable(
                 name: "RoleRequests");
 
             migrationBuilder.DropTable(
                 name: "Sales");
+
+            migrationBuilder.DropTable(
+                name: "Reviewers");
 
             migrationBuilder.DropTable(
                 name: "Vehicles");
@@ -441,6 +540,16 @@ namespace CarSales.Web.Data.Migrations
                 table: "AspNetUserRoles",
                 keyColumns: new[] { "RoleId", "UserId" },
                 keyValues: new object[] { "bbea2448-c801-43d1-8b05-e3a2c22338d9", "10933c11-ac2a-410d-b60a-8b1d97324975" });
+
+            migrationBuilder.DeleteData(
+                table: "AspNetUserRoles",
+                keyColumns: new[] { "RoleId", "UserId" },
+                keyValues: new object[] { "2d1b88f7-208a-43de-bb14-aca56b43080c", "4d693871-c20b-4e9f-8490-1c641b9e3a40" });
+
+            migrationBuilder.DeleteData(
+                table: "AspNetUserRoles",
+                keyColumns: new[] { "RoleId", "UserId" },
+                keyValues: new object[] { "bbea2448-c801-43d1-8b05-e3a2c22338d9", "4d693871-c20b-4e9f-8490-1c641b9e3a40" });
 
             migrationBuilder.DeleteData(
                 table: "AspNetUserRoles",
@@ -470,6 +579,11 @@ namespace CarSales.Web.Data.Migrations
             migrationBuilder.DeleteData(
                 table: "AspNetRoles",
                 keyColumn: "Id",
+                keyValue: "2d1b88f7-208a-43de-bb14-aca56b43080c");
+
+            migrationBuilder.DeleteData(
+                table: "AspNetRoles",
+                keyColumn: "Id",
                 keyValue: "9cbd5531-0c49-4889-95b9-b81fc1e7653a");
 
             migrationBuilder.DeleteData(
@@ -491,6 +605,11 @@ namespace CarSales.Web.Data.Migrations
                 table: "AspNetUsers",
                 keyColumn: "Id",
                 keyValue: "10933c11-ac2a-410d-b60a-8b1d97324975");
+
+            migrationBuilder.DeleteData(
+                table: "AspNetUsers",
+                keyColumn: "Id",
+                keyValue: "4d693871-c20b-4e9f-8490-1c641b9e3a40");
 
             migrationBuilder.DeleteData(
                 table: "AspNetUsers",

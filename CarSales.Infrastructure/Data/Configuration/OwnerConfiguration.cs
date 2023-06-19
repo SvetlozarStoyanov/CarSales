@@ -1,11 +1,6 @@
 ﻿using CarSales.Infrastructure.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CarSales.Infrastructure.Data.Configuration
 {
@@ -39,6 +34,11 @@ namespace CarSales.Infrastructure.Data.Configuration
                 {
                     Id = 4,
                     UserId = "10933c11-ac2a-410d-b60a-8b1d97324975"
+                },
+                new Owner()
+                {
+                    Id = 5,
+                    UserId = "4d693871-c20b-4e9f-8490-1c641b9e3a40"
                 }
             };
 
