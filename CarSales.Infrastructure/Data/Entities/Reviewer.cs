@@ -1,5 +1,4 @@
-﻿using CarSales.Infrastructure.Data.Enums;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace CarSales.Infrastructure.Data.Entities
 {
@@ -15,9 +14,9 @@ namespace CarSales.Infrastructure.Data.Entities
         public bool IsActive { get; set; } = true;
         public string UserId { get; set; } = null!;
         public User User { get; set; } = null!;
-        public decimal? ShortReviewPrice { get; set; }
-        public decimal? StandartReviewPrice { get; set; }
-        public decimal? PremiumReviewPrice { get; set; }
+        public decimal ShortReviewPrice { get; set; }
+        public decimal StandartReviewPrice { get; set; }
+        public decimal PremiumReviewPrice { get; set; }
         public virtual ICollection<Review> Reviews { get; set; }
     }
 }
