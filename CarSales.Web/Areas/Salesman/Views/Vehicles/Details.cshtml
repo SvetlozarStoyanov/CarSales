@@ -114,4 +114,12 @@ else if (Model.ImporterUserId != null && Model.ImporterUserId != User.Id())
         </a>
     </div>
 }
+else
+{
+    <div class="text-center mt-3 mb-3">
+        <a class="btn btn-lg btn-success" asp-area="Salesman" asp-controller="Reviewers" asp-action="Index" asp-route-vehicleId="@Model.Id">
+            Order review
+        </a>
+    </div>
+}
 <script src="~/js/Vehicles/canBuyVehicle.js"></script>
