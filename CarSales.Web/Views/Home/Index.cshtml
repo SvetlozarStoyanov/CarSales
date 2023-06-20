@@ -1,7 +1,54 @@
-﻿@{
+﻿@model IEnumerable<ReviewListModel>
+@{
     ViewData["Title"] = "Home Page";
 }
 
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
 </div>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <td>
+                Vehicle
+            </td>
+            <td>
+                Title
+            </td>
+            <td>
+                Price
+            </td>
+            <td>
+                Length
+            </td>
+            <td>
+
+            </td>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var review in Model)
+        {
+            <tr>
+                <td>
+                    @review.VehicleName
+                </td>
+                <td>
+                    @review.Title
+                </td>
+                <td>
+                    @review.VehiclePrice
+                </td>
+                <td>
+                    @review.ReviewType
+                </td>
+                <td>
+                    <a class="btn btn-primary" asp-controller="Reviews" asp-action="Details" asp-route-id="@review.Id">
+                        <i class="bi bi-info-circle"></i> Details
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
