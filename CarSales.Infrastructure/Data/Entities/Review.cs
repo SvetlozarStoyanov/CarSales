@@ -7,6 +7,7 @@ namespace CarSales.Infrastructure.Data.Entities
     {
         public int Id { get; set; }
         [MinLength(10), MaxLength(1000)]
+        public string Title { get; set; }
         public string Overview { get; set; } = null!;
         [MinLength(10), MaxLength(1000)]
         public string Performance { get; set; } = null!;
@@ -17,6 +18,7 @@ namespace CarSales.Infrastructure.Data.Entities
         [MinLength(10), MaxLength(1000)]
         public string? Features { get; set; }
         public ReviewType ReviewType { get; set; }
+        public ReviewStatus ReviewStatus { get; set; } = ReviewStatus.Ordered;
         public decimal Price { get; set; }
         public int ReviewerId { get; set; }
         public Reviewer Reviewer { get; set; }
