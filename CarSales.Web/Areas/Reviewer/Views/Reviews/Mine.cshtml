@@ -1,0 +1,202 @@
+﻿@model ReviewsQueryModel
+@{
+    ViewData["Title"] = "My reviews";
+    var previousPage = Model.CurrentPage - 1;
+    if (previousPage < 1)
+    {
+        previousPage = 1;
+    }
+
+    var maxPage = Math.Ceiling((double)Model.ReviewCount /
+    Model.ReviewsPerPage);
+    var shouldButtonBeDisabled = Model.CurrentPage >= maxPage;
+}
+
+<h1 class="text-center">@ViewData["Title"]</h1>
+
+
+<form id="form" method="get">
+    <div class="row mt-5 mb-5">
+        <div class="d-flex justify-content-between">
+
+            <div class="form-group">
+                <label asp-for="@Model.SearchTerm" class="form-label custom-label">Search Term</label>
+                <input asp-for="@Model.SearchTerm" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label asp-for="@Model.VehicleNames" class="form-label custom-label">Vehicle Name</label>
+                <select asp-for="@Model.VehicleName" class="form-select">
+                    <option value="@null">All</option>
+                    @foreach (var vehicleName in Model.VehicleNames)
+                    {
+                        <option value="@vehicleName">@vehicleName</option>
+                    }
+                </select>
+            </div>
+            <div class="form-group">
+                <label asp-for="@Model.ReviewStatus" class="form-label custom-label">Review status</label>
+                <select asp-for="@Model.ReviewStatus" class="form-select">
+                    <option value="@null">All</option>
+                    @foreach (var reviewStatus in Model.ReviewStatuses)
+                    {
+                        <option value="@reviewStatus">@reviewStatus</option>
+                    }
+                </select>
+            </div>
+            <div class="form-group">
+                <label asp-for="@Model.ReviewsPerPage" class="form-label custom-label">Reviews Per Page</label>
+                <select asp-for="@Model.ReviewsPerPage" class="form-select">
+                    @for (int i = 1; i <= 12; i++)
+                    {
+                        <option value="@i">@i</option>
+                    }
+                </select>
+
+            </div>
+            <div class="form-group">
+                <label class="form-label custom-label">Review Types</label>
+                <div id="reviewTypesDiv">
+                    <input id="selectedReviewTypes" asp-for="@Model.SelectedReviewTypes" hidden />
+                    <div class="form-check custom-checkbox-container">
+                        <input class="custom-checkbox" type="checkbox" id="allReviewTypes" value="@null" name="all" />
+                        <label class="custom-checkbox-label">All</label>
+                    </div>
+                    @foreach (var reviewType in Model.ReviewTypes)
+                    {
+                        <div class="form-check custom-checkbox-container">
+                            <input class="review-types custom-checkbox" type="checkbox" id="@reviewType.ToString().ToLower()" value="@reviewType" name="@reviewType.ToString().ToLower()" />
+                            <label class="custom-checkbox-label">@reviewType</label>
+                        </div>
+                    }
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="form-label custom-label">Vehicle Types</label>
+                <div id="vehicleTypesDiv">
+                    <input id="selectedVehicleTypes" asp-for="@Model.SelectedVehicleTypes" hidden />
+                    <div class="form-check custom-checkbox-container">
+                        <input class="custom-checkbox" type="checkbox" id="allVehicleTypes" value="@null" name="all" />
+                        <label class="custom-checkbox-label">All</label>
+                    </div>
+                    @foreach (var vehicleType in Model.VehicleTypes)
+                    {
+                        <div class="form-check custom-checkbox-container">
+                            <input class="vehicle-types custom-checkbox" type="checkbox" id="@vehicleType.ToString().ToLower()" value="@vehicleType" name="@vehicleType.ToString().ToLower()" />
+                            <label class="custom-checkbox-label">@vehicleType</label>
+                        </div>
+                    }
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="@Model.ReviewSorting" class="form-label custom-label">Sorting</label>
+                <select asp-for="@Model.ReviewSorting" class="form-select">
+                    @foreach (var sortingOption in Model.SortingOptions)
+                    {
+                        <option value="@sortingOption">@(string.Join(" ", Regex.Matches(sortingOption.ToString(), "[A-Z][a-z]*").Select(m => m.Value).ToArray()))</option>
+                    }
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-5">
+        <div class="col-md-6 d-grid gap-2 d-md-flex justify-content-md-start">
+            <a class="btn btn-primary btn-lg @(Model.CurrentPage == 1 ? "disabled" : string.Empty)"
+               asp-area="Reviewer"
+               asp-controller="Reviews"
+               asp-action="Mine"
+               asp-route-searchTerm="@Model.SearchTerm"
+               asp-route-vehicleName="@Model.VehicleName"
+               asp-route-reviewsPerPage="@Model.ReviewsPerPage"
+               asp-route-currentPage="@previousPage"
+               asp-route-selectedReviewTypes="@Model.SelectedReviewTypes"
+               asp-route-selectedVehicleTypes="@Model.SelectedVehicleTypes"
+               asp-route-reviewStatus="@((int?)Model.ReviewStatus)"
+               asp-route-reviewSorting="@((int)Model.ReviewSorting)"><i class="bi bi-arrow-left"></i></a>
+        </div>
+
+        <div class="col-md-6 d-grid gap-2 d-md-flex justify-content-md-end">
+            <a class="btn btn-primary btn-lg @(shouldButtonBeDisabled ? "disabled" : string.Empty)"
+               asp-area="Reviewer"
+               asp-controller="Reviews"
+               asp-action="Mine"
+               asp-route-searchTerm="@Model.SearchTerm"
+               asp-route-vehicleName="@Model.VehicleName"
+               asp-route-reviewsPerPage="@Model.ReviewsPerPage"
+               asp-route-currentPage="@(Model.CurrentPage + 1)"
+               asp-route-selectedReviewTypes="@Model.SelectedReviewTypes"
+               asp-route-selectedVehicleTypes="@Model.SelectedVehicleTypes"
+               asp-route-reviewStatus="@((int?)Model.ReviewStatus)"
+               asp-route-reviewSorting="@((int)Model.ReviewSorting)"><i class="bi bi-arrow-right"></i></a>
+        </div>
+    </div>
+
+
+    <div class="text-center btn-lg">
+        <button type="submit" id="submitBtn" class="btn btn-primary btn-lg">Filter</button>
+    </div>
+
+</form>
+
+
+
+@if (Model.ReviewCount > 0)
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <td>
+                    Vehicle
+                </td>
+                <td>
+                    Title
+                </td>
+                <td>
+                    Vehicle Price
+                </td>
+                <td>
+                    Length
+                </td>
+                <td>
+                </td>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var review in Model.Reviews)
+            {
+                <tr>
+                    <td>
+                        @review.VehicleName
+                    </td>
+                    <td>
+                        @review.Title
+                    </td>
+                    <td>
+                        @review.VehiclePrice
+                    </td>
+                    <td>
+                        @review.ReviewType
+                    </td>
+                    <td>
+                        @if (review.ReviewStatus == ReviewStatus.Ordered)
+                        {
+                            <a class="btn btn-success" asp-area="Reviewer" asp-controller="Reviews" asp-action="Create" asp-route-id="@review.Id">Create</a>
+                        }
+                        else
+                        {
+                            <a class="btn btn-primary" asp-area="Reviewer" asp-controller="Reviews" asp-action="Details" asp-route-id="@review.Id">
+                                <i class="bi bi-info-circle"></i> Details
+                            </a>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <h4 class="text-center mt-5">No reviews match given criteria</h4>
+}
+
+<script src="~/js/Reviews/selectReviewAndVehicleTypes.js"></script>
