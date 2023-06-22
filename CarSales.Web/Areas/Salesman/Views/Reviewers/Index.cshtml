@@ -136,7 +136,7 @@
                         @reviewer.PremiumReviewPrice credits
                     </td>
                     <td>
-                        <a asp-area="Salesman" asp-controller="Reviews" asp-action="OrderReview" asp-route-reviewerId="@reviewer.Id" asp-route-vehicleId="@Model.VehicleId">Choose</a>
+                        <a class="btn btn-primary" asp-area="Salesman" asp-controller="Reviews" asp-action="OrderReview" asp-route-reviewerId="@reviewer.Id" asp-route-vehicleId="@Model.VehicleId">Choose</a>
                     </td>
                 </tr>
             }

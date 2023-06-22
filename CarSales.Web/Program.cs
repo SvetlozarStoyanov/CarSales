@@ -4,6 +4,7 @@ using CarSales.Web.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Antiforgery;
 
 namespace CarSales.Web
 {
@@ -35,6 +36,15 @@ namespace CarSales.Web
             {
                 options.Filters.Add<AutoValidateAntiforgeryTokenAttribute>();
             });
+
+
+            //builder.Services.AddAntiforgery(options =>
+            //{
+            //    // Set Cookie properties using CookieBuilder properties†.
+            //    options.FormFieldName = "AntiforgeryFieldname";
+            //    options.HeaderName = "X-CSRF-TOKEN-HEADERNAME";
+            //    options.SuppressXFrameOptionsHeader = false;
+            //});
 
             builder.Services.AddAuthentication();
             builder.Services.AddAuthorization();
@@ -69,6 +79,22 @@ namespace CarSales.Web
             app.UseAuthentication();
             app.UseAuthorization();
 
+            //var antiforgery = app.Services.GetRequiredService<IAntiforgery>();
+
+            //app.Use((context, next) =>
+            //{
+            //    var requestPath = context.Request.Path.Value;
+
+            //    if (string.Equals(requestPath, "/", StringComparison.OrdinalIgnoreCase)
+            //        || string.Equals(requestPath, "/index.html", StringComparison.OrdinalIgnoreCase))
+            //    {
+            //        var tokenSet = antiforgery.GetAndStoreTokens(context);
+            //        context.Response.Cookies.Append("XSRF-TOKEN", tokenSet.RequestToken!,
+            //            new CookieOptions { HttpOnly = false });
+            //    }
+
+            //    return next(context);
+            //});
 
             app.MapControllerRoute(
                 name: "areas",
