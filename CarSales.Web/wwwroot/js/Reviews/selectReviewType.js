@@ -1,45 +1,51 @@
-﻿const selectedReviewTypesInput = document.querySelector('#selectedReviewTypes');
-const allReviewTypesCheckBox = document.querySelector('#reviewTypesDiv>.form-check>#all');
-const reviewTypesCheckboxes = document.querySelectorAll('#reviewTypesDiv>.form-check>.review-types');
+﻿const selectedReviewTypeIndexInput = document.querySelector('#selectedReviewTypeIndex');
 
-const submitFormBtn = document.querySelector('#submitBtn');
-const form = document.querySelector('#form');
-console.log(reviewTypesCheckboxes.length);
 
-window.addEventListener('load', function () {
-    if (selectedReviewTypesInput.value === '') {
-        allReviewTypesCheckBox.checked = true;
-    } else {
-        for (let checkbox of reviewTypesCheckboxes) {
-            if (selectedReviewTypesInput.value.includes(checkbox.value)) {
-                checkbox.checked = true;
-            }
+const reviewPlanArticles = document.querySelectorAll('.review-plan');
+const reviewPlanButtons = document.querySelectorAll('.review-plan>div>button');
+let currSelectedPlanIndex = -1;
+
+window.addEventListener('load', async function () {
+    await setTimeout(() => {
+        if (currSelectedPlanIndex === -1) {
+            selectReviewPlan(1);
         }
-    }
-});
+    }, 600);
+})
 
-allReviewTypesCheckBox.addEventListener('change', function (e) {
-    for (let checkbox of reviewTypesCheckboxes) {
-        checkbox.checked = false;
-    }
-});
 
-for (let checkbox of reviewTypesCheckboxes) {
-    checkbox.addEventListener('change', function (e) {
-        let currCheckBox = e.currentTarget;
-        if (currCheckBox.checked) {
-            if (allReviewTypesCheckBox.checked) {
-                allReviewTypesCheckBox.checked = false;
-            }
+for (let btn of reviewPlanButtons) {
+    btn.addEventListener('click', async function (e) {
+        e.preventDefault();
+        e.currentTarget.blur();
+
+        const currReviewPlanArticle = e.currentTarget.parentNode.parentNode;
+        let currReviewPlanArticleIndex = parseInt(currReviewPlanArticle.querySelector('input').value);
+        if (currSelectedPlanIndex !== -1) {
+            await resetOldReviewPlan(currSelectedPlanIndex);
         }
+        await selectReviewPlan(currReviewPlanArticleIndex);
+
     });
 }
 
-form.addEventListener('submit', function (e) {
-    selectedReviewTypesInput.value = '';
-    for (let checkbox of reviewTypesCheckboxes) {
-        if (checkbox.checked) {
-            selectedReviewTypesInput.value += `${checkbox.value};`;
-        }
-    }
-});
+async function selectReviewPlan(index) {
+    currSelectedPlanIndex = index;
+    selectedReviewTypeIndexInput.value = parseInt(currSelectedPlanIndex);
+
+    const currSelectedReviewPlanArticle = reviewPlanArticles[currSelectedPlanIndex];
+    const currSelectedReviewPlanArticleIcon = currSelectedReviewPlanArticle.querySelector('div>button>i');
+    currSelectedReviewPlanArticleIcon.classList.remove('bi-dash-circle-fill');
+    currSelectedReviewPlanArticleIcon.classList.add('bi-check-circle-fill');
+    currSelectedReviewPlanArticle.classList.add('bg-success');
+    currSelectedReviewPlanArticle.classList.remove('bg-info');
+}
+
+async function resetOldReviewPlan(index) {
+    const currSelectedReviewPlanArticle = reviewPlanArticles[index];
+    const currSelectedReviewPlanArticleIcon = currSelectedReviewPlanArticle.querySelector('div>button>i');
+    currSelectedReviewPlanArticleIcon.classList.remove('bi-check-circle-fill');
+    currSelectedReviewPlanArticleIcon.classList.add('bi-dash-circle-fill');
+    currSelectedReviewPlanArticle.classList.remove('bg-success');
+    currSelectedReviewPlanArticle.classList.add('bg-info');
+}
