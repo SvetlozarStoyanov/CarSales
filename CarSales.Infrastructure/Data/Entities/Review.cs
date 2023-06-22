@@ -8,11 +8,11 @@ namespace CarSales.Infrastructure.Data.Entities
         public int Id { get; set; }
         [MinLength(10), MaxLength(1000)]
         public string Title { get; set; }
-        public string Overview { get; set; } = null!;
+        public string Overview { get; set; }
         [MinLength(10), MaxLength(1000)]
-        public string Performance { get; set; } = null!;
+        public string Performance { get; set; }
         [MinLength(10), MaxLength(1000)]
-        public string? Interior { get; set; } = null!;
+        public string? Interior { get; set; }
         [MinLength(10), MaxLength(1000)]
         public string? Longevity { get; set; }
         [MinLength(10), MaxLength(1000)]
