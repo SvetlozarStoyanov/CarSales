@@ -1,4 +1,5 @@
-﻿using CarSales.Core.Models.Reviews;
+﻿using CarSales.Core.Enums;
+using CarSales.Core.Models.Reviews;
 using CarSales.Infrastructure.Data.Enums;
 
 namespace CarSales.Core.Contracts
@@ -7,18 +8,27 @@ namespace CarSales.Core.Contracts
     {
         Task<IEnumerable<ReviewListModel>> GetLatestReviewsAsync();
 
-
         Task<ReviewViewModel> GetReviewByIdAsync(int id);
 
+        Task<ReviewsQueryModel> GetReviewerReviewsAsync(string userId,
+            string? searchTerm = null,
+            string? vehicleName = null,
+            int reviewsPerPage = 6,
+            int currentPage = 1,
+            string? selectedReviewTypes = null,
+            string? selectedVehicleTypes = null,
+            ReviewStatus? reviewStatus = null,
+            ReviewSorting reviewSorting = ReviewSorting.VehiclePriceDescending
+            );
 
-        Task<ReviewOrderModel> CreateReviewOrderModelAsync(int reviewerId, int vehicleId);
+
+        Task<ReviewOrderModel> CreateReviewOrderModel(int reviewerId, int vehicleId, IDictionary<ReviewType, decimal> reviewTypesAndPrices);
 
 
-        Task<ReviewCreateModel> CreateReviewCreateModelAsync(int reviewerId, int vehicleId, decimal price, ReviewType reviewType);
+        Task<ReviewCreateModel> CreateReviewCreateModelAsync(int id);
 
 
-
-        Task CreateOrderedReviewAsync(ReviewOrderModel model);
+        Task CreateOrderedReviewAsync(string userId, ReviewOrderModel model);
 
 
         Task CreateCompletedReviewAsync(ReviewCreateModel model);

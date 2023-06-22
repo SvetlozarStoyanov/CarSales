@@ -1,5 +1,7 @@
 ﻿using AirsoftMatchMaker.Infrastructure.Data.Common.Repository;
 using CarSales.Core.Contracts;
+using CarSales.Core.Enums;
+using CarSales.Core.Exceptions;
 using CarSales.Core.Models.Reviews;
 using CarSales.Core.Models.Vehicles;
 using CarSales.Infrastructure.Data.Entities;
@@ -66,46 +68,147 @@ namespace CarSales.Core.Services
             return review;
         }
 
-
-
-        public async Task<ReviewCreateModel> CreateReviewCreateModelAsync(int reviewerId, int vehicleId, decimal price, ReviewType reviewType)
+        public async Task<ReviewsQueryModel> GetReviewerReviewsAsync(string userId,
+            string? searchTerm = null,
+            string? vehicleName = null,
+            int reviewsPerPage = 6,
+            int currentPage = 1,
+            string? selectedReviewTypes = null,
+            string? selectedVehicleTypes = null,
+            ReviewStatus? reviewStatus = null,
+            ReviewSorting reviewSorting = ReviewSorting.VehiclePriceDescending
+            )
         {
-            var model = new ReviewCreateModel()
+            var reviewer = await repository.AllReadOnly<Reviewer>()
+                .FirstOrDefaultAsync(r => r.UserId == userId);
+
+            var reviews = await repository.AllReadOnly<Review>()
+                .Where(r => r.ReviewerId == reviewer.Id)
+                .Include(r => r.Vehicle)
+                .ToListAsync();
+            var vehicleNames = reviews.Select(r => $"{r.Vehicle.Brand} {r.Vehicle.Model}").ToList();
+            if (!string.IsNullOrWhiteSpace(searchTerm))
             {
-                ReviewerId = reviewerId,
-                VehicleId = vehicleId,
-                Price = price,
-                ReviewType = reviewType
-            };
+                reviews = reviews.Where(r => r.Title.ToLower().Contains(searchTerm.ToLower()))
+                    .ToList();
+            }
+            if (!string.IsNullOrWhiteSpace(vehicleName))
+            {
+                reviews = reviews.Where(r => $"{r.Vehicle.Brand} {r.Vehicle.Model}" == vehicleName)
+                    .ToList();
+            }
+            if (!string.IsNullOrWhiteSpace(selectedReviewTypes))
+            {
+                var selectedReviewTypesSplit = selectedReviewTypes.Split(';', StringSplitOptions.RemoveEmptyEntries)
+                    .ToList();
+
+                reviews = reviews.Where(r => selectedReviewTypesSplit.Any(srt => srt.ToLower() == r.ReviewType.ToString().ToLower())).ToList();
+            }
+
+            if (!string.IsNullOrWhiteSpace(selectedVehicleTypes))
+            {
+                var selectedVehicleTypesSplit = selectedVehicleTypes.Split(';', StringSplitOptions.RemoveEmptyEntries)
+                    .ToList();
+
+                reviews = reviews.Where(r => selectedVehicleTypesSplit.Any(svt => svt.ToLower() == r.Vehicle.VehicleType.ToString().ToLower())).ToList();
+            }
+
+            if (reviewStatus != null)
+            {
+                reviews = reviews.Where(r => r.ReviewStatus == reviewStatus)
+                    .ToList();
+            }
+
+            switch (reviewSorting)
+            {
+                case ReviewSorting.VehiclePriceAscending:
+                    reviews = reviews.OrderBy(r => r.Vehicle.Price).ToList();
+                    break;
+                case ReviewSorting.VehiclePriceDescending:
+                    reviews = reviews.OrderByDescending(r => r.Vehicle.Price).ToList();
+                    break;
+                case ReviewSorting.TitleAscending:
+                    reviews = reviews.OrderByDescending(r => r.Title).ToList();
+                    break;
+                case ReviewSorting.TitleDescending:
+                    reviews = reviews.OrderBy(r => r.Title).ToList();
+                    break;
+            }
+
+            var reviewCount = reviews.Count();
+            var sortedReviews = reviews.Skip((currentPage - 1) * reviewsPerPage)
+                .Take(reviewsPerPage);
+            var model = CreateReviewsQueryModel(searchTerm,
+                vehicleName,
+                reviewCount,
+                currentPage,
+                reviewsPerPage,
+                reviewStatus,
+                reviewSorting,
+                selectedReviewTypes,
+                selectedVehicleTypes,
+                vehicleNames,
+                sortedReviews);
 
             return model;
         }
 
-        public async Task<ReviewOrderModel> CreateReviewOrderModelAsync(int reviewerId, int vehicleId)
+        public async Task<ReviewCreateModel> CreateReviewCreateModelAsync(int id)
         {
-            var reviewTypes = Enum.GetValues<ReviewType>().ToList();
-            var reviewer = await repository.AllReadOnly<Reviewer>()
-                .FirstOrDefaultAsync(r => r.Id == reviewerId);
-            var prices = new List<decimal>() {
-                reviewer.ShortReviewPrice, reviewer.StandartReviewPrice, reviewer.PremiumReviewPrice
-            };
-          
+            var model = await repository.AllReadOnly<Review>()
+                .Where(r => r.Id == id)
+                .Select(r => new ReviewCreateModel()
+                {
+                    Id = r.Id,
+                    VehicleName = $"{r.Vehicle.Brand} {r.Vehicle.Model}",
+                    ReviewType = r.ReviewType
+                })
+                .FirstOrDefaultAsync();
+
+
+            return model;
+        }
+
+        public async Task<ReviewOrderModel> CreateReviewOrderModel(int reviewerId, int vehicleId, IDictionary<ReviewType, decimal> reviewTypesAndPrices)
+        {
             var model = new ReviewOrderModel()
             {
                 ReviewerId = reviewerId,
                 VehicleId = vehicleId,
+                ReviewTypesAndPrices = reviewTypesAndPrices
             };
-            for (int i = 0; i < reviewTypes.Count; i++)
-            {
-                model.ReviewTypesAndPrices.Add(reviewTypes[i], prices[i]);
-            }
             return model;
         }
 
-        public async Task CreateOrderedReviewAsync(ReviewOrderModel model)
+        public async Task CreateOrderedReviewAsync(string userId, ReviewOrderModel model)
         {
+            var salesman = await repository.All<Salesman>()
+                .Where(s => s.UserId == userId)
+                .Include(s => s.User)
+                .FirstOrDefaultAsync();
+
+            var reviewer = await repository.All<Reviewer>()
+                .Where(r => r.Id == model.ReviewerId)
+                .Include(s => s.User)
+                .FirstOrDefaultAsync();
+
+            var reviewTypeEnumLength = Enum.GetValues<ReviewType>().Length;
+            if (model.ReviewTypeIndex < 0 || model.ReviewTypeIndex >= reviewTypeEnumLength)
+            {
+                throw new ArgumentOutOfRangeException("Out of bounds of Enum");
+            }
+            model.ReviewType = (ReviewType)model.ReviewTypeIndex;
+            model.Price = model.ReviewTypesAndPrices[model.ReviewType];
+            if (salesman.User.Credits < model.Price)
+            {
+                throw new InsufficientCreditsException("You do not have enough credits for this purchase!");
+            }
+
             var review = new Review()
             {
+                Title = "",
+                Overview = "",
+                Performance = "",
                 ReviewerId = model.ReviewerId,
                 VehicleId = model.VehicleId,
                 ReviewType = model.ReviewType,
@@ -113,32 +216,72 @@ namespace CarSales.Core.Services
                 Price = model.Price,
             };
 
+            salesman.User.Credits -= model.Price;
+            reviewer.User.Credits += model.Price;
+
             await repository.AddAsync<Review>(review);
 
             await repository.SaveChangesAsync();
         }
         public async Task CreateCompletedReviewAsync(ReviewCreateModel model)
         {
-            var review = new Review()
-            {
-                Title = model.Title,
-                Overview = model.Overview,
-                Performance = model.Performance,
-                Interior = model.Interior,
-                Longevity = model.Longevity,
-                Features = model.Features,
-                ReviewerId = model.ReviewerId,
-                VehicleId = model.VehicleId,
-                ReviewType = model.ReviewType,
-                ReviewStatus = ReviewStatus.Completed,
-                Price = model.Price,
-            };
+            var review = await repository.All<Review>()
+                .FirstOrDefaultAsync(r => r.Id == model.Id);
 
-            await repository.AddAsync<Review>(review);
+            review.Title = model.Title;
+            review.Overview = model.Overview;
+            review.Performance = model.Performance;
+            review.Interior = model.Interior;
+            review.Longevity = model.Longevity;
+            review.Features = model.Features;
+            review.ReviewStatus = ReviewStatus.Completed;
 
             await repository.SaveChangesAsync();
         }
 
+        private ReviewsQueryModel CreateReviewsQueryModel(string? searchTerm,
+            string? vehicleName,
+            int reviewCount,
+            int currentPage,
+            int reviewsPerPage,
+            ReviewStatus? reviewStatus,
+            ReviewSorting reviewSorting,
+            string selectedReviewTypes,
+            string selectedVehicleTypes,
+            ICollection<string> vehicleNames,
+            IEnumerable<Review> reviews)
+        {
+
+            var model = new ReviewsQueryModel()
+            {
+                SearchTerm = searchTerm,
+                VehicleName = vehicleName,
+
+                CurrentPage = currentPage,
+                ReviewsPerPage = reviewsPerPage,
+                ReviewCount = reviewCount,
+                ReviewStatus = reviewStatus,
+                ReviewSorting = reviewSorting,
+                SelectedReviewTypes = selectedReviewTypes,
+                SelectedVehicleTypes = selectedVehicleTypes,
+                VehicleNames = vehicleNames,
+                Reviews = reviews.Select(r => new ReviewListModel()
+                {
+                    Id = r.Id,
+                    Title = r.Title,
+                    Overview = r.Overview,
+                    ReviewerId = r.ReviewerId,
+                    VehicleId = r.VehicleId,
+                    VehicleName = $"{r.Vehicle.Brand} {r.Vehicle.Model}",
+                    ReviewType = r.ReviewType,
+                    ReviewStatus = r.ReviewStatus,
+                    VehiclePrice = r.Vehicle.Price,
+                })
+
+            };
+
+            return model;
+        }
 
     }
 }
