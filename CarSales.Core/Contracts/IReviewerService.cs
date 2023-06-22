@@ -1,6 +1,7 @@
 ﻿
 using CarSales.Core.Models.Reviewers;
 using CarSales.Infrastructure.Data.Entities;
+using CarSales.Infrastructure.Data.Enums;
 
 namespace CarSales.Core.Contracts
 {
@@ -22,6 +23,10 @@ namespace CarSales.Core.Contracts
         /// <param name="userId"></param>
         /// <returns></returns>
         Task RetireReviewerAsync(string userId);
+
+
+        Task<IDictionary<ReviewType, decimal>> GetReviewTypesAndPricesAsync(int reviewerId);
+
 
         Task<ReviewersQueryModel> GetAllReviewersAsync(string searchTerm = null
             );

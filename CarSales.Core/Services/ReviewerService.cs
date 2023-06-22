@@ -135,5 +135,22 @@ namespace CarSales.Core.Services
             return model;
         }
 
+
+        public async Task<IDictionary<ReviewType, decimal>> GetReviewTypesAndPricesAsync(int reviewerId)
+        {
+            var reviewTypesAndPrices = new Dictionary<ReviewType, decimal>();
+            var reviewTypes = Enum.GetValues<ReviewType>().ToList();
+            var reviewer = await repository.AllReadOnly<Reviewer>()
+                .FirstOrDefaultAsync(r => r.Id == reviewerId);
+            var prices = new List<decimal>() {
+                reviewer.ShortReviewPrice, reviewer.StandartReviewPrice, reviewer.PremiumReviewPrice
+            };
+            for (int i = 0; i < reviewTypes.Count; i++)
+            {
+                reviewTypesAndPrices.Add(reviewTypes[i], prices[i]);
+            }
+
+            return reviewTypesAndPrices;
+        }
     }
 }
