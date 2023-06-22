@@ -8,8 +8,7 @@ namespace CarSales.Core.Models.Reviews
         {
             ReviewTypesAndPrices = new Dictionary<ReviewType, decimal>();
         }
-
-        public int Id { get; set; }
+        public int ReviewTypeIndex { get; set; } = -1;
         public ReviewType ReviewType { get; set; }
         public decimal Price { get; set; }
         public int ReviewerId { get; set; }

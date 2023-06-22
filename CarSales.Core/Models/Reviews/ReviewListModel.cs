@@ -8,6 +8,7 @@ namespace CarSales.Core.Models.Reviews
         public string Title { get; set; }
         public string Overview { get; set; } = null!;
         public ReviewType ReviewType { get; set; }
+        public ReviewStatus ReviewStatus { get; set; }
         public decimal VehiclePrice { get; set; }
         public int ReviewerId { get; set; }
         public string ReviewerName { get; set; }
