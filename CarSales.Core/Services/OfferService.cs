@@ -24,7 +24,10 @@ namespace CarSales.Core.Services
                 .Where(o => o.UserId == userId)
                 .Include(o => o.Offers)
                 .FirstOrDefaultAsync();
-            if (owner.Offers.Any(of => of.VehicleId == vehicleId))
+            var vehicle = await repository.AllReadOnly<Vehicle>()
+                .Where(v => v.Id == vehicleId)
+                .FirstOrDefaultAsync();
+            if (vehicle.SalesmanId == null || owner.Offers.Any(of => of.VehicleId == vehicleId))
             {
                 return false;
             }
@@ -124,7 +127,7 @@ namespace CarSales.Core.Services
                         SalesmanId = o.Vehicle.SalesmanId,
                         SalesmanName = $"{o.Vehicle.Salesman.User.FirstName} {o.Vehicle.Salesman.User.LastName}",
                         VehicleType = o.Vehicle.VehicleType,
-                        VehicleRating = o.Vehicle.VehicleRating,
+                        VehicleRating = (VehicleRating)o.Vehicle.Reviews.Where(r => r.ReviewStatus == ReviewStatus.Completed).Average(r => (int)r.VehicleRating),
                     },
                     OfferorId = o.OfferorId,
                     OfferorName = $"{o.Offeror.User.FirstName} {o.Offeror.User.LastName}",
