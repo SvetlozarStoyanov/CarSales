@@ -1,5 +1,4 @@
-﻿@model VehicleMinModel
-
+﻿@model VehicleListModel
 @{
     string imageUrl = Model.ImageUrl ?? $"/img/VehicleTypes/{Model.VehicleType}.png";
 }
@@ -13,24 +12,24 @@
             <h5 class="mt-1 mb-1 card-title">
                 @Model.Name
             </h5>
-            @if (Model.SalesmanId != null)
+            @if (Model.SalesmanName != null)
             {
                 <p>
                     Sold by: @Model.SalesmanName
                 </p>
             }
-            else if (Model.ImporterId != null)
+            else if (Model.ImporterName != null)
             {
                 <p>
                     Imported by: @Model.ImporterName
                 </p>
             }
-@*            else if (Model.OwnerId != null)
+            else if (Model.OwnerName != null)
             {
                 <p>
                     @Model.OwnerName
                 </p>
-            }*@
+            }
             <div>
                 @if (Model.VehicleRating > VehicleRating.NotRated)
                 {
@@ -60,6 +59,11 @@
             </div>
             <div class="mt-2 mb-2">
                 @Model.Price credits
+            </div>
+            <div class="mt-2 mb-2">
+                <a class="btn btn-primary" asp-area="Salesman" asp-controller="Vehicles" asp-action="Details" asp-route-id="@Model.Id">
+                    Details
+                </a>
             </div>
         </div>
     </article>

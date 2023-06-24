@@ -31,8 +31,9 @@
                 </p>
             }
             <div>
-                @{
-                    var ratingAsInt = (int)Model.VehicleRating + 1;
+                @if (Model.VehicleRating > VehicleRating.NotRated)
+                {
+                    var ratingAsInt = (int)Model.VehicleRating;
                     for (int i = 0; i < ratingAsInt; i++)
                     {
                         <span class="m-1 p-1">
@@ -46,12 +47,21 @@
                         </span>
                     }
                 }
+                else
+                {
+                    @for (int i = 0; i < 5; i++)
+                    {
+                        <span class="m-2 p-2">
+                            <i style="font-size:15px;" class="bi bi-star opacity-50"></i>
+                        </span>
+                    }
+                }
             </div>
             <div class="mt-2 mb-2">
                 @Model.Price credits
             </div>
             <div class="mt-2 mb-2">
-                <a class="btn btn-primary" asp-area="Owner" asp-controller="Vehicles" asp-action="Details" asp-route-id="@Model.Id">
+                <a class="btn btn-primary" asp-area="Reviewer" asp-controller="Vehicles" asp-action="Details" asp-route-id="@Model.Id">
                     Details
                 </a>
             </div>
