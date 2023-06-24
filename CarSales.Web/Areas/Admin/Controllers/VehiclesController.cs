@@ -69,12 +69,7 @@ namespace CarSales.Web.Areas.Admin.Controllers
             return View(model);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> ChangeRating(VehicleChangeRatingModel model)
-        {
-            await vehicleService.ChangeVehicleRatingAsync(model.Id, (int)model.NewRating);
-            return RedirectToAction(nameof(Details), new { id = model.Id });
-        }
+
     }
 
 }

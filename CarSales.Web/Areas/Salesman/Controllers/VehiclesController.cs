@@ -130,12 +130,7 @@ namespace CarSales.Web.Areas.Salesman.Controllers
             return View(model);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> ChangeRating(VehicleChangeRatingModel model)
-        {
-            await vehicleService.ChangeVehicleRatingAsync(model.Id, (int)model.NewRating);
-            return RedirectToAction(nameof(Details), new { id = model.Id });
-        }
+
 
         public async Task<IActionResult> BuyFromSalesman(int id)
         {
