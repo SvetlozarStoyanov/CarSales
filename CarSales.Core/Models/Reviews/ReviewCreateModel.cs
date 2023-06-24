@@ -6,6 +6,10 @@ namespace CarSales.Core.Models.Reviews
 {
     public class ReviewCreateModel
     {
+        public ReviewCreateModel()
+        {
+            VehicleRatings = Enum.GetValues<VehicleRating>().Skip(1).ToHashSet();
+        }
         public int Id { get; set; }
         [MinLength(10), MaxLength(100)]
         public string Title { get; set; } = null!;
@@ -20,6 +24,8 @@ namespace CarSales.Core.Models.Reviews
         [MinLength(10), MaxLength(1000)]
         public string? Features { get; set; }
         public ReviewType ReviewType { get; set; }
-        public string VehicleName { get; set; }
+        public VehicleRating VehicleRating { get; set; }
+        public string VehicleName { get; set; } = null!;
+        public ICollection<VehicleRating> VehicleRatings { get; set; }
     }
 }
