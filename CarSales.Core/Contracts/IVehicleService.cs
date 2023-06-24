@@ -97,14 +97,6 @@ namespace CarSales.Core.Contracts
             string selectedVehicleTypes = null,
             VehicleSorting sorting = VehicleSorting.Alphabetically);
 
-        /// <summary>
-        /// Changes the <see cref="VehicleRating"/> of vehicle with given <paramref name="id"/>
-        /// with <paramref name="newRating"/>
-        /// </summary>
-        /// <param name="id"></param>
-        /// <param name="newRating"></param>
-        /// <returns></returns>
-        Task ChangeVehicleRatingAsync(int id, int newRating);
 
         /// <summary>
         /// <see cref="Vehicle"/> with <paramref name="id"/> is purchased by 

@@ -28,6 +28,7 @@ namespace CarSales.Core.Services
                 .Where(v => v.SalesmanId != null)
                 .Include(v => v.Salesman)
                 .ThenInclude(s => s.User)
+                .Include(v => v.Reviews)
                 .ToListAsync();
             if (vehicles.Count > 0)
             {
@@ -57,10 +58,10 @@ namespace CarSales.Core.Services
                         vehicles = vehicles.OrderByDescending(v => v.Price).ToList();
                         break;
                     case VehicleSorting.RatingAscending:
-                        vehicles = vehicles.OrderBy(v => v.VehicleRating).ToList();
+                        //vehicles = vehicles.OrderBy(v => v.VehicleRating).ToList();
                         break;
                     case VehicleSorting.RatingDescending:
-                        vehicles = vehicles.OrderByDescending(v => v.VehicleRating).ToList();
+                        //vehicles = vehicles.OrderByDescending(v => v.VehicleRating).ToList();
                         break;
                 }
             }
@@ -74,7 +75,9 @@ namespace CarSales.Core.Services
                     Name = $"{v.Brand} {v.Model} {v.YearProduced}",
                     ImageUrl = v.ImageUrl,
                     VehicleType = v.VehicleType,
-                    VehicleRating = v.VehicleRating,
+                    VehicleRating = v.Reviews.Count(r => r.ReviewStatus == ReviewStatus.Completed) > 0 
+                    ? (VehicleRating)v.Reviews.Where(r => r.ReviewStatus == ReviewStatus.Completed).Average(r => (int)r.VehicleRating) 
+                    : VehicleRating.NotRated,
                     Price = v.Price,
                     SalesmanId = v.SalesmanId,
                     SalesmanUserId = v.Salesman.UserId,
@@ -100,6 +103,8 @@ namespace CarSales.Core.Services
             .Where(v => v.ImporterId != null)
             .Include(v => v.Importer)
             .ThenInclude(i => i.User)
+                .Include(v => v.Reviews)
+
             .ToListAsync();
             if (vehicles.Count > 0)
             {
@@ -129,10 +134,10 @@ namespace CarSales.Core.Services
                         vehicles = vehicles.OrderByDescending(v => v.Price).ToList();
                         break;
                     case VehicleSorting.RatingAscending:
-                        vehicles = vehicles.OrderBy(v => v.VehicleRating).ToList();
+                        //vehicles = vehicles.OrderBy(v => v.VehicleRating).ToList();
                         break;
                     case VehicleSorting.RatingDescending:
-                        vehicles = vehicles.OrderByDescending(v => v.VehicleRating).ToList();
+                        //vehicles = vehicles.OrderByDescending(v => v.VehicleRating).ToList();
                         break;
                 }
             }
@@ -145,7 +150,7 @@ namespace CarSales.Core.Services
                     Name = $"{v.Brand} {v.Model} {v.YearProduced}",
                     ImageUrl = v.ImageUrl,
                     VehicleType = v.VehicleType,
-                    VehicleRating = v.VehicleRating,
+                    VehicleRating = VehicleRating.NotRated,
                     Price = v.Price,
                     ImporterId = v.ImporterId,
                     ImporterUserId = v.Importer.UserId,
@@ -176,7 +181,9 @@ namespace CarSales.Core.Services
                     KilometersDriven = v.KilometersDriven,
                     Price = v.Price,
                     VehicleType = v.VehicleType,
-                    VehicleRating = v.VehicleRating,
+                    VehicleRating = v.Reviews.Count(r => r.ReviewStatus == ReviewStatus.Completed) > 0
+                    ? (VehicleRating)v.Reviews.Where(r => r.ReviewStatus == ReviewStatus.Completed).Average(r => (int)r.VehicleRating)
+                    : VehicleRating.NotRated,
                     OwnerId = v.OwnerId,
                     OwnerUserId = v.Owner != null ? v.Owner.UserId : null,
                     OwnerName = v.Owner != null ? $"{v.Owner.User.FirstName} {v.Owner.User.LastName}" : null,
@@ -186,7 +193,7 @@ namespace CarSales.Core.Services
                     ImporterId = v.ImporterId,
                     ImporterUserId = v.Importer != null ? v.Importer.UserId : null,
                     ImporterName = v.Importer != null ? $"{v.Importer.User.FirstName} {v.Importer.User.LastName}" : null,
-                    VehicleChangeRatingModel = new VehicleChangeRatingModel(v.Id, v.VehicleRating)
+
                 })
                 .FirstOrDefaultAsync();
 
@@ -204,6 +211,7 @@ namespace CarSales.Core.Services
                 .Where(v => v.Owner.UserId == userId)
                 .Include(v => v.Owner)
                 .ThenInclude(o => o.User)
+                .Include(v => v.Reviews)
                 .ToListAsync();
 
             if (vehicles.Count > 0)
@@ -234,10 +242,10 @@ namespace CarSales.Core.Services
                         vehicles = vehicles.OrderByDescending(v => v.Price).ToList();
                         break;
                     case VehicleSorting.RatingAscending:
-                        vehicles = vehicles.OrderBy(v => v.VehicleRating).ToList();
+                        //vehicles = vehicles.OrderBy(v => v.VehicleRating).ToList();
                         break;
                     case VehicleSorting.RatingDescending:
-                        vehicles = vehicles.OrderByDescending(v => v.VehicleRating).ToList();
+                        //vehicles = vehicles.OrderByDescending(v => v.VehicleRating).ToList();
                         break;
                 }
             }
@@ -251,7 +259,9 @@ namespace CarSales.Core.Services
                     Name = $"{v.Brand} {v.Model} {v.YearProduced}",
                     ImageUrl = v.ImageUrl,
                     VehicleType = v.VehicleType,
-                    VehicleRating = v.VehicleRating,
+                    VehicleRating = v.Reviews.Count(r => r.ReviewStatus == ReviewStatus.Completed) > 0
+                    ? (VehicleRating)v.Reviews.Where(r => r.ReviewStatus == ReviewStatus.Completed).Average(r => (int)r.VehicleRating)
+                    : VehicleRating.NotRated,
                     Price = v.Price,
                     OwnerId = v.OwnerId,
                     OwnerUserId = v.Owner.UserId,
@@ -277,6 +287,7 @@ namespace CarSales.Core.Services
                 .Where(v => v.Salesman.UserId == userId)
                 .Include(v => v.Salesman)
                 .ThenInclude(s => s.User)
+                .Include(v => v.Reviews)
                 .ToListAsync();
 
             if (vehicles.Count > 0)
@@ -307,10 +318,10 @@ namespace CarSales.Core.Services
                         vehicles = vehicles.OrderByDescending(v => v.Price).ToList();
                         break;
                     case VehicleSorting.RatingAscending:
-                        vehicles = vehicles.OrderBy(v => v.VehicleRating).ToList();
+                        //vehicles = vehicles.OrderBy(v => v.VehicleRating).ToList();
                         break;
                     case VehicleSorting.RatingDescending:
-                        vehicles = vehicles.OrderByDescending(v => v.VehicleRating).ToList();
+                        //vehicles = vehicles.OrderByDescending(v => v.VehicleRating).ToList();
                         break;
                 }
             }
@@ -324,7 +335,9 @@ namespace CarSales.Core.Services
                     Name = $"{v.Brand} {v.Model} {v.YearProduced}",
                     ImageUrl = v.ImageUrl,
                     VehicleType = v.VehicleType,
-                    VehicleRating = v.VehicleRating,
+                    VehicleRating = v.Reviews.Count(r => r.ReviewStatus == ReviewStatus.Completed) > 0
+                    ? (VehicleRating)v.Reviews.Where(r => r.ReviewStatus == ReviewStatus.Completed).Average(r => (int)r.VehicleRating)
+                    : VehicleRating.NotRated,
                     Price = v.Price,
                     SalesmanId = v.SalesmanId,
                     SalesmanUserId = v.Salesman.UserId,
@@ -350,6 +363,7 @@ namespace CarSales.Core.Services
                 .Where(v => v.Salesman.UserId == userId)
                 .Include(v => v.Salesman)
                 .ThenInclude(s => s.User)
+                .Include(v => v.Reviews)
                 .ToListAsync();
 
             if (vehicles.Count > 0)
@@ -380,10 +394,10 @@ namespace CarSales.Core.Services
                         vehicles = vehicles.OrderByDescending(v => v.Price).ToList();
                         break;
                     case VehicleSorting.RatingAscending:
-                        vehicles = vehicles.OrderBy(v => v.VehicleRating).ToList();
+                        //vehicles = vehicles.OrderBy(v => v.VehicleRating).ToList();
                         break;
                     case VehicleSorting.RatingDescending:
-                        vehicles = vehicles.OrderByDescending(v => v.VehicleRating).ToList();
+                        //vehicles = vehicles.OrderByDescending(v => v.VehicleRating).ToList();
                         break;
                 }
             }
@@ -397,7 +411,9 @@ namespace CarSales.Core.Services
                     Name = $"{v.Brand} {v.Model} {v.YearProduced}",
                     ImageUrl = v.ImageUrl,
                     VehicleType = v.VehicleType,
-                    VehicleRating = v.VehicleRating,
+                    VehicleRating = v.Reviews.Count(r => r.ReviewStatus == ReviewStatus.Completed) > 0
+                    ? (VehicleRating)v.Reviews.Where(r => r.ReviewStatus == ReviewStatus.Completed).Average(r => (int)r.VehicleRating)
+                    : VehicleRating.NotRated,
                     Price = v.Price,
                     SalesmanId = v.SalesmanId,
                     SalesmanUserId = v.Salesman.UserId,
@@ -413,13 +429,6 @@ namespace CarSales.Core.Services
         }
 
 
-        public async Task ChangeVehicleRatingAsync(int id, int newRating)
-        {
-            var vehicle = await repository.GetByIdAsync<Vehicle>(id);
-            vehicle.VehicleRating = (VehicleRating)newRating;
-            repository.Update<Vehicle>(vehicle);
-            await repository.SaveChangesAsync();
-        }
 
         public async Task BuyVehicleFromSalesmanAsync(int id, string buyerUserId)
         {
@@ -427,6 +436,7 @@ namespace CarSales.Core.Services
                 .Where(v => v.Id == id)
                 .Include(v => v.Salesman)
                 .ThenInclude(sm => sm.User)
+                .Include(v => v.Reviews)
                 .FirstOrDefaultAsync();
             var salesman = vehicle.Salesman;
             var buyer = await repository.All<Owner>()
@@ -508,15 +518,12 @@ namespace CarSales.Core.Services
                     Id = v.Id,
                     Name = $"{v.Brand} {v.Model}",
                     Description = v.Description,
-                    VehicleRating = v.VehicleRating,
                     Price = v.Price,
                     OldPrice = v.Price,
                     OwnerUserId = v.Owner.UserId,
                     //VehicleRatings = Enum.GetValues<VehicleRating>()
                 })
                 .FirstOrDefaultAsync();
-            var vehicleRatings = Enum.GetValues<VehicleRating>().ToArray();
-            vehicle.VehicleRatings = vehicleRatings;
             return vehicle;
         }
 
@@ -533,7 +540,6 @@ namespace CarSales.Core.Services
 
             vehicle.Description = model.Description;
             vehicle.Price = model.Price;
-            vehicle.VehicleRating = model.VehicleRating;
             vehicle.OwnerId = null;
             vehicle.SalesmanId = salesman.Id;
 
@@ -550,7 +556,6 @@ namespace CarSales.Core.Services
 
             vehicle.Description = model.Description;
             vehicle.Price = model.Price;
-            vehicle.VehicleRating = model.VehicleRating;
 
             await repository.SaveChangesAsync();
         }
@@ -563,7 +568,6 @@ namespace CarSales.Core.Services
             {
                 ImporterId = importer.Id,
                 VehicleTypes = Enum.GetValues<VehicleType>(),
-                VehicleRatings = Enum.GetValues<VehicleRating>()
             };
             return vehicle;
         }
@@ -581,7 +585,6 @@ namespace CarSales.Core.Services
                 KilometersDriven = model.KilometersDriven,
                 Price = model.Price,
                 VehicleType = model.VehicleType,
-                VehicleRating = model.VehicleRating,
                 ImporterId = model.ImporterId
             };
             var importer = await repository.All<Importer>()
