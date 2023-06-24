@@ -27,11 +27,15 @@ namespace CarSales.Core.Services
                 .Select(r => new ReviewListModel()
                 {
                     Id = r.Id,
-                    Title = r.Title,
+                    Title = r.Title.Substring(0, 70).TrimEnd() + (r.Title.Length > 70 ? ".." : ""),
+                    Overview = r.Overview,
+                    ReviewType = r.ReviewType,
                     ReviewerName = $"{r.Reviewer.User.FirstName} {r.Reviewer.User.LastName}",
+                    VehicleId = r.VehicleId,
                     VehicleName = $"{r.Vehicle.Brand} {r.Vehicle.Model}",
+                    VehicleImageUrl = r.Vehicle.ImageUrl,
+                    VehicleType = r.Vehicle.VehicleType,
                     VehiclePrice = r.Vehicle.Price,
-                    ReviewType = r.ReviewType
                 })
                 .ToListAsync();
 
@@ -60,7 +64,7 @@ namespace CarSales.Core.Services
                         Price = r.Vehicle.Price,
                         ImageUrl = r.Vehicle.ImageUrl,
                         VehicleType = r.Vehicle.VehicleType,
-                        VehicleRating = r.Vehicle.VehicleRating
+                        VehicleRating = r.VehicleRating
                     }
                 })
                 .FirstOrDefaultAsync();
@@ -235,6 +239,7 @@ namespace CarSales.Core.Services
             review.Longevity = model.Longevity;
             review.Features = model.Features;
             review.ReviewStatus = ReviewStatus.Completed;
+            review.VehicleRating = model.VehicleRating;
 
             await repository.SaveChangesAsync();
         }
@@ -270,14 +275,16 @@ namespace CarSales.Core.Services
                     Id = r.Id,
                     Title = r.Title,
                     Overview = r.Overview,
+                    Price = r.Price,
+                    ReviewType = r.ReviewType,
+                    ReviewStatus = r.ReviewStatus,
                     ReviewerId = r.ReviewerId,
                     VehicleId = r.VehicleId,
                     VehicleName = $"{r.Vehicle.Brand} {r.Vehicle.Model}",
-                    ReviewType = r.ReviewType,
-                    ReviewStatus = r.ReviewStatus,
+                    VehicleImageUrl = r.Vehicle.ImageUrl,
+                    VehicleType = r.Vehicle.VehicleType,
                     VehiclePrice = r.Vehicle.Price,
                 })
-
             };
 
             return model;
