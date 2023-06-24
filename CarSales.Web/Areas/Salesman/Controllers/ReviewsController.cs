@@ -1,7 +1,6 @@
 ﻿using CarSales.Core.Contracts;
 using CarSales.Core.Exceptions;
 using CarSales.Core.Models.Reviews;
-using CarSales.Infrastructure.Data.Entities;
 using CarSales.Web.Extensions;
 using Microsoft.AspNetCore.Mvc;
 
