@@ -28,8 +28,9 @@
         }
     </div>
     <div class="text-center">
-        @{
-            var ratingAsInt = (int)Model.VehicleRating + 1;
+        @if (Model.VehicleRating > VehicleRating.NotRated)
+        {
+            var ratingAsInt = (int)Model.VehicleRating;
             for (int i = 0; i < ratingAsInt; i++)
             {
                 <span class="m-2 p-2">
@@ -43,9 +44,16 @@
                 </span>
             }
         }
-        <h4>
-            @Model.VehicleRating
-        </h4>
+        else
+        {
+            @for (int i = 0; i < 5; i++)
+            {
+                <span class="m-2 p-2 ">
+                    <i style="font-size:45px;" class="bi bi-star opacity-25 text-secondary">
+                    </i>
+                </span>
+            }
+        }
     </div>
     <div>
         <img style="width:500px;height:400px" src="@imageUrl" />

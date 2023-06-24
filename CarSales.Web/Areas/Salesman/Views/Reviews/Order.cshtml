@@ -7,16 +7,16 @@
 <h1 class="text-center mt-3 mb-3">
     @ViewData["Title"]
 </h1>
-<form asp-area="Salesman" asp-controller="Reviews" asp-action="OrderReview" method="post">
-    <input asp-for="@Model.VehicleId" value="@Model.VehicleId" hidden readonly/>
-    <input asp-for="@Model.ReviewerId" value="@Model.ReviewerId" hidden readonly/>
+<form asp-area="Salesman" asp-controller="Reviews" asp-action="Order" method="post">
+    <input asp-for="@Model.VehicleId" value="@Model.VehicleId" hidden readonly />
+    <input asp-for="@Model.ReviewerId" value="@Model.ReviewerId" hidden readonly />
     <input asp-for="@Model.ReviewTypeIndex" value="@Model.ReviewTypeIndex" id="selectedReviewTypeIndex" hidden />
 
     <section class="container d-flex justify-content-evenly">
         @foreach (var kvp in Model.ReviewTypesAndPrices)
         {
-            <article class="bg-info bg-opacity-75 p-5 rounded-5 d-flex flex-column justify-content-around text-white mt-3 mb-3 review-plan" id="@kvp.Key.ToString()">
-                <input value="@planIndex" hidden disabled readonly/>
+            <article class="bg-info bg-opacity-75 p-5 rounded-5 d-flex flex-column justify-content-around text-white text- mt-3 mb-3 review-plan" id="@kvp.Key.ToString()">
+                <input value="@planIndex" hidden disabled readonly />
                 <h2 class="text-center mt-3 mb-3">
                     @kvp.Key
                 </h2>
@@ -27,27 +27,21 @@
                     <li>
                         <h5>Performance</h5>
                     </li>
-                    @if (kvp.Key > ReviewType.Short)
-                    {
-                        <li>
-                            <h5>Interior</h5>
-                        </li>
-                        <li>
-                            <h5>Longevity</h5>
-                        </li>
-                    }
-                    @if (kvp.Key > ReviewType.Standart)
-                    {
-                        <li>
-                            <h5>Features</h5>
-                        </li>
-                    }
+                    <li class="@(kvp.Key < ReviewType.Standart ? "text-decoration-line-through text-muted" : "")">
+                        <h5>Interior</h5>
+                    </li>
+                    <li class="@(kvp.Key < ReviewType.Standart ? "text-decoration-line-through text-muted" : "")">
+                        <h5>Longevity</h5>
+                    </li>
+                    <li class="@(kvp.Key < ReviewType.Premium ? "text-decoration-line-through text-muted" : "")">
+                        <h5>Features</h5>
+                    </li>
                 </ul>
                 <h3 class="align-self-center mt-2 mb-2">
                     <span>@kvp.Value</span> credits
                 </h3>
                 <div class="mt-3 mb-3 align-self-center">
-                    <button class="btn rounded-5">
+                    <button class="btn btn-lg rounded-5">
                         @*<i class="bi bi-check-circle-fill fs-1 "></i>*@
                         <i class="bi bi-dash-circle-fill fs-1 text-light"></i>
                         @*<h5 class="text-light">
