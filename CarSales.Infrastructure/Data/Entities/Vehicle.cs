@@ -27,7 +27,6 @@ namespace CarSales.Infrastructure.Data.Entities
         public double TopSpeed { get; set; }
         public double KilometersDriven { get; set; }
         public VehicleType VehicleType { get; set; }
-        public VehicleRating VehicleRating { get; set; }
         public decimal Price { get; set; }
 
         [ForeignKey(nameof(Entities.Owner.Id))]

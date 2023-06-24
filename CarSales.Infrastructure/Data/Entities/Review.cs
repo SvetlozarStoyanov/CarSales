@@ -19,6 +19,7 @@ namespace CarSales.Infrastructure.Data.Entities
         public string? Features { get; set; }
         public ReviewType ReviewType { get; set; }
         public ReviewStatus ReviewStatus { get; set; } = ReviewStatus.Ordered;
+        public VehicleRating VehicleRating { get; set; }
         public decimal Price { get; set; }
         public int ReviewerId { get; set; }
         public Reviewer Reviewer { get; set; }

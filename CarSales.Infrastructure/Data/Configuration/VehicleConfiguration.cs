@@ -31,7 +31,6 @@ namespace CarSales.Infrastructure.Data.Configuration
                     OwnerId = null,
                     ImporterId = null,
                     VehicleType = VehicleType.Car,
-                    VehicleRating = VehicleRating.Reliable,
                     YearProduced = 2016
                 },
                 new Vehicle()
@@ -48,7 +47,6 @@ namespace CarSales.Infrastructure.Data.Configuration
                     OwnerId = null,
                     ImporterId = null,
                     VehicleType = VehicleType.Car,
-                    VehicleRating = VehicleRating.Good,
                     YearProduced = 2011
                 },
                 new Vehicle()
@@ -65,7 +63,6 @@ namespace CarSales.Infrastructure.Data.Configuration
                     OwnerId = null,
                     ImporterId = null,
                     VehicleType = VehicleType.Car,
-                    VehicleRating = VehicleRating.Good,
                     YearProduced = 2014
                 },
                 new Vehicle()
@@ -82,7 +79,6 @@ namespace CarSales.Infrastructure.Data.Configuration
                     OwnerId = null,
                     ImporterId = 1,
                     VehicleType = VehicleType.Car,
-                    VehicleRating = VehicleRating.Reliable,
                     YearProduced = 2004
                 },
                 new Vehicle()
@@ -98,7 +94,6 @@ namespace CarSales.Infrastructure.Data.Configuration
                     SalesmanId = null,
                     OwnerId = 1,
                     VehicleType = VehicleType.Car,
-                    VehicleRating = VehicleRating.Good,
                     YearProduced = 2020
                 }
             };
