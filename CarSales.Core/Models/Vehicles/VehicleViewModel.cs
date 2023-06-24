@@ -24,6 +24,5 @@ namespace CarSales.Core.Models.Vehicles
         public int? ImporterId { get; set; }
         public string? ImporterUserId { get; set; }
         public string? ImporterName { get; set; }
-        public VehicleChangeRatingModel? VehicleChangeRatingModel { get; set; }
     }
 }
