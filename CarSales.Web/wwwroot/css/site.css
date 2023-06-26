@@ -52,3 +52,14 @@ body {
     padding: 10px 0px;
     margin: 0px 0px 0px 5px;
 }
+
+.basic-transition {
+    transition: ease-in-out;
+    transition-delay: 0.2s;
+}
+
+.custom-divider {
+    opacity: 1;
+    border: 8px solid black;
+    border-radius: 2px;
+}
