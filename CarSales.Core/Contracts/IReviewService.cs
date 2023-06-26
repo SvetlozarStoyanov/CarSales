@@ -6,7 +6,9 @@ namespace CarSales.Core.Contracts
 {
     public interface IReviewService
     {
-        Task<IEnumerable<ReviewListModel>> GetLatestReviewsAsync();
+        Task<IEnumerable<ReviewListModel>> GetLatestReviewsAsync(int? id);
+
+        Task<ReviewListModel> GetNewestReviewAsync();
 
         Task<ReviewViewModel> GetReviewByIdAsync(int id);
 

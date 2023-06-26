@@ -18,17 +18,17 @@ namespace CarSales.Core.Services
             this.repository = repository;
         }
 
-        public async Task<IEnumerable<ReviewListModel>> GetLatestReviewsAsync()
+        public async Task<IEnumerable<ReviewListModel>> GetLatestReviewsAsync(int? id)
         {
             var reviews = await repository.AllReadOnly<Review>()
-                .Where(r => r.ReviewStatus == ReviewStatus.Completed)
+                .Where(r => r.ReviewStatus == ReviewStatus.Completed && r.Id != id)
                 .OrderByDescending(r => r.Id)
                 .Take(6)
                 .Select(r => new ReviewListModel()
                 {
                     Id = r.Id,
-                    Title = r.Title.Substring(0, 70).TrimEnd() + (r.Title.Length > 70 ? ".." : ""),
-                    Overview = r.Overview,
+                    Title = r.Title,
+                    Overview = r.Overview.Substring(0, 70).TrimEnd() + "...",
                     ReviewType = r.ReviewType,
                     ReviewerName = $"{r.Reviewer.User.FirstName} {r.Reviewer.User.LastName}",
                     VehicleId = r.VehicleId,
@@ -41,6 +41,37 @@ namespace CarSales.Core.Services
 
             return reviews;
         }
+
+        public async Task<ReviewListModel> GetNewestReviewAsync()
+        {
+            var newestVehicleWithReview = await repository.AllReadOnly<Vehicle>()
+                .OrderByDescending(v => v.Id)
+                .Where(v => v.Reviews.Count(r => r.VehicleRating >= VehicleRating.Reliable) > 0)
+                .Include(v => v.Reviews)
+                .ThenInclude(r => r.Reviewer)
+                .ThenInclude(rv => rv.User)
+                .FirstOrDefaultAsync();
+            var review = newestVehicleWithReview.Reviews
+                .OrderByDescending(r => r.VehicleRating)
+                .Where(r => r.VehicleRating >= VehicleRating.Reliable)
+                .Select(r => new ReviewListModel()
+                {
+                    Id = r.Id,
+                    Title = r.Title,
+                    Overview = r.Overview,
+                    ReviewType = r.ReviewType,
+                    ReviewerName = $"{r.Reviewer.User.FirstName} {r.Reviewer.User.LastName}",
+                    VehicleId = r.VehicleId,
+                    VehicleName = $"{r.Vehicle.Brand} {r.Vehicle.Model}",
+                    VehicleImageUrl = r.Vehicle.ImageUrl,
+                    VehicleType = r.Vehicle.VehicleType,
+                    VehiclePrice = r.Vehicle.Price,
+                })
+                .FirstOrDefault();
+
+            return review;
+        }
+
 
         public async Task<ReviewViewModel> GetReviewByIdAsync(int id)
         {
