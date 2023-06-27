@@ -72,6 +72,82 @@ namespace CarSales.Core.Services
             return review;
         }
 
+        public async Task<ReviewsQueryModel> GetAllReviewsAsync(string? searchTerm = null,
+            string? vehicleName = null,
+            int reviewsPerPage = 6,
+            int currentPage = 1,
+            string? selectedReviewTypes = null,
+            string? selectedVehicleTypes = null,
+            ReviewSorting reviewSorting = ReviewSorting.VehiclePriceDescending)
+        {
+
+            var reviews = await repository.AllReadOnly<Review>()
+                .Where(r => r.ReviewStatus == ReviewStatus.Completed)
+                .Include(r => r.Vehicle)
+                .ToListAsync();
+            var vehicleNames = reviews.Select(r => $"{r.Vehicle.Brand} {r.Vehicle.Model}").ToHashSet();
+            if (!string.IsNullOrWhiteSpace(searchTerm))
+            {
+                reviews = reviews.Where(r => r.Title.ToLower().Contains(searchTerm.ToLower()))
+                    .ToList();
+            }
+            if (!string.IsNullOrWhiteSpace(vehicleName))
+            {
+                reviews = reviews.Where(r => $"{r.Vehicle.Brand} {r.Vehicle.Model}" == vehicleName)
+                    .ToList();
+            }
+            if (!string.IsNullOrWhiteSpace(selectedReviewTypes))
+            {
+                var selectedReviewTypesSplit = selectedReviewTypes.Split(';', StringSplitOptions.RemoveEmptyEntries)
+                    .ToList();
+
+                reviews = reviews.Where(r => selectedReviewTypesSplit.Any(srt => srt.ToLower() == r.ReviewType.ToString().ToLower())).ToList();
+            }
+
+            if (!string.IsNullOrWhiteSpace(selectedVehicleTypes))
+            {
+                var selectedVehicleTypesSplit = selectedVehicleTypes.Split(';', StringSplitOptions.RemoveEmptyEntries)
+                    .ToList();
+
+                reviews = reviews.Where(r => selectedVehicleTypesSplit.Any(svt => svt.ToLower() == r.Vehicle.VehicleType.ToString().ToLower())).ToList();
+            }
+
+
+
+            switch (reviewSorting)
+            {
+                case ReviewSorting.VehiclePriceAscending:
+                    reviews = reviews.OrderBy(r => r.Vehicle.Price).ToList();
+                    break;
+                case ReviewSorting.VehiclePriceDescending:
+                    reviews = reviews.OrderByDescending(r => r.Vehicle.Price).ToList();
+                    break;
+                case ReviewSorting.TitleAscending:
+                    reviews = reviews.OrderByDescending(r => r.Title).ToList();
+                    break;
+                case ReviewSorting.TitleDescending:
+                    reviews = reviews.OrderBy(r => r.Title).ToList();
+                    break;
+            }
+
+            var reviewCount = reviews.Count();
+            var sortedReviews = reviews.Skip((currentPage - 1) * reviewsPerPage)
+                .Take(reviewsPerPage);
+            var model = CreateReviewsQueryModel(searchTerm,
+                vehicleName,
+                reviewCount,
+                currentPage,
+                reviewsPerPage,
+                null,
+                reviewSorting,
+                selectedReviewTypes,
+                selectedVehicleTypes,
+                vehicleNames,
+                sortedReviews);
+
+            return model;
+        }
+
 
         public async Task<ReviewViewModel> GetReviewByIdAsync(int id)
         {
@@ -320,6 +396,7 @@ namespace CarSales.Core.Services
 
             return model;
         }
+
 
     }
 }

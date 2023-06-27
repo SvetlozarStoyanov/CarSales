@@ -10,6 +10,16 @@ namespace CarSales.Core.Contracts
 
         Task<ReviewListModel> GetNewestReviewAsync();
 
+        Task<ReviewsQueryModel> GetAllReviewsAsync(
+            string? searchTerm = null,
+            string? vehicleName = null,
+            int reviewsPerPage = 6,
+            int currentPage = 1,
+            string? selectedReviewTypes = null,
+            string? selectedVehicleTypes = null,
+            ReviewSorting reviewSorting = ReviewSorting.VehiclePriceDescending);
+
+
         Task<ReviewViewModel> GetReviewByIdAsync(int id);
 
         Task<ReviewsQueryModel> GetReviewerReviewsAsync(string userId,
