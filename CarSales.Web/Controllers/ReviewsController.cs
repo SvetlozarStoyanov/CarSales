@@ -1,4 +1,5 @@
 ﻿using CarSales.Core.Contracts;
+using CarSales.Core.Models.Reviews;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CarSales.Web.Controllers
@@ -12,9 +13,18 @@ namespace CarSales.Web.Controllers
             this.reviewService = reviewService;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index([FromQuery] ReviewsQueryModel model)
         {
-            return View();
+            var queryResult = await reviewService.GetAllReviewsAsync(model.SearchTerm,
+                model.VehicleName,
+                model.ReviewsPerPage,
+                model.CurrentPage,
+                model.SelectedReviewTypes,
+                model.SelectedVehicleTypes,
+                model.ReviewSorting);
+
+            model = queryResult;
+            return View(model);
         }
 
         public async Task<IActionResult> Details(int id)
