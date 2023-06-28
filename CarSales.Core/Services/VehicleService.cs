@@ -34,8 +34,8 @@ namespace CarSales.Core.Services
             {
                 if (!string.IsNullOrWhiteSpace(searchTerm))
                 {
-                    vehicles = vehicles.Where(v => v.Brand.Contains(searchTerm)
-                    || v.Model.Contains(searchTerm))
+                    vehicles = vehicles.Where(v => v.Brand.ToLower().Contains(searchTerm.ToLower())
+                    || v.Model.ToLower().Contains(searchTerm.ToLower()))
                     .ToList();
                 }
                 if (!string.IsNullOrEmpty(selectedVehicleTypes))
@@ -103,15 +103,15 @@ namespace CarSales.Core.Services
             .Where(v => v.ImporterId != null)
             .Include(v => v.Importer)
             .ThenInclude(i => i.User)
-                .Include(v => v.Reviews)
+            .Include(v => v.Reviews)
 
             .ToListAsync();
             if (vehicles.Count > 0)
             {
                 if (!string.IsNullOrWhiteSpace(searchTerm))
                 {
-                    vehicles = vehicles.Where(v => v.Brand.Contains(searchTerm)
-                    || v.Model.Contains(searchTerm))
+                    vehicles = vehicles.Where(v => v.Brand.ToLower().Contains(searchTerm.ToLower())
+                    || v.Model.ToLower().Contains(searchTerm.ToLower()))
                     .ToList();
                 }
                 if (!string.IsNullOrEmpty(selectedVehicleTypes))
@@ -218,8 +218,8 @@ namespace CarSales.Core.Services
             {
                 if (!string.IsNullOrWhiteSpace(searchTerm))
                 {
-                    vehicles = vehicles.Where(v => v.Brand.Contains(searchTerm)
-                    || v.Model.Contains(searchTerm))
+                    vehicles = vehicles.Where(v => v.Brand.ToLower().Contains(searchTerm.ToLower())
+                    || v.Model.ToLower().Contains(searchTerm.ToLower()))
                     .ToList();
                 }
                 if (!string.IsNullOrEmpty(selectedVehicleTypes))
@@ -294,8 +294,8 @@ namespace CarSales.Core.Services
             {
                 if (!string.IsNullOrWhiteSpace(searchTerm))
                 {
-                    vehicles = vehicles.Where(v => v.Brand.Contains(searchTerm)
-                    || v.Model.Contains(searchTerm))
+                    vehicles = vehicles.Where(v => v.Brand.ToLower().Contains(searchTerm.ToLower())
+                    || v.Model.ToLower().Contains(searchTerm.ToLower()))
                     .ToList();
                 }
                 if (!string.IsNullOrEmpty(selectedVehicleTypes))
@@ -370,8 +370,8 @@ namespace CarSales.Core.Services
             {
                 if (!string.IsNullOrWhiteSpace(searchTerm))
                 {
-                    vehicles = vehicles.Where(v => v.Brand.Contains(searchTerm)
-                    || v.Model.Contains(searchTerm))
+                    vehicles = vehicles.Where(v => v.Brand.ToLower().Contains(searchTerm.ToLower())
+                    || v.Model.ToLower().Contains(searchTerm.ToLower()))
                     .ToList();
                 }
                 if (!string.IsNullOrEmpty(selectedVehicleTypes))
