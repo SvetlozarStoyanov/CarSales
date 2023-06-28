@@ -40,7 +40,7 @@ namespace CarSales.Web.Areas.Salesman.Controllers
             return View(model);
         }
 
-        public async Task<IActionResult> ImportedVehicles([FromQuery] VehiclesQueryModel model)
+        public async Task<IActionResult> Imported([FromQuery] VehiclesQueryModel model)
         {
             var queryResult = await vehicleService.GetImportedVehicles(
                 model.SearchTerm,
@@ -154,7 +154,7 @@ namespace CarSales.Web.Areas.Salesman.Controllers
             catch (Exception e)
             {
                 TempData["error"] = e.Message;
-                return RedirectToAction(nameof(ImportedVehicles));
+                return RedirectToAction(nameof(Imported));
             }
             return RedirectToAction(nameof(Details), new { id = id });
         }
