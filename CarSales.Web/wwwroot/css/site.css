@@ -63,3 +63,13 @@ body {
     border: 8px solid black;
     border-radius: 2px;
 }
+
+.custom-border {
+    border: 3px solid black;
+    border-radius: 5px;
+}
+
+    .custom-border:hover {
+        border: 3px solid blue;
+        border-radius: 5px;
+    }
