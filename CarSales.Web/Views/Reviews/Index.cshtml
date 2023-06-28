@@ -1,6 +1,6 @@
 ﻿@model ReviewsQueryModel
 @{
-    ViewData["Title"] = "All Reviews";
+    ViewData["Title"] = "Reviews";
     var previousPage = Model.CurrentPage - 1;
     if (previousPage < 1)
     {
@@ -34,9 +34,9 @@
             </button>
         </div>
         <div class="collapse" id="collapseExample">
-            <article class="d-flex flex-row justify-content-between w-100 mb-3">
+            <article class="d-flex flex-row flex-wrap justify-content-between w-100 mb-3">
                 <div class="form-group">
-                    <label asp-for="@Model.VehicleNames" class="form-label">Vehicle Name</label>
+                    <label asp-for="@Model.VehicleNames" class="form-label custom-label">Vehicle Name</label>
                     <select asp-for="@Model.VehicleName" class="form-select">
                         <option value="@null">All</option>
                         @foreach (var vehicleName in Model.VehicleNames)
@@ -46,7 +46,7 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <label asp-for="@Model.ReviewsPerPage" class="form-label">Reviews Per Page</label>
+                    <label asp-for="@Model.ReviewsPerPage" class="form-label custom-label">Reviews Per Page</label>
                     <select asp-for="@Model.ReviewsPerPage" class="form-select">
                         @for (int i = 1; i <= 12; i++)
                         {
@@ -59,15 +59,15 @@
                     <label class="form-label custom-label">Review Types</label>
                     <div id="reviewTypesDiv">
                         <input id="selectedReviewTypes" asp-for="@Model.SelectedReviewTypes" hidden />
-                        <div class="form-check">
-                            <input class="" type="checkbox" id="allReviewTypes" value="@null" name="all" />
-                            <label class="form-label">All</label>
+                        <div class="form-check custom-checkbox-container">
+                            <input class="custom-checkbox" type="checkbox" id="allReviewTypes" value="@null" name="all" />
+                            <label class="form-label custom-checkbox-label">All</label>
                         </div>
                         @foreach (var reviewType in Model.ReviewTypes)
                         {
-                            <div class="form-check">
-                                <input class="review-types" type="checkbox" id="@reviewType.ToString().ToLower()" value="@reviewType" name="@reviewType.ToString().ToLower()" />
-                                <label class="form-label">@reviewType</label>
+                            <div class="form-check custom-checkbox-container">
+                                <input class="review-types custom-checkbox" type="checkbox" id="@reviewType.ToString().ToLower()" value="@reviewType" name="@reviewType.ToString().ToLower()" />
+                                <label class="form-label custom-checkbox-label">@reviewType</label>
                             </div>
                         }
                     </div>
@@ -76,21 +76,21 @@
                     <label class="form-label custom-label">Vehicle Types</label>
                     <div id="vehicleTypesDiv">
                         <input id="selectedVehicleTypes" asp-for="@Model.SelectedVehicleTypes" hidden />
-                        <div class="form-check">
-                            <input class="" type="checkbox" id="allVehicleTypes" value="@null" name="all" />
-                            <label class="form-label">All</label>
+                        <div class="form-check custom-checkbox-container">
+                            <input class="custom-checkbox" type="checkbox" id="allVehicleTypes" value="@null" name="all" />
+                            <label class="form-label custom-checkbox-label">All</label>
                         </div>
                         @foreach (var vehicleType in Model.VehicleTypes)
                         {
-                            <div class="form-check">
-                                <input class="vehicle-types" type="checkbox" id="@vehicleType.ToString().ToLower()" value="@vehicleType" name="@vehicleType.ToString().ToLower()" />
-                                <label class="form-label">@vehicleType</label>
+                            <div class="form-check custom-checkbox-container">
+                                <input class="vehicle-types custom-checkbox" type="checkbox" id="@vehicleType.ToString().ToLower()" value="@vehicleType" name="@vehicleType.ToString().ToLower()" />
+                                <label class="form-label custom-checkbox-label">@vehicleType</label>
                             </div>
                         }
                     </div>
                 </div>
                 <div class="form-group">
-                    <label asp-for="@Model.ReviewSorting" class="form-label">Sorting</label>
+                    <label asp-for="@Model.ReviewSorting" class="form-label custom-label">Sorting</label>
                     <select asp-for="@Model.ReviewSorting" class="form-select">
                         @foreach (var sortingOption in Model.SortingOptions)
                         {
@@ -104,60 +104,58 @@
     </form>
 
 
-    <div class="d-flex flex-column align-items-center ">
-
-        <div class="row justify-content-between row-cols-lg-2 row-cols-1 w-100 h-100 border border-5 border-primary-subtle ">
-
-            @if (Model.ReviewCount > 0)
-            {
+    @if (Model.ReviewCount > 0)
+    {
+        <div class="d-flex flex-column align-items-center">
+            <div class="row justify-content-between row-cols-lg-2 row-cols-1 w-100 h-100 border border-5 border-primary-subtle ">
                 @foreach (var review in Model.Reviews)
                 {
                     <partial name="_ReviewPartial" model="review" />
                 }
-            }
-            else
-            {
-                <h4 class="text-center mt-5">No reviews match given criteria</h4>
-            }
-        </div>
+            </div>
 
-    </div>
-    <div class="d-flex justify-content-around mt-3 mb-3">
-        <div class="">
-            <a class="btn btn-primary btn-lg @(Model.CurrentPage == 1 ? "disabled" : string.Empty)"
-               asp-area=""
-               asp-controller="Reviews"
-               asp-action="Index"
-               asp-route-searchTerm="@Model.SearchTerm"
-               asp-route-vehicleName="@Model.VehicleName"
-               asp-route-reviewsPerPage="@Model.ReviewsPerPage"
-               asp-route-currentPage="@previousPage"
-               asp-route-selectedReviewTypes="@Model.SelectedReviewTypes"
-               asp-route-selectedVehicleTypes="@Model.SelectedVehicleTypes"
-               asp-route-reviewStatus="@((int?)Model.ReviewStatus)"
-               asp-route-reviewSorting="@((int)Model.ReviewSorting)"><i class="bi bi-arrow-left"></i></a>
         </div>
+        <div class="d-flex justify-content-around mt-3 mb-3">
+            <div class="">
+                <a class="btn btn-primary btn-lg @(Model.CurrentPage == 1 ? "disabled" : string.Empty)"
+                   asp-area=""
+                   asp-controller="Reviews"
+                   asp-action="Index"
+                   asp-route-searchTerm="@Model.SearchTerm"
+                   asp-route-vehicleName="@Model.VehicleName"
+                   asp-route-reviewsPerPage="@Model.ReviewsPerPage"
+                   asp-route-currentPage="@previousPage"
+                   asp-route-selectedReviewTypes="@Model.SelectedReviewTypes"
+                   asp-route-selectedVehicleTypes="@Model.SelectedVehicleTypes"
+                   asp-route-reviewStatus="@((int?)Model.ReviewStatus)"
+                   asp-route-reviewSorting="@((int)Model.ReviewSorting)"><i class="bi bi-arrow-left"></i></a>
+            </div>
 
-        <div class="">
-            <a class="btn btn-primary btn-lg @(shouldButtonBeDisabled ? "disabled" : string.Empty)"
-               asp-area=""
-               asp-controller="Reviews"
-               asp-action="Index"
-               asp-route-searchTerm="@Model.SearchTerm"
-               asp-route-vehicleName="@Model.VehicleName"
-               asp-route-reviewsPerPage="@Model.ReviewsPerPage"
-               asp-route-currentPage="@(Model.CurrentPage + 1)"
-               asp-route-selectedReviewTypes="@Model.SelectedReviewTypes"
-               asp-route-selectedVehicleTypes="@Model.SelectedVehicleTypes"
-               asp-route-reviewStatus="@((int?)Model.ReviewStatus)"
-               asp-route-reviewSorting="@((int)Model.ReviewSorting)"><i class="bi bi-arrow-right"></i></a>
+            <div class="">
+                <a class="btn btn-primary btn-lg @(shouldButtonBeDisabled ? "disabled" : string.Empty)"
+                   asp-area=""
+                   asp-controller="Reviews"
+                   asp-action="Index"
+                   asp-route-searchTerm="@Model.SearchTerm"
+                   asp-route-vehicleName="@Model.VehicleName"
+                   asp-route-reviewsPerPage="@Model.ReviewsPerPage"
+                   asp-route-currentPage="@(Model.CurrentPage + 1)"
+                   asp-route-selectedReviewTypes="@Model.SelectedReviewTypes"
+                   asp-route-selectedVehicleTypes="@Model.SelectedVehicleTypes"
+                   asp-route-reviewStatus="@((int?)Model.ReviewStatus)"
+                   asp-route-reviewSorting="@((int)Model.ReviewSorting)"><i class="bi bi-arrow-right"></i></a>
+            </div>
         </div>
-    </div>
+    }
+    else
+    {
+        <h3 class="text-center mt-5">No reviews match given criteria</h3>
+    }
+
 </section>
 
 
 
 
 
-<script src="~/js/Reviews/selectReviewAndVehicleTypes.js"></script>
-<script src="~/js/Reviews/toggleFilterMenu.js"></script>
+<script src="~/js/Reviews/index.js"></script>
