@@ -1,17 +1,21 @@
 ﻿const selectedVehicleTypesInput = document.querySelector('#selectedVehicleTypes');
-const selectedReviewTypesInput = document.querySelector('#selectedReviewTypes');
 
 const allVehicleTypesCheckBox = document.querySelector('#vehicleTypesDiv>.form-check>#allVehicleTypes');
-const allReviewTypesCheckBox = document.querySelector('#reviewTypesDiv>.form-check>#allReviewTypes');
 
 const vehicleTypesCheckboxes = document.querySelectorAll('#vehicleTypesDiv>.form-check>.vehicle-types');
-const reviewTypesCheckboxes = document.querySelectorAll('#reviewTypesDiv>.form-check>.review-types');
+
+const filterBtn = document.querySelector('#filterBtn');
+const filterIcon = filterBtn.querySelector('i');
 
 const submitFormBtn = document.querySelector('#submitBtn');
 const form = document.querySelector('#form');
 
-console.log(vehicleTypesCheckboxes.length);
-console.log(reviewTypesCheckboxes.length);
+filterBtn.addEventListener('click', function (e) {
+    e.preventDefault();
+    e.currentTarget.blur();
+    filterIcon.classList.toggle('bi-filter-circle');
+    filterIcon.classList.toggle('bi-filter-circle-fill');
+});
 
 window.addEventListener('load', function () {
     if (selectedVehicleTypesInput.value === '') {
@@ -23,15 +27,7 @@ window.addEventListener('load', function () {
             }
         }
     }
-    if (selectedReviewTypesInput.value === '') {
-        allReviewTypesCheckBox.checked = true;
-    } else {
-        for (let checkbox of reviewTypesCheckboxes) {
-            if (selectedReviewTypesInput.value.includes(checkbox.value)) {
-                checkbox.checked = true;
-            }
-        }
-    }
+
 });
 
 allVehicleTypesCheckBox.addEventListener('change', function (e) {
@@ -40,11 +36,6 @@ allVehicleTypesCheckBox.addEventListener('change', function (e) {
     }
 });
 
-allReviewTypesCheckBox.addEventListener('change', function (e) {
-    for (let checkbox of reviewTypesCheckboxes) {
-        checkbox.checked = false;
-    }
-});
 
 for (let checkbox of vehicleTypesCheckboxes) {
     checkbox.addEventListener('change', function (e) {
@@ -57,16 +48,6 @@ for (let checkbox of vehicleTypesCheckboxes) {
     });
 }
 
-for (let checkbox of reviewTypesCheckboxes) {
-    checkbox.addEventListener('change', function (e) {
-        let currCheckBox = e.currentTarget;
-        if (currCheckBox.checked) {
-            if (allReviewTypesCheckBox.checked) {
-                allReviewTypesCheckBox.checked = false;
-            }
-        }
-    });
-}
 
 form.addEventListener('submit', function (e) {
 
@@ -77,10 +58,4 @@ form.addEventListener('submit', function (e) {
         }
     }
 
-    selectedReviewTypesInput.value = '';
-    for (let checkbox of reviewTypesCheckboxes) {
-        if (checkbox.checked) {
-            selectedReviewTypesInput.value += `${checkbox.value};`;
-        }
-    }
 });
