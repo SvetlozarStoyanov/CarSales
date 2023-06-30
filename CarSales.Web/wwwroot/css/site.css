@@ -64,12 +64,42 @@ body {
     border-radius: 2px;
 }
 
-.custom-border {
+.custom-border-black-blue {
     border: 3px solid black;
     border-radius: 5px;
 }
 
-    .custom-border:hover {
+    .custom-border-black-blue:hover {
         border: 3px solid blue;
+        border-radius: 5px;
+    }
+
+.custom-border-white-blue {
+    border: 3px solid white;
+    border-radius: 5px;
+}
+
+    .custom-border-white-blue:hover {
+        border: 3px solid blue;
+        border-radius: 5px;
+    }
+
+.custom-border-white-yellow {
+    border: 3px solid white;
+    border-radius: 5px;
+}
+
+    .custom-border-white-yellow:hover {
+        border: 3px solid #b58900;
+        border-radius: 5px;
+    }
+
+.custom-border-white-lightblue {
+    border: 3px solid white;
+    border-radius: 5px;
+}
+
+    .custom-border-white-lightblue:hover {
+        border: 3px solid #57b8d5;
         border-radius: 5px;
     }
