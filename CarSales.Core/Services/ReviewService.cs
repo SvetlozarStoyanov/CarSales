@@ -18,6 +18,25 @@ namespace CarSales.Core.Services
             this.repository = repository;
         }
 
+
+        public async Task<bool> CanCreateReviewAsync(string userId, int reviewId)
+        {
+            var review = await repository.GetByIdAsync<Review>(reviewId);
+            if (review == null || review.ReviewStatus == ReviewStatus.Completed)
+            {
+                return false;
+            }
+            var reviewer = await repository.AllReadOnly<Reviewer>()
+                .Where(r => r.UserId == userId)
+                .Include(r => r.Reviews)
+                .FirstOrDefaultAsync();
+            if (!reviewer.Reviews.Any(r => r.Id == reviewId))
+            {
+                return false;
+            }
+            return true;
+        }
+
         public async Task<IEnumerable<ReviewListModel>> GetLatestReviewsAsync(int? id)
         {
             var reviews = await repository.AllReadOnly<Review>()
@@ -368,8 +387,8 @@ namespace CarSales.Core.Services
             {
                 SearchTerm = searchTerm,
                 VehicleName = vehicleName,
-
                 CurrentPage = currentPage,
+                MaxPage = (int)Math.Ceiling(((double)reviewCount / reviewsPerPage)),
                 ReviewsPerPage = reviewsPerPage,
                 ReviewCount = reviewCount,
                 ReviewStatus = reviewStatus,
@@ -393,6 +412,32 @@ namespace CarSales.Core.Services
                     VehiclePrice = r.Vehicle.Price,
                 })
             };
+            if (model.MaxPage > 1)
+            {
+                var previousPages = new HashSet<int>();
+                var nextPages = new HashSet<int>();
+                var pagesToMaxPage = model.MaxPage - model.CurrentPage;
+                var numberOfPages = 0;
+                var index = 1;
+                while (numberOfPages < 4 && numberOfPages < model.MaxPage - 1)
+                {
+                    var previousPage = model.CurrentPage - index;
+                    var nextPage = model.CurrentPage + index;
+                    if (previousPage >= 1)
+                    {
+                        previousPages.Add(previousPage);
+                        numberOfPages++;
+                    }
+                    if (nextPage <= model.MaxPage)
+                    {
+                        nextPages.Add(nextPage);
+                        numberOfPages++;
+                    }
+                    index++;
+                }
+                model.PreviousPages = previousPages.Reverse();
+                model.NextPages = nextPages;
+            }
 
             return model;
         }
