@@ -34,4 +34,11 @@
     <Folder Include="Areas\Salesman\Models\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Update="Areas\Reviewer\Views\Reviews\Details.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>

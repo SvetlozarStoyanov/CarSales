@@ -16,6 +16,26 @@ namespace CarSales.Web.Areas.Salesman.Controllers
             this.reviewerService = reviewerService;
         }
 
+        public async Task<IActionResult> Index([FromQuery] ReviewsQueryModel model)
+        {
+            var queryResult = await reviewService.GetAllReviewsAsync(model.SearchTerm,
+                model.VehicleName,
+                model.ReviewsPerPage,
+                model.CurrentPage,
+                model.SelectedReviewTypes,
+                model.SelectedVehicleTypes,
+                model.ReviewSorting
+                );
+            model = queryResult;
+            return View(model);
+        }
+
+        public async Task<IActionResult> Details(int id)
+        {
+            var model = await reviewService.GetReviewByIdAsync(id);
+            return View(model);
+        }
+
         [HttpGet]
         //[ValidateAntiForgeryToken]
         public async Task<IActionResult> Order(int reviewerId, int vehicleId)
