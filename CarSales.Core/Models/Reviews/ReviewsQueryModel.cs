@@ -18,6 +18,8 @@ namespace CarSales.Core.Models.Reviews
         public string? VehicleName { get; set; }
         public int ReviewsPerPage { get; set; } = 6;
         public int CurrentPage { get; set; } = 1;
+        public int FirstPage { get; set; } = 1;
+        public int MaxPage { get; set; }
         public int ReviewCount { get; set; }
         public string? SelectedVehicleTypes { get; set; }
         public string? SelectedReviewTypes { get; set; }
@@ -27,6 +29,8 @@ namespace CarSales.Core.Models.Reviews
         public ICollection<ReviewStatus> ReviewStatuses { get; set; }
         public ICollection<ReviewType> ReviewTypes { get; set; }
         public ICollection<string> VehicleNames { get; set; }
+        public IEnumerable<int> PreviousPages { get; set; }
+        public IEnumerable<int> NextPages { get; set; }
         public IEnumerable<VehicleType> VehicleTypes { get; set; }
         public IEnumerable<ReviewListModel> Reviews { get; set; }
     }
