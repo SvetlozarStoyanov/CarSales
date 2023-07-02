@@ -158,7 +158,5 @@ namespace CarSales.Core.Contracts
         /// <returns></returns>
         Task ImportVehicleAsync(VehicleImportModel model);
 
-
-        //Task<VehiclesQueryModel> CreateVehiclesQueryModel();
     }
 }
