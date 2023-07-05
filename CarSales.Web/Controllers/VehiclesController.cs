@@ -23,15 +23,7 @@ namespace CarSales.Web.Controllers
                 model.SelectedVehicleTypes,
                 model.VehicleSorting);
 
-            model.SearchTerm = queryResult.SearchTerm;
-            model.VehiclesPerPage = queryResult.VehiclesPerPage;
-            model.CurrentPage = queryResult.CurrentPage;
-            model.VehiclesCount = queryResult.VehiclesCount;
-            model.VehicleSorting = queryResult.VehicleSorting;
-            model.SortingOptions = queryResult.SortingOptions;
-            model.VehicleTypes = queryResult.VehicleTypes;
-            model.SelectedVehicleTypes = queryResult.SelectedVehicleTypes;
-            model.Vehicles = queryResult.Vehicles;
+            model = queryResult;
 
             return View(model);
         }

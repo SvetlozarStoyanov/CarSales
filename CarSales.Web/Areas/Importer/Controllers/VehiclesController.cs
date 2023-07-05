@@ -28,20 +28,12 @@ namespace CarSales.Web.Areas.Importer.Controllers
                 model.SelectedVehicleTypes,
                 model.VehicleSorting);
 
-            model.SearchTerm = queryResult.SearchTerm;
-            model.VehiclesPerPage = queryResult.VehiclesPerPage;
-            model.CurrentPage = queryResult.CurrentPage;
-            model.VehiclesCount = queryResult.VehiclesCount;
-            model.VehicleSorting = queryResult.VehicleSorting;
-            model.SortingOptions = queryResult.SortingOptions;
-            model.VehicleTypes = queryResult.VehicleTypes;
-            model.SelectedVehicleTypes = queryResult.SelectedVehicleTypes;
-            model.Vehicles = queryResult.Vehicles;
+            model = queryResult;
 
             return View(model);
         }
 
-        public async Task<IActionResult> ImportedVehicles([FromQuery] VehiclesQueryModel model)
+        public async Task<IActionResult> Imported([FromQuery] VehiclesQueryModel model)
         {
             var queryResult = await vehicleService.GetImportedVehicles(
                 model.SearchTerm,
@@ -50,15 +42,7 @@ namespace CarSales.Web.Areas.Importer.Controllers
                 model.SelectedVehicleTypes,
                 model.VehicleSorting);
 
-            model.SearchTerm = queryResult.SearchTerm;
-            model.VehiclesPerPage = queryResult.VehiclesPerPage;
-            model.CurrentPage = queryResult.CurrentPage;
-            model.VehiclesCount = queryResult.VehiclesCount;
-            model.VehicleSorting = queryResult.VehicleSorting;
-            model.SortingOptions = queryResult.SortingOptions;
-            model.VehicleTypes = queryResult.VehicleTypes;
-            model.SelectedVehicleTypes = queryResult.SelectedVehicleTypes;
-            model.Vehicles = queryResult.Vehicles;
+            model = queryResult;
 
             return View(model);
         }
@@ -95,15 +79,7 @@ namespace CarSales.Web.Areas.Importer.Controllers
                  model.SelectedVehicleTypes,
                  model.VehicleSorting);
 
-            model.SearchTerm = queryResult.SearchTerm;
-            model.VehiclesPerPage = queryResult.VehiclesPerPage;
-            model.CurrentPage = queryResult.CurrentPage;
-            model.VehiclesCount = queryResult.VehiclesCount;
-            model.VehicleSorting = queryResult.VehicleSorting;
-            model.SortingOptions = queryResult.SortingOptions;
-            model.VehicleTypes = queryResult.VehicleTypes;
-            model.SelectedVehicleTypes = queryResult.SelectedVehicleTypes;
-            model.Vehicles = queryResult.Vehicles;
+            model = queryResult;
 
             return View(model);
         }
@@ -118,15 +94,7 @@ namespace CarSales.Web.Areas.Importer.Controllers
             model.SelectedVehicleTypes,
             model.VehicleSorting);
 
-            model.SearchTerm = queryResult.SearchTerm;
-            model.VehiclesPerPage = queryResult.VehiclesPerPage;
-            model.CurrentPage = queryResult.CurrentPage;
-            model.VehiclesCount = queryResult.VehiclesCount;
-            model.VehicleSorting = queryResult.VehicleSorting;
-            model.SortingOptions = queryResult.SortingOptions;
-            model.VehicleTypes = queryResult.VehicleTypes;
-            model.SelectedVehicleTypes = queryResult.SelectedVehicleTypes;
-            model.Vehicles = queryResult.Vehicles;
+            model = queryResult;
 
             return View(model);
         }

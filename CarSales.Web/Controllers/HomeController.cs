@@ -17,7 +17,7 @@ namespace CarSales.Web.Controllers
 
         public async Task<IActionResult> Index()
         {
-            ViewBag.NewestVehicleReview = await reviewService.GetNewestReviewAsync();
+            ViewBag.NewestVehicleReview = await reviewService.GetRandomReviewAsync();
             var model = await reviewService.GetLatestReviewsAsync(ViewBag.NewestVehicleReview.Id);
             return View(model);
         }
