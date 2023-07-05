@@ -17,11 +17,15 @@ namespace CarSales.Core.Models.Vehicles
         [Display(Name = "Sorting")]
         public string? SearchTerm { get; set; }
         public int VehiclesPerPage { get; set; } = 6;
-        public int VehiclesCount { get; set; }
+        public int VehicleCount { get; set; }
         public int CurrentPage { get; set; } = 1;
+        public int FirstPage { get; set; } = 1;
+        public int MaxPage { get; set; }
         public string? SelectedVehicleTypes { get; set; }
         public VehicleSorting VehicleSorting { get; set; }
         public IEnumerable<VehicleSorting> SortingOptions { get; set; }
+        public IEnumerable<int> PreviousPages { get; set; }
+        public IEnumerable<int> NextPages { get; set; }
         public IEnumerable<VehicleType> VehicleTypes { get; set; }
         public IEnumerable<VehicleListModel> Vehicles { get; set; }
     }
