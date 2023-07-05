@@ -27,10 +27,10 @@ namespace CarSales.Core.Contracts
         Task<IEnumerable<ReviewListModel>> GetLatestReviewsAsync(int? id);
 
         /// <summary>
-        /// Returns newest <see cref="Review"/>
+        /// Returns a random <see cref="Review"/> from the latest 7
         /// </summary>
         /// <returns><see cref="ReviewListModel"/></returns>
-        Task<ReviewListModel> GetNewestReviewAsync();
+        Task<ReviewListModel> GetRandomReviewAsync();
 
         /// <summary>
         /// Returns all <see cref="Review"/> which match criteria given in parameters

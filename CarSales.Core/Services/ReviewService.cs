@@ -61,32 +61,34 @@ namespace CarSales.Core.Services
             return reviews;
         }
 
-        public async Task<ReviewListModel> GetNewestReviewAsync()
+        public async Task<ReviewListModel> GetRandomReviewAsync()
         {
-            var newestVehicleWithReview = await repository.AllReadOnly<Vehicle>()
+            var latestReviews = await repository.AllReadOnly<Review>()
                 .OrderByDescending(v => v.Id)
-                .Where(v => v.Reviews.Count(r => r.VehicleRating >= VehicleRating.Reliable) > 0)
-                .Include(v => v.Reviews)
-                .ThenInclude(r => r.Reviewer)
+                .Take(7)
+                .Where(r => r.VehicleRating > VehicleRating.Average)
+                .Include(r => r.Vehicle)
+                .Include(r => r.Reviewer)
                 .ThenInclude(rv => rv.User)
-                .FirstOrDefaultAsync();
-            var review = newestVehicleWithReview.Reviews
-                .OrderByDescending(r => r.VehicleRating)
-                .Where(r => r.VehicleRating >= VehicleRating.Reliable)
-                .Select(r => new ReviewListModel()
-                {
-                    Id = r.Id,
-                    Title = r.Title,
-                    Overview = r.Overview,
-                    ReviewType = r.ReviewType,
-                    ReviewerName = $"{r.Reviewer.User.FirstName} {r.Reviewer.User.LastName}",
-                    VehicleId = r.VehicleId,
-                    VehicleName = $"{r.Vehicle.Brand} {r.Vehicle.Model}",
-                    VehicleImageUrl = r.Vehicle.ImageUrl,
-                    VehicleType = r.Vehicle.VehicleType,
-                    VehiclePrice = r.Vehicle.Price,
-                })
-                .FirstOrDefault();
+                .ToListAsync();
+
+            var random = new Random();
+            var randomIndex = random.Next(0, latestReviews.Count);
+            var randomReview = latestReviews[randomIndex];
+
+            var review = new ReviewListModel() 
+            {
+                Id = randomReview.Id,
+                Title = randomReview.Title,
+                Overview = randomReview.Overview,
+                ReviewType = randomReview.ReviewType,
+                ReviewerName = $"{randomReview.Reviewer.User.FirstName} {randomReview.Reviewer.User.LastName}",
+                VehicleId = randomReview.VehicleId,
+                VehicleName = $"{randomReview.Vehicle.Brand} {randomReview.Vehicle.Model}",
+                VehicleImageUrl = randomReview.Vehicle.ImageUrl,
+                VehicleType = randomReview.Vehicle.VehicleType,
+                VehiclePrice = randomReview.Vehicle.Price,
+            };
 
             return review;
         }
@@ -416,7 +418,7 @@ namespace CarSales.Core.Services
             {
                 var previousPages = new HashSet<int>();
                 var nextPages = new HashSet<int>();
-                var pagesToMaxPage = model.MaxPage - model.CurrentPage;
+                //var pagesToMaxPage = model.MaxPage - model.CurrentPage;
                 var numberOfPages = 0;
                 var index = 1;
                 while (numberOfPages < 4 && numberOfPages < model.MaxPage - 1)
