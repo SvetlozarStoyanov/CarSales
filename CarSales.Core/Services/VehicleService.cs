@@ -75,8 +75,8 @@ namespace CarSales.Core.Services
                     Name = $"{v.Brand} {v.Model} {v.YearProduced}",
                     ImageUrl = v.ImageUrl,
                     VehicleType = v.VehicleType,
-                    VehicleRating = v.Reviews.Count(r => r.ReviewStatus == ReviewStatus.Completed) > 0 
-                    ? (VehicleRating)v.Reviews.Where(r => r.ReviewStatus == ReviewStatus.Completed).Average(r => (int)r.VehicleRating) 
+                    VehicleRating = v.Reviews.Count(r => r.ReviewStatus == ReviewStatus.Completed) > 0
+                    ? (VehicleRating)v.Reviews.Where(r => r.ReviewStatus == ReviewStatus.Completed).Average(r => (int)r.VehicleRating)
                     : VehicleRating.NotRated,
                     Price = v.Price,
                     SalesmanId = v.SalesmanId,
@@ -360,8 +360,8 @@ namespace CarSales.Core.Services
             VehicleSorting sorting = VehicleSorting.Alphabetically)
         {
             var vehicles = await repository.AllReadOnly<Vehicle>()
-                .Where(v => v.Salesman.UserId == userId)
-                .Include(v => v.Salesman)
+                .Where(v => v.Importer.UserId == userId)
+                .Include(v => v.Importer)
                 .ThenInclude(s => s.User)
                 .Include(v => v.Reviews)
                 .ToListAsync();
@@ -416,8 +416,8 @@ namespace CarSales.Core.Services
                     : VehicleRating.NotRated,
                     Price = v.Price,
                     SalesmanId = v.SalesmanId,
-                    SalesmanUserId = v.Salesman.UserId,
-                    SalesmanName = $"{v.Salesman.User.FirstName} {v.Salesman.User.LastName}"
+                    ImporterUserId = v.Importer.UserId,
+                    ImporterName = $"{v.Importer.User.FirstName} {v.Importer.User.LastName}"
                 });
             if (!sortedVehicles.Any())
             {
@@ -596,19 +596,46 @@ namespace CarSales.Core.Services
             await repository.SaveChangesAsync();
         }
 
-        private VehiclesQueryModel CreateVehiclesQueryModel(string? searchTerm, int vehiclesPerPage, int currentPage, string? selectedVehicleTypes, IEnumerable<VehicleListModel> vehicles, int count)
+        private VehiclesQueryModel CreateVehiclesQueryModel(string? searchTerm, int vehiclesPerPage, int currentPage, string? selectedVehicleTypes, IEnumerable<VehicleListModel> vehicles, int vehicleCount)
         {
             var model = new VehiclesQueryModel()
             {
                 SearchTerm = searchTerm,
                 VehiclesPerPage = vehiclesPerPage,
                 CurrentPage = currentPage,
+                MaxPage = (int)Math.Ceiling(vehicleCount / (double)vehiclesPerPage),
                 SelectedVehicleTypes = selectedVehicleTypes,
                 SortingOptions = Enum.GetValues<VehicleSorting>().ToHashSet(),
                 VehicleTypes = Enum.GetValues<VehicleType>().ToHashSet(),
-                VehiclesCount = count,
+                VehicleCount = vehicleCount,
                 Vehicles = vehicles
             };
+            if (model.MaxPage > 1)
+            {
+                var previousPages = new HashSet<int>();
+                var nextPages = new HashSet<int>();
+                //var pagesToMaxPage = model.MaxPage - model.CurrentPage;
+                var numberOfPages = 0;
+                var index = 1;
+                while (numberOfPages < 4 && numberOfPages < model.MaxPage - 1)
+                {
+                    var previousPage = model.CurrentPage - index;
+                    var nextPage = model.CurrentPage + index;
+                    if (previousPage >= 1)
+                    {
+                        previousPages.Add(previousPage);
+                        numberOfPages++;
+                    }
+                    if (nextPage <= model.MaxPage)
+                    {
+                        nextPages.Add(nextPage);
+                        numberOfPages++;
+                    }
+                    index++;
+                }
+                model.PreviousPages = previousPages.Reverse();
+                model.NextPages = nextPages;
+            }
             return model;
         }
 
