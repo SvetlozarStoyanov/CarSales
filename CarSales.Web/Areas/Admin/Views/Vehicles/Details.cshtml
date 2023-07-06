@@ -91,4 +91,13 @@
         </div>
     }
 }*@
+
+@if (Model.ReviewCount > 0)
+{
+    <div class="text-center mt-3 mb-3">
+        <a asp-area="Admin" asp-controller="Reviews" asp-action="Index" asp-route-vehicleName="@Model.Name" class="btn btn-lg btn-info">
+            @Model.ReviewCount @(Model.ReviewCount > 1 ? "Reviews" : "Review")
+        </a>
+    </div>
+}
 <script src="~/js/Vehicles/canBuyVehicle.js"></script>

@@ -1,11 +1,11 @@
 ﻿@model VehicleViewModel
 @{
-    ViewData["Title"] = $"{Model.Brand} {Model.Model}";
+    ViewData["Title"] = Model.Name;
     string imageUrl = Model.ImageUrl ?? $"/img/VehicleTypes/{Model.VehicleType}.png";
 }
 <link href="~/css/vehicleDetails.css" rel="stylesheet" type="text/css" />
 <h1 class="text-center mt-3 mb-3">
-    @Model.Brand @Model.Model
+    Model.Name
 </h1>
 <section class="d-flex p-5">
     <article class="mx-2">
@@ -78,3 +78,11 @@
         </div>
     </article>
 </section>
+@if (Model.ReviewCount > 0)
+{
+    <div class="text-center mt-3 mb-3">
+        <a asp-area="" asp-controller="Reviews" asp-action="Index" asp-route-vehicleName="@Model.Name" class="btn btn-lg btn-info">
+            @Model.ReviewCount @(Model.ReviewCount > 1 ? "Reviews" : "Review")
+        </a>
+    </div>
+}
