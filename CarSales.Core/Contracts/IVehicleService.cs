@@ -40,13 +40,6 @@ namespace CarSales.Core.Contracts
             );
 
         /// <summary>
-        /// Returns <see cref="Vehicle"/> by given <paramref name="id"/>
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns><see cref="VehicleViewModel"/></returns>
-        Task<VehicleViewModel> GetVehicleByIdAsync(int id);
-
-        /// <summary>
         /// Returns all <see cref="Vehicle"/>belonging to <see cref="Owner"/> with given <paramref name="userId"/>
         /// </summary>
         /// <param name="userId"></param>
@@ -96,6 +89,13 @@ namespace CarSales.Core.Contracts
             int currentPage = 1,
             string selectedVehicleTypes = null,
             VehicleSorting sorting = VehicleSorting.Alphabetically);
+
+        /// <summary>
+        /// Returns <see cref="Vehicle"/> by given <paramref name="id"/>
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns><see cref="VehicleViewModel"/></returns>
+        Task<VehicleViewModel> GetVehicleByIdAsync(int id);
 
 
         /// <summary>
