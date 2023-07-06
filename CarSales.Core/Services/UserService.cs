@@ -1,5 +1,6 @@
 ﻿using AirsoftMatchMaker.Infrastructure.Data.Common.Repository;
 using CarSales.Core.Contracts;
+using CarSales.Core.Models.Users;
 using CarSales.Infrastructure.Data.Entities;
 using CarSales.Infrastructure.Data.Enums;
 using Microsoft.EntityFrameworkCore;
@@ -13,9 +14,23 @@ namespace CarSales.Core.Services
         {
             this.repository = repository;
         }
-        public async Task<User> GetUserByIdAsync(string userId)
+        public async Task<UserViewModel> GetUserByIdAsync(string id)
         {
-            var user = await repository.GetByIdAsync<User>(userId);
+            var user = await repository.AllReadOnly<User>()
+                .Where(u => u.Id == id)
+                .Select(u => new UserViewModel()
+                {
+                    Id = u.Id,
+                    FirstName = u.FirstName,
+                    LastName = u.LastName,
+                    UserName = u.UserName,
+                    PhoneNumber = u.PhoneNumber,
+                    Credits = u.Credits
+                })
+                .FirstOrDefaultAsync();
+
+            user.UserEditModel = CreateUserEditModel(user);
+
             return user;
         }
 
@@ -48,6 +63,33 @@ namespace CarSales.Core.Services
                 .Sum(off => off.Price);
 
             return availableCredits;
+        }
+        public async Task EditUserAsync(UserEditModel model)
+        {
+            var user = await repository.GetByIdAsync<User>(model.Id);
+
+            if (model.UserName != null)
+            {
+                user.UserName = model.UserName;
+            }
+            if (model.PhoneNumber != null)
+            {
+                user.PhoneNumber = model.PhoneNumber;
+            }
+
+            await repository.SaveChangesAsync();
+        }
+
+        private UserEditModel CreateUserEditModel(UserViewModel viewModel)
+        {
+            var editModel = new UserEditModel()
+            {
+                Id = viewModel.Id,
+                UserName = viewModel.UserName,
+                PhoneNumber = viewModel.PhoneNumber
+            };
+
+            return editModel;
         }
     }
 }

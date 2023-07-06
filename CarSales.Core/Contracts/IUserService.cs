@@ -1,4 +1,5 @@
-﻿using CarSales.Infrastructure.Data.Entities;
+﻿using CarSales.Core.Models.Users;
+using CarSales.Infrastructure.Data.Entities;
 using CarSales.Infrastructure.Data.Enums;
 
 namespace CarSales.Core.Contracts
@@ -10,7 +11,7 @@ namespace CarSales.Core.Contracts
         /// </summary>
         /// <param name="userId"></param>
         /// <returns><see cref="User"/></returns>
-        Task<User> GetUserByIdAsync(string userId);
+        Task<UserViewModel> GetUserByIdAsync(string userId);
 
         /// <summary>
         /// Returns the <see cref="User.Credits"/> of <see cref="User"/>
@@ -30,5 +31,7 @@ namespace CarSales.Core.Contracts
         /// <param name="offerId"></param>
         /// <returns><see cref="decimal"/></returns>
         Task<decimal> GetUserAvailableCreditsAsync(string userId, int offerId);
+
+        Task EditUserAsync(UserEditModel model);
     }
 }
