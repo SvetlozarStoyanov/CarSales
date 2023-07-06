@@ -51,17 +51,17 @@ namespace CarSales.Core.Services
                     case VehicleSorting.Alphabetically:
                         vehicles = vehicles.OrderBy(v => v.Brand).ToList();
                         break;
-                    case VehicleSorting.PriceAscending:
-                        vehicles = vehicles.OrderBy(v => v.Price).ToList();
-                        break;
                     case VehicleSorting.PriceDescending:
                         vehicles = vehicles.OrderByDescending(v => v.Price).ToList();
                         break;
-                    case VehicleSorting.RatingAscending:
-                        //vehicles = vehicles.OrderBy(v => v.VehicleRating).ToList();
+                    case VehicleSorting.PriceAscending:
+                        vehicles = vehicles.OrderBy(v => v.Price).ToList();
                         break;
                     case VehicleSorting.RatingDescending:
-                        //vehicles = vehicles.OrderByDescending(v => v.VehicleRating).ToList();
+                        vehicles = vehicles.OrderByDescending(v => v.Reviews.Average(r => (int)r.VehicleRating)).ToList();
+                        break;
+                    case VehicleSorting.RatingAscending:
+                        vehicles = vehicles.OrderBy(v => v.Reviews.Average(r => (int)r.VehicleRating)).ToList();
                         break;
                 }
             }
@@ -127,17 +127,13 @@ namespace CarSales.Core.Services
                     case VehicleSorting.Alphabetically:
                         vehicles = vehicles.OrderBy(v => v.Brand).ToList();
                         break;
-                    case VehicleSorting.PriceAscending:
-                        vehicles = vehicles.OrderBy(v => v.Price).ToList();
-                        break;
                     case VehicleSorting.PriceDescending:
                         vehicles = vehicles.OrderByDescending(v => v.Price).ToList();
                         break;
-                    case VehicleSorting.RatingAscending:
-                        //vehicles = vehicles.OrderBy(v => v.VehicleRating).ToList();
+                    case VehicleSorting.PriceAscending:
+                        vehicles = vehicles.OrderBy(v => v.Price).ToList();
                         break;
-                    case VehicleSorting.RatingDescending:
-                        //vehicles = vehicles.OrderByDescending(v => v.VehicleRating).ToList();
+                    default:
                         break;
                 }
             }
@@ -161,43 +157,10 @@ namespace CarSales.Core.Services
                 currentPage = 1;
             }
             var queryModel = CreateVehiclesQueryModel(searchTerm, vehiclesPerPage, currentPage, selectedVehicleTypes, sortedVehicles, vehicles.Count);
+            
+            queryModel.SortingOptions = queryModel.SortingOptions.Take(queryModel.SortingOptions.Count() - 2);
 
             return queryModel;
-        }
-
-        public async Task<VehicleViewModel> GetVehicleByIdAsync(int id)
-        {
-            var vehicle = await repository.AllReadOnly<Vehicle>()
-                .Where(v => v.Id == id)
-                .Select(v => new VehicleViewModel()
-                {
-                    Id = v.Id,
-                    Brand = v.Brand,
-                    Model = v.Model,
-                    Description = v.Description,
-                    ImageUrl = v.ImageUrl,
-                    YearProduced = v.YearProduced,
-                    TopSpeed = v.TopSpeed,
-                    KilometersDriven = v.KilometersDriven,
-                    Price = v.Price,
-                    VehicleType = v.VehicleType,
-                    VehicleRating = v.Reviews.Count(r => r.ReviewStatus == ReviewStatus.Completed) > 0
-                    ? (VehicleRating)v.Reviews.Where(r => r.ReviewStatus == ReviewStatus.Completed).Average(r => (int)r.VehicleRating)
-                    : VehicleRating.NotRated,
-                    OwnerId = v.OwnerId,
-                    OwnerUserId = v.Owner != null ? v.Owner.UserId : null,
-                    OwnerName = v.Owner != null ? $"{v.Owner.User.FirstName} {v.Owner.User.LastName}" : null,
-                    SalesmanId = v.SalesmanId,
-                    SalesmanUserId = v.Salesman != null ? v.Salesman.UserId : null,
-                    SalesmanName = v.Salesman != null ? $"{v.Salesman.User.FirstName} {v.Salesman.User.LastName}" : null,
-                    ImporterId = v.ImporterId,
-                    ImporterUserId = v.Importer != null ? v.Importer.UserId : null,
-                    ImporterName = v.Importer != null ? $"{v.Importer.User.FirstName} {v.Importer.User.LastName}" : null,
-
-                })
-                .FirstOrDefaultAsync();
-
-            return vehicle;
         }
 
         public async Task<VehiclesQueryModel> GetOwnerVehiclesAsync(string userId,
@@ -235,17 +198,17 @@ namespace CarSales.Core.Services
                     case VehicleSorting.Alphabetically:
                         vehicles = vehicles.OrderBy(v => v.Brand).ToList();
                         break;
-                    case VehicleSorting.PriceAscending:
-                        vehicles = vehicles.OrderBy(v => v.Price).ToList();
-                        break;
                     case VehicleSorting.PriceDescending:
                         vehicles = vehicles.OrderByDescending(v => v.Price).ToList();
                         break;
-                    case VehicleSorting.RatingAscending:
-                        //vehicles = vehicles.OrderBy(v => v.VehicleRating).ToList();
+                    case VehicleSorting.PriceAscending:
+                        vehicles = vehicles.OrderBy(v => v.Price).ToList();
                         break;
                     case VehicleSorting.RatingDescending:
-                        //vehicles = vehicles.OrderByDescending(v => v.VehicleRating).ToList();
+                        vehicles = vehicles.OrderByDescending(v => v.Reviews.Average(r => (int)r.VehicleRating)).ToList();
+                        break;
+                    case VehicleSorting.RatingAscending:
+                        vehicles = vehicles.OrderBy(v => v.Reviews.Average(r => (int)r.VehicleRating)).ToList();
                         break;
                 }
             }
@@ -311,17 +274,17 @@ namespace CarSales.Core.Services
                     case VehicleSorting.Alphabetically:
                         vehicles = vehicles.OrderBy(v => v.Brand).ToList();
                         break;
-                    case VehicleSorting.PriceAscending:
-                        vehicles = vehicles.OrderBy(v => v.Price).ToList();
-                        break;
                     case VehicleSorting.PriceDescending:
                         vehicles = vehicles.OrderByDescending(v => v.Price).ToList();
                         break;
-                    case VehicleSorting.RatingAscending:
-                        //vehicles = vehicles.OrderBy(v => v.VehicleRating).ToList();
+                    case VehicleSorting.PriceAscending:
+                        vehicles = vehicles.OrderBy(v => v.Price).ToList();
                         break;
                     case VehicleSorting.RatingDescending:
-                        //vehicles = vehicles.OrderByDescending(v => v.VehicleRating).ToList();
+                        vehicles = vehicles.OrderByDescending(v => v.Reviews.Average(r => (int)r.VehicleRating)).ToList();
+                        break;
+                    case VehicleSorting.RatingAscending:
+                        vehicles = vehicles.OrderBy(v => v.Reviews.Average(r => (int)r.VehicleRating)).ToList();
                         break;
                 }
             }
@@ -387,17 +350,13 @@ namespace CarSales.Core.Services
                     case VehicleSorting.Alphabetically:
                         vehicles = vehicles.OrderBy(v => v.Brand).ToList();
                         break;
-                    case VehicleSorting.PriceAscending:
-                        vehicles = vehicles.OrderBy(v => v.Price).ToList();
-                        break;
                     case VehicleSorting.PriceDescending:
                         vehicles = vehicles.OrderByDescending(v => v.Price).ToList();
                         break;
-                    case VehicleSorting.RatingAscending:
-                        //vehicles = vehicles.OrderBy(v => v.VehicleRating).ToList();
+                    case VehicleSorting.PriceAscending:
+                        vehicles = vehicles.OrderBy(v => v.Price).ToList();
                         break;
-                    case VehicleSorting.RatingDescending:
-                        //vehicles = vehicles.OrderByDescending(v => v.VehicleRating).ToList();
+                    default:
                         break;
                 }
             }
@@ -425,10 +384,46 @@ namespace CarSales.Core.Services
             }
             var queryModel = CreateVehiclesQueryModel(searchTerm, vehiclesPerPage, currentPage, selectedVehicleTypes, sortedVehicles, vehicles.Count);
 
+            queryModel.SortingOptions = queryModel.SortingOptions.Take(queryModel.SortingOptions.Count() - 2);
             return queryModel;
         }
 
+        public async Task<VehicleViewModel> GetVehicleByIdAsync(int id)
+        {
+            var vehicle = await repository.AllReadOnly<Vehicle>()
+                .Where(v => v.Id == id)
+                .Select(v => new VehicleViewModel()
+                {
+                    Id = v.Id,
+                    Brand = v.Brand,
+                    Model = v.Model,
+                    Name = $"{v.Brand} {v.Model}",
+                    Description = v.Description,
+                    ImageUrl = v.ImageUrl,
+                    YearProduced = v.YearProduced,
+                    TopSpeed = v.TopSpeed,
+                    KilometersDriven = v.KilometersDriven,
+                    Price = v.Price,
+                    ReviewCount = v.Reviews.Count,
+                    VehicleType = v.VehicleType,
+                    VehicleRating = v.Reviews.Count(r => r.ReviewStatus == ReviewStatus.Completed) > 0
+                    ? (VehicleRating)v.Reviews.Where(r => r.ReviewStatus == ReviewStatus.Completed).Average(r => (int)r.VehicleRating)
+                    : VehicleRating.NotRated,
+                    OwnerId = v.OwnerId,
+                    OwnerUserId = v.Owner != null ? v.Owner.UserId : null,
+                    OwnerName = v.Owner != null ? $"{v.Owner.User.FirstName} {v.Owner.User.LastName}" : null,
+                    SalesmanId = v.SalesmanId,
+                    SalesmanUserId = v.Salesman != null ? v.Salesman.UserId : null,
+                    SalesmanName = v.Salesman != null ? $"{v.Salesman.User.FirstName} {v.Salesman.User.LastName}" : null,
+                    ImporterId = v.ImporterId,
+                    ImporterUserId = v.Importer != null ? v.Importer.UserId : null,
+                    ImporterName = v.Importer != null ? $"{v.Importer.User.FirstName} {v.Importer.User.LastName}" : null,
 
+                })
+                .FirstOrDefaultAsync();
+
+            return vehicle;
+        }
 
         public async Task BuyVehicleFromSalesmanAsync(int id, string buyerUserId)
         {
