@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CarSales.Web.Data.Migrations
 {
     [DbContext(typeof(CarSalesDbContext))]
-    [Migration("20230624100922_Initial")]
+    [Migration("20230708113812_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -430,6 +430,12 @@ namespace CarSales.Web.Data.Migrations
                         .HasMaxLength(30)
                         .HasColumnType("nvarchar(30)");
 
+                    b.Property<int>("Gender")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ImageUrl")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasMaxLength(30)
@@ -485,18 +491,19 @@ namespace CarSales.Web.Data.Migrations
                         {
                             Id = "cbed6d2a-e60a-49df-a6e3-982ccd980393",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "3c9515a2-5257-475e-9cb4-a980172680b3",
+                            ConcurrencyStamp = "ce955fca-318a-474b-8dcf-5cee15d977f0",
                             Credits = 50000m,
                             Email = "Admin@gmail.com",
                             EmailConfirmed = false,
                             FirstName = "Admin",
+                            Gender = 1,
                             LastName = "Test",
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@GMAIL.COM",
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAIAAYagAAAAEGA6XlHyUX5/lFaCkLYb4GnqiQ2StAMGZXXyVVXk6wd/6kv3gqAW5G+MWkGw23jXAA==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEPsDrV5XcYOVEH3MvSK6MNsxSPAA5BT4MEiPJwNhOZmMRFv6QJiYMaGfIfNbC9WVUw==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "8f58d64e-9295-45b1-a782-b69a39c367a7",
+                            SecurityStamp = "c98e7e18-b909-444a-8877-689150f08f68",
                             TwoFactorEnabled = false,
                             UserName = "Admin"
                         },
@@ -504,18 +511,19 @@ namespace CarSales.Web.Data.Migrations
                         {
                             Id = "b5fef437-f504-46d2-926d-3158e54e1932",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "9915c42c-54a1-4d38-9508-7c6454299e81",
+                            ConcurrencyStamp = "37d124e9-9f5c-4ae5-97bd-f2ce982ef682",
                             Credits = 50000m,
                             Email = "Owner@gmail.com",
                             EmailConfirmed = false,
                             FirstName = "Owner",
+                            Gender = 1,
                             LastName = "Test",
                             LockoutEnabled = false,
                             NormalizedEmail = "OWNER@GMAIL.COM",
                             NormalizedUserName = "OWNER",
-                            PasswordHash = "AQAAAAIAAYagAAAAEJ/J3i1MAX6qy45eWx9NGegEj+qq2Dil12E+eulY7kMbjVbZ48cr51ijA7T7OD2Xdg==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEG5vCMhpFec4ZgCLtsUPzPPRspk/vbzPAV2DBRJagL5ytGAtVT09PY2xdzzDsG89jw==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "1f77b827-242d-43c4-99d9-d3c6f1d4aede",
+                            SecurityStamp = "be0f662b-a05f-4a80-b918-265aee92240e",
                             TwoFactorEnabled = false,
                             UserName = "Owner"
                         },
@@ -523,18 +531,19 @@ namespace CarSales.Web.Data.Migrations
                         {
                             Id = "926bee86-8bbd-43f6-bc1c-9639d43531a4",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "e7a9bbf8-e24b-496a-b1f6-6f9f1522d91a",
+                            ConcurrencyStamp = "eeaae261-f32a-4da4-909d-f4ba16824a8e",
                             Credits = 50000m,
                             Email = "Owner2@gmail.com",
                             EmailConfirmed = false,
                             FirstName = "Owner2",
+                            Gender = 1,
                             LastName = "Test",
                             LockoutEnabled = false,
                             NormalizedEmail = "OWNER2@GMAIL.COM",
                             NormalizedUserName = "OWNER2",
-                            PasswordHash = "AQAAAAIAAYagAAAAEKxbWoSYO/dmgqhacZeJsfx9XCa5T9kZuFI9yPCMPDQkAnZoxJOOdXt4/RrCSmhb7g==",
+                            PasswordHash = "AQAAAAIAAYagAAAAECsAgZ80KcNbOQVKX09BVcP8MgiFZEKaLqGntcfkU9iB1rgng/BKrZSKLMowoB8V3A==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "7afeb291-b84f-4a77-ac81-86ab45631bae",
+                            SecurityStamp = "5a3294c4-49e7-477c-a60c-a0b266f34395",
                             TwoFactorEnabled = false,
                             UserName = "Owner2"
                         },
@@ -542,18 +551,19 @@ namespace CarSales.Web.Data.Migrations
                         {
                             Id = "66ccb670-f0dd-4aa1-a83d-8b2a0003bb50",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "9601ca3f-343d-47ce-add3-42a5c27a747a",
+                            ConcurrencyStamp = "e622083d-9ca1-4978-b78d-99caa666ef98",
                             Credits = 50000m,
                             Email = "Salesman@gmail.com",
                             EmailConfirmed = false,
                             FirstName = "Salesman",
+                            Gender = 1,
                             LastName = "Test",
                             LockoutEnabled = false,
                             NormalizedEmail = "SALESMAN@GMAIL.COM",
                             NormalizedUserName = "SALESMAN",
-                            PasswordHash = "AQAAAAIAAYagAAAAEMelPGL7filp1X57m4/MutAwhvyVjxenMK+rWAHrXeiF1syegOYYwebUyiEJBeMu3A==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEPgGSnh8PW8vK6qxPV9lW6D2AcP2kXqwPQM4nmf1Qvneqdk7lZ2a2WN4f3uOD5KCwQ==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "633123f8-c1c5-474a-8848-4e987dcca421",
+                            SecurityStamp = "6a323951-55b3-43ad-beff-cd36241e8c53",
                             TwoFactorEnabled = false,
                             UserName = "Salesman"
                         },
@@ -561,18 +571,19 @@ namespace CarSales.Web.Data.Migrations
                         {
                             Id = "10933c11-ac2a-410d-b60a-8b1d97324975",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "b912a385-d266-4870-9ed5-1a30e8aa53af",
+                            ConcurrencyStamp = "746d6d30-387e-40a8-82bf-eef1f7b8d8b0",
                             Credits = 50000m,
                             Email = "Importer@gmail.com",
                             EmailConfirmed = false,
                             FirstName = "Importer",
+                            Gender = 1,
                             LastName = "Test",
                             LockoutEnabled = false,
                             NormalizedEmail = "IMPORTER@GMAIL.COM",
                             NormalizedUserName = "IMPORTER",
-                            PasswordHash = "AQAAAAIAAYagAAAAEFMjOGKhGgvMPiBZD1QOrb0xQKRvoCCobFvQ1+cajmGhW/ASxZgEHOHW17ApL+pMaA==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEJzmgRJm+tzXw2aYWvpecXqRDL0VLQTlxb6EGqUIa/OAEefJxxaFhCbaXor90rVX9w==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "9d3f3bce-79b5-4ed2-b795-81e625fb26c9",
+                            SecurityStamp = "14294a08-d8b4-49d8-8914-6f7a7df0395a",
                             TwoFactorEnabled = false,
                             UserName = "Importer"
                         },
@@ -580,18 +591,19 @@ namespace CarSales.Web.Data.Migrations
                         {
                             Id = "4d693871-c20b-4e9f-8490-1c641b9e3a40",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "36e1ad1f-4fcf-40a0-870e-e3ca25be9a77",
+                            ConcurrencyStamp = "47f1b853-3576-49c3-93cb-36e1fcffe5b4",
                             Credits = 50000m,
                             Email = "Reviewer@gmail.com",
                             EmailConfirmed = false,
                             FirstName = "Reviewer",
+                            Gender = 1,
                             LastName = "Test",
                             LockoutEnabled = false,
                             NormalizedEmail = "REVIEWER@GMAIL.COM",
                             NormalizedUserName = "REVIEWER",
-                            PasswordHash = "AQAAAAIAAYagAAAAEMmqwnnPWnjVGYdDuk53J0IfBo3MzzIIEiL5/cVxxYSxXCJJRgD3Ll+kchWcIqHViA==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEFWmeO9I00c0EhcQj3RjJV55aTKkBWBH9Yyp8AiJyhurgfDPEUYHcY8kqjhhh5Foiw==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "dbb02feb-2bd2-403f-abc6-3c0b181e3ce2",
+                            SecurityStamp = "6f319c8d-3a94-4229-9061-f70067fa623b",
                             TwoFactorEnabled = false,
                             UserName = "Reviewer"
                         });

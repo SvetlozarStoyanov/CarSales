@@ -27,6 +27,19 @@ namespace CarSales.Web.Data.Migrations
                 nullable: false,
                 defaultValue: "");
 
+            migrationBuilder.AddColumn<int>(
+                name: "Gender",
+                table: "AspNetUsers",
+                type: "int",
+                nullable: false,
+                defaultValue: 0);
+
+            migrationBuilder.AddColumn<string>(
+                name: "ImageUrl",
+                table: "AspNetUsers",
+                type: "nvarchar(max)",
+                nullable: true);
+
             migrationBuilder.AddColumn<string>(
                 name: "LastName",
                 table: "AspNetUsers",
@@ -327,15 +340,15 @@ namespace CarSales.Web.Data.Migrations
 
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
-                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Credits", "Email", "EmailConfirmed", "FirstName", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
+                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Credits", "Email", "EmailConfirmed", "FirstName", "Gender", "ImageUrl", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
                 values: new object[,]
                 {
-                    { "10933c11-ac2a-410d-b60a-8b1d97324975", 0, "b912a385-d266-4870-9ed5-1a30e8aa53af", 50000m, "Importer@gmail.com", false, "Importer", "Test", false, null, "IMPORTER@GMAIL.COM", "IMPORTER", "AQAAAAIAAYagAAAAEFMjOGKhGgvMPiBZD1QOrb0xQKRvoCCobFvQ1+cajmGhW/ASxZgEHOHW17ApL+pMaA==", null, false, "9d3f3bce-79b5-4ed2-b795-81e625fb26c9", false, "Importer" },
-                    { "4d693871-c20b-4e9f-8490-1c641b9e3a40", 0, "36e1ad1f-4fcf-40a0-870e-e3ca25be9a77", 50000m, "Reviewer@gmail.com", false, "Reviewer", "Test", false, null, "REVIEWER@GMAIL.COM", "REVIEWER", "AQAAAAIAAYagAAAAEMmqwnnPWnjVGYdDuk53J0IfBo3MzzIIEiL5/cVxxYSxXCJJRgD3Ll+kchWcIqHViA==", null, false, "dbb02feb-2bd2-403f-abc6-3c0b181e3ce2", false, "Reviewer" },
-                    { "66ccb670-f0dd-4aa1-a83d-8b2a0003bb50", 0, "9601ca3f-343d-47ce-add3-42a5c27a747a", 50000m, "Salesman@gmail.com", false, "Salesman", "Test", false, null, "SALESMAN@GMAIL.COM", "SALESMAN", "AQAAAAIAAYagAAAAEMelPGL7filp1X57m4/MutAwhvyVjxenMK+rWAHrXeiF1syegOYYwebUyiEJBeMu3A==", null, false, "633123f8-c1c5-474a-8848-4e987dcca421", false, "Salesman" },
-                    { "926bee86-8bbd-43f6-bc1c-9639d43531a4", 0, "e7a9bbf8-e24b-496a-b1f6-6f9f1522d91a", 50000m, "Owner2@gmail.com", false, "Owner2", "Test", false, null, "OWNER2@GMAIL.COM", "OWNER2", "AQAAAAIAAYagAAAAEKxbWoSYO/dmgqhacZeJsfx9XCa5T9kZuFI9yPCMPDQkAnZoxJOOdXt4/RrCSmhb7g==", null, false, "7afeb291-b84f-4a77-ac81-86ab45631bae", false, "Owner2" },
-                    { "b5fef437-f504-46d2-926d-3158e54e1932", 0, "9915c42c-54a1-4d38-9508-7c6454299e81", 50000m, "Owner@gmail.com", false, "Owner", "Test", false, null, "OWNER@GMAIL.COM", "OWNER", "AQAAAAIAAYagAAAAEJ/J3i1MAX6qy45eWx9NGegEj+qq2Dil12E+eulY7kMbjVbZ48cr51ijA7T7OD2Xdg==", null, false, "1f77b827-242d-43c4-99d9-d3c6f1d4aede", false, "Owner" },
-                    { "cbed6d2a-e60a-49df-a6e3-982ccd980393", 0, "3c9515a2-5257-475e-9cb4-a980172680b3", 50000m, "Admin@gmail.com", false, "Admin", "Test", false, null, "ADMIN@GMAIL.COM", "ADMIN", "AQAAAAIAAYagAAAAEGA6XlHyUX5/lFaCkLYb4GnqiQ2StAMGZXXyVVXk6wd/6kv3gqAW5G+MWkGw23jXAA==", null, false, "8f58d64e-9295-45b1-a782-b69a39c367a7", false, "Admin" }
+                    { "10933c11-ac2a-410d-b60a-8b1d97324975", 0, "746d6d30-387e-40a8-82bf-eef1f7b8d8b0", 50000m, "Importer@gmail.com", false, "Importer", 1, null, "Test", false, null, "IMPORTER@GMAIL.COM", "IMPORTER", "AQAAAAIAAYagAAAAEJzmgRJm+tzXw2aYWvpecXqRDL0VLQTlxb6EGqUIa/OAEefJxxaFhCbaXor90rVX9w==", null, false, "14294a08-d8b4-49d8-8914-6f7a7df0395a", false, "Importer" },
+                    { "4d693871-c20b-4e9f-8490-1c641b9e3a40", 0, "47f1b853-3576-49c3-93cb-36e1fcffe5b4", 50000m, "Reviewer@gmail.com", false, "Reviewer", 1, null, "Test", false, null, "REVIEWER@GMAIL.COM", "REVIEWER", "AQAAAAIAAYagAAAAEFWmeO9I00c0EhcQj3RjJV55aTKkBWBH9Yyp8AiJyhurgfDPEUYHcY8kqjhhh5Foiw==", null, false, "6f319c8d-3a94-4229-9061-f70067fa623b", false, "Reviewer" },
+                    { "66ccb670-f0dd-4aa1-a83d-8b2a0003bb50", 0, "e622083d-9ca1-4978-b78d-99caa666ef98", 50000m, "Salesman@gmail.com", false, "Salesman", 1, null, "Test", false, null, "SALESMAN@GMAIL.COM", "SALESMAN", "AQAAAAIAAYagAAAAEPgGSnh8PW8vK6qxPV9lW6D2AcP2kXqwPQM4nmf1Qvneqdk7lZ2a2WN4f3uOD5KCwQ==", null, false, "6a323951-55b3-43ad-beff-cd36241e8c53", false, "Salesman" },
+                    { "926bee86-8bbd-43f6-bc1c-9639d43531a4", 0, "eeaae261-f32a-4da4-909d-f4ba16824a8e", 50000m, "Owner2@gmail.com", false, "Owner2", 1, null, "Test", false, null, "OWNER2@GMAIL.COM", "OWNER2", "AQAAAAIAAYagAAAAECsAgZ80KcNbOQVKX09BVcP8MgiFZEKaLqGntcfkU9iB1rgng/BKrZSKLMowoB8V3A==", null, false, "5a3294c4-49e7-477c-a60c-a0b266f34395", false, "Owner2" },
+                    { "b5fef437-f504-46d2-926d-3158e54e1932", 0, "37d124e9-9f5c-4ae5-97bd-f2ce982ef682", 50000m, "Owner@gmail.com", false, "Owner", 1, null, "Test", false, null, "OWNER@GMAIL.COM", "OWNER", "AQAAAAIAAYagAAAAEG5vCMhpFec4ZgCLtsUPzPPRspk/vbzPAV2DBRJagL5ytGAtVT09PY2xdzzDsG89jw==", null, false, "be0f662b-a05f-4a80-b918-265aee92240e", false, "Owner" },
+                    { "cbed6d2a-e60a-49df-a6e3-982ccd980393", 0, "ce955fca-318a-474b-8dcf-5cee15d977f0", 50000m, "Admin@gmail.com", false, "Admin", 1, null, "Test", false, null, "ADMIN@GMAIL.COM", "ADMIN", "AQAAAAIAAYagAAAAEPsDrV5XcYOVEH3MvSK6MNsxSPAA5BT4MEiPJwNhOZmMRFv6QJiYMaGfIfNbC9WVUw==", null, false, "c98e7e18-b909-444a-8877-689150f08f68", false, "Admin" }
                 });
 
             migrationBuilder.InsertData(
@@ -639,6 +652,14 @@ namespace CarSales.Web.Data.Migrations
 
             migrationBuilder.DropColumn(
                 name: "FirstName",
+                table: "AspNetUsers");
+
+            migrationBuilder.DropColumn(
+                name: "Gender",
+                table: "AspNetUsers");
+
+            migrationBuilder.DropColumn(
+                name: "ImageUrl",
                 table: "AspNetUsers");
 
             migrationBuilder.DropColumn(
