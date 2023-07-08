@@ -1,4 +1,5 @@
 ﻿using CarSales.Infrastructure.Data.Entities;
+using CarSales.Infrastructure.Data.Enums;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -44,6 +45,7 @@ namespace CarSales.Infrastructure.Data.Configuration
                     UserName = name,
                     NormalizedUserName = name.ToUpper(),
                     Email = $"{name}@gmail.com",
+                    Gender = Gender.Male,
                     Credits = 50000m,
                     NormalizedEmail = $"{name.ToUpper()}@GMAIL.COM",
                 };
