@@ -25,6 +25,8 @@ namespace CarSales.Core.Services
                     LastName = u.LastName,
                     UserName = u.UserName,
                     PhoneNumber = u.PhoneNumber,
+                    ImageUrl = u.ImageUrl,
+                    Gender = u.Gender.ToString(),
                     Credits = u.Credits
                 })
                 .FirstOrDefaultAsync();
