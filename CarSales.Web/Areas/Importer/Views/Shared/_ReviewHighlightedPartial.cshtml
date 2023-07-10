@@ -1,0 +1,27 @@
+﻿@model ReviewListModel
+@{
+    string imageUrl = Model.VehicleImageUrl ?? $"/img/VehicleTypes/{Model.VehicleType}.png";
+}
+<article class="m-1 mt-3 mb-3 text-white text-break">
+    <div class="d-flex flex-md-row flex-column justify-content-evenly review-hightlighted-container w-100 h-100 basic-transition custom-border-white-blue">
+
+        <div class="text-center flex-shrink-md-1 flex-sm-shrink-1 bg-dark bg-opacity-25">
+            <img class="w-100 h-100" src="@imageUrl" alt="vehicleImg" />
+        </div>
+        <div class="container flex-shrink-md-1 d-flex flex-column justify-content-evenly align-items-center bg-dark bg-opacity-10 ">
+            <h2 class="text-center mt-2 mb-2">
+                @Model.VehicleName
+            </h2>
+            <h6 class="text-center mt-2 mb-2">
+                @Model.Title
+            </h6>
+            <p class="text-center d-none d-xl-block mt-2 mb-2">
+                @Model.Overview
+            </p>
+            <div class="text-center mt-2 mb-2">
+                <a class="btn btn-primary" asp-area="Importer" asp-controller="Reviews" asp-action="Details" asp-route-id="@Model.Id">Read Full Review</a>
+            </div>
+        </div>
+    </div>
+
+</article>
