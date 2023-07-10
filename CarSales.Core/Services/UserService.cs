@@ -24,6 +24,7 @@ namespace CarSales.Core.Services
                     FirstName = u.FirstName,
                     LastName = u.LastName,
                     UserName = u.UserName,
+                    Email = u.Email,
                     PhoneNumber = u.PhoneNumber,
                     ImageUrl = u.ImageUrl,
                     Gender = u.Gender.ToString(),
@@ -70,14 +71,17 @@ namespace CarSales.Core.Services
         {
             var user = await repository.GetByIdAsync<User>(model.Id);
 
-            if (model.UserName != null)
+            if (model.ImageUrl == string.Empty)
             {
-                user.UserName = model.UserName;
+                model.ImageUrl = null;
             }
-            if (model.PhoneNumber != null)
-            {
-                user.PhoneNumber = model.PhoneNumber;
-            }
+            user.UserName = model.UserName;
+            user.FirstName = model.FirstName;
+            user.LastName = model.LastName;
+            user.Email = model.Email;
+            user.ImageUrl = model.ImageUrl;
+            user.PhoneNumber = model.PhoneNumber;
+
 
             await repository.SaveChangesAsync();
         }
@@ -87,8 +91,13 @@ namespace CarSales.Core.Services
             var editModel = new UserEditModel()
             {
                 Id = viewModel.Id,
+                FirstName = viewModel.FirstName,
+                LastName = viewModel.LastName,
                 UserName = viewModel.UserName,
-                PhoneNumber = viewModel.PhoneNumber
+                Email = viewModel.Email,
+                PhoneNumber = viewModel.PhoneNumber,
+                Credits = viewModel.Credits,
+                ImageUrl = viewModel.ImageUrl
             };
 
             return editModel;
