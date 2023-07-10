@@ -49,6 +49,7 @@ namespace CarSales.Core.Services
                     Title = r.Title,
                     Overview = r.Overview.Substring(0, 70).TrimEnd() + "...",
                     ReviewType = r.ReviewType,
+                    ReviewStatus = r.ReviewStatus,
                     ReviewerName = $"{r.Reviewer.User.FirstName} {r.Reviewer.User.LastName}",
                     VehicleId = r.VehicleId,
                     VehicleName = $"{r.Vehicle.Brand} {r.Vehicle.Model}",
