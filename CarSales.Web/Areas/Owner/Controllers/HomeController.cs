@@ -1,4 +1,6 @@
-﻿using CarSales.Web.Models;
+﻿using CarSales.Core.Contracts;
+using CarSales.Core.Services;
+using CarSales.Web.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -7,14 +9,17 @@ namespace CarSales.Web.Areas.Owner.Controllers
     public class HomeController : BaseController
     {
         private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
+        private readonly IReviewService reviewService;
+        public HomeController(ILogger<HomeController> logger,IReviewService reviewService)
         {
             _logger = logger;
+            this.reviewService = reviewService;
         }
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            ViewBag.NewestVehicleReview = await reviewService.GetRandomReviewAsync();
+            var model = await reviewService.GetLatestReviewsAsync(ViewBag.NewestVehicleReview.Id);
+            return View(model);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
