@@ -13,20 +13,29 @@ namespace CarSales.Web.Areas.Owner.Controllers
             this.userService = userService;
         }
 
-        public async Task<IActionResult> MyAccount()
+        public async Task<IActionResult> Details(string id)
         {
-            var model = await userService.GetUserByIdAsync(User.Id());
+            var model = await userService.GetUserByIdAsync(id);
+            ViewBag.CanEditProfile = await userService.CanEditProfileAsync(id, User.Id());
+            return View(model);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Edit(string id)
+        {
+            var model = await userService.CreateUserEditModelAsync(id);
             return View(model);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(UserEditModel userEditModel)
+        public async Task<IActionResult> Edit(UserEditModel model)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                await userService.EditUserAsync(userEditModel);
+                return View(model);
             }
-            return RedirectToAction(nameof(MyAccount));
+            await userService.EditUserAsync(model);
+            return RedirectToAction("Index", "Home", new { area = "Owner" });
         }
     }
 }
