@@ -13,7 +13,7 @@
         <li class="nav-item dropdown">
             <a class="nav-link active dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">My Account</a>
             <div class="dropdown-menu">
-                <a class="nav-link active" asp-area="Owner" asp-controller="Users" asp-action="MyAccount">My Account</a>
+                <a class="nav-link active" asp-area="Owner" asp-controller="Users" asp-action="Details" asp-route-id="@user.Id">My Profile</a>
                 <div class="dropdown-divider"></div>
                 <a class="nav-link active" asp-area="Owner" asp-controller="Vehicles" asp-action="Mine">My Vehicles</a>
                 <div class="dropdown-divider"></div>
