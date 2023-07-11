@@ -14,34 +14,19 @@ namespace CarSales.Core.Services
         {
             this.repository = repository;
         }
-        public async Task<UserViewModel> GetUserByIdAsync(string id)
+
+        public async Task<bool> CanEditProfileAsync(string id, string loggedInUserId)
         {
-            var user = await repository.AllReadOnly<User>()
-                .Where(u => u.Id == id)
-                .Select(u => new UserViewModel()
-                {
-                    Id = u.Id,
-                    FirstName = u.FirstName,
-                    LastName = u.LastName,
-                    UserName = u.UserName,
-                    Email = u.Email,
-                    PhoneNumber = u.PhoneNumber,
-                    ImageUrl = u.ImageUrl,
-                    Gender = u.Gender.ToString(),
-                    Credits = u.Credits
-                })
-                .FirstOrDefaultAsync();
-
-            user.UserEditModel = CreateUserEditModel(user);
-
-            return user;
+            if (loggedInUserId == id)
+            {
+                return true;
+            }
+            return false;
         }
-
-
-        public async Task<decimal> GetUserAvailableCreditsAsync(string userId)
+        public async Task<decimal> GetUserAvailableCreditsAsync(string id)
         {
             var owner = await repository.AllReadOnly<Owner>()
-                .Where(o => o.UserId == userId)
+                .Where(o => o.UserId == id)
                 .Include(o => o.User)
                 .Include(o => o.Offers)
                 .FirstOrDefaultAsync();
@@ -67,6 +52,46 @@ namespace CarSales.Core.Services
 
             return availableCredits;
         }
+
+        public async Task<UserViewModel> GetUserByIdAsync(string id)
+        {
+            var user = await repository.AllReadOnly<User>()
+                .Where(u => u.Id == id)
+                .Select(u => new UserViewModel()
+                {
+                    Id = u.Id,
+                    FirstName = u.FirstName,
+                    LastName = u.LastName,
+                    UserName = u.UserName,
+                    Email = u.Email,
+                    PhoneNumber = u.PhoneNumber,
+                    ImageUrl = u.ImageUrl,
+                    Gender = u.Gender,
+                    Credits = u.Credits
+                })
+                .FirstOrDefaultAsync();
+            return user;
+        }
+
+        public async Task<UserEditModel> CreateUserEditModelAsync(string id)
+        {
+            var user = await repository.AllReadOnly<User>()
+                    .Where(u => u.Id == id)
+                    .Select(u => new UserEditModel()
+                    {
+                        Id = u.Id,
+                        FirstName = u.FirstName,
+                        LastName = u.LastName,
+                        UserName = u.UserName,
+                        Email = u.Email,
+                        PhoneNumber = u.PhoneNumber,
+                        ImageUrl = u.ImageUrl,
+                        Gender = u.Gender,
+                    })
+                    .FirstOrDefaultAsync();
+            return user;
+        }
+
         public async Task EditUserAsync(UserEditModel model)
         {
             var user = await repository.GetByIdAsync<User>(model.Id);
@@ -96,11 +121,13 @@ namespace CarSales.Core.Services
                 UserName = viewModel.UserName,
                 Email = viewModel.Email,
                 PhoneNumber = viewModel.PhoneNumber,
-                Credits = viewModel.Credits,
+                Gender = viewModel.Gender,
                 ImageUrl = viewModel.ImageUrl
             };
 
             return editModel;
         }
+
+
     }
 }

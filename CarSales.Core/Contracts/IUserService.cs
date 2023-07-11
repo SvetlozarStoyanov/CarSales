@@ -6,13 +6,8 @@ namespace CarSales.Core.Contracts
 {
     public interface IUserService
     {
-        /// <summary>
-        /// Gets <see cref="User"/> with given <paramref name="userId"/>
-        /// </summary>
-        /// <param name="userId"></param>
-        /// <returns><see cref="User"/></returns>
-        Task<UserViewModel> GetUserByIdAsync(string userId);
 
+        Task<bool> CanEditProfileAsync(string userId, string loggedInUserId);
         /// <summary>
         /// Returns the <see cref="User.Credits"/> of <see cref="User"/>
         /// with <paramref name="userId"/> taking into account all <see cref="Offer"/>s the <see cref="User"/>
@@ -32,6 +27,26 @@ namespace CarSales.Core.Contracts
         /// <returns><see cref="decimal"/></returns>
         Task<decimal> GetUserAvailableCreditsAsync(string userId, int offerId);
 
+        /// <summary>
+        /// Gets <see cref="User"/> with given <paramref name="userId"/>
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns><see cref="UserViewModel"/></returns>
+        Task<UserViewModel> GetUserByIdAsync(string userId);
+
+        /// <summary>
+        /// Creates a <see cref="UserEditModel"/> from <see cref="User"/> with id given <paramref name="userId"/>
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns><see cref="UserEditModel"/></returns>
+        Task<UserEditModel> CreateUserEditModelAsync(string userId);
+
+
+        /// <summary>
+        /// Edits <see cref="User"/> information with information from <paramref name="model"/>
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         Task EditUserAsync(UserEditModel model);
     }
 }
