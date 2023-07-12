@@ -13,8 +13,8 @@
         <li class="nav-item dropdown">
             <a class="nav-link active dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">My Account</a>
             <div class="dropdown-menu">
-                @*<a class="nav-link">My account</a>
-                <div class="dropdown-divider"></div>*@
+                <a class="nav-link active" asp-area="Reviewer" asp-controller="Users" asp-action="Details" asp-route-id="@user.Id">My Profile</a>
+                <div class="dropdown-divider"></div>
                 <a class="nav-link active" asp-area="Reviewer" asp-controller="Reviewers" asp-action="EditReviewPrices">Edit Review Prices</a>
                 <a class="nav-link active" asp-area="Reviewer" asp-controller="Reviews" asp-action="Mine">My reviews</a>
                 <div class="dropdown-divider"></div>

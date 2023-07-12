@@ -6,14 +6,21 @@
 <ul class="navbar-nav">
     @if (SignInManager.IsSignedIn(User))
     {
+        var user = await UserManager.GetUserAsync(User);
         <li class="nav-item">
-            <a class="nav-link active" asp-area="Admin" asp-controller="Vehicles" asp-action="Mine">My vehicles</a>
+            <a class="nav-link active" disabled><span id="userCredits">@user.Credits</span> credits</a>
         </li>
-        @*        <li class="nav-item">
-    <a class="nav-link active">My account</a>
-    </li>*@
-        <li class="nav-item">
-            <a class="nav-link active" asp-area="" asp-controller="Users" asp-action="Logout" class="nav-link active">Logout</a>
+        <li class="nav-item dropdown">
+            <a class="nav-link active dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">My Account</a>
+            <div class="dropdown-menu">
+                <a class="nav-link active" asp-area="Admin" asp-controller="Users" asp-action="Details" asp-route-id="@user.Id">My Profile</a>
+                <div class="dropdown-divider"></div>
+                <a class="nav-link active" asp-area="Admin" asp-controller="Vehicles" asp-action="Mine">My Vehicles</a>
+@*                <div class="dropdown-divider"></div>
+                <a class="nav-link active" asp-area="Admin" asp-controller="Offers" asp-action="Outgoing">My Offers</a>*@
+                <div class="dropdown-divider"></div>
+                <a class="nav-link active" asp-area="" asp-controller="Users" asp-action="Logout">Logout</a>
+            </div>
         </li>
     }
     else
