@@ -1,0 +1,81 @@
+﻿@model UserEditModel
+@{
+    ViewData["Title"] = $"{Model.FirstName} {Model.LastName}";
+    string defaultImage = $"/img/Profile/{Model.Gender}Profile.png";
+    string profilePicture = Model.ImageUrl != null ? Model.ImageUrl : defaultImage;
+}
+<input value="@defaultImage" id="defaultProfilePicture" hidden />
+<section class="text-white d-flex flex-lg-row flex-column justify-content-lg-around justify-content-between">
+    <form asp-area="Admin" asp-controller="Users" asp-action="Edit" method="post">
+        <input asp-for="@Model.Id" hidden />
+        <input asp-for="@Model.Gender" hidden />
+        <article class="d-flex flex-column justify-content-between bg-secondary bg-opacity-50 px-5 py-3 border border-5 border-white rounded-5">
+            <ul class="list-unstyled">
+                <li>
+                    <span asp-validation-for="@Model.FirstName" class="text-danger"></span>
+                </li>
+                <li>
+                    <span asp-validation-for="@Model.LastName" class="text-danger"></span>
+                </li>
+                <li>
+                    <span asp-validation-for="@Model.UserName" class="text-danger"></span>
+                </li>
+                <li>
+                    <span asp-validation-for="@Model.Email" class="text-danger"></span>
+                </li>
+                <li>
+                    <span asp-validation-for="@Model.PhoneNumber" class="text-danger text-wrap"></span>
+                </li>
+                <li>
+                    <span asp-validation-for="@Model.ImageUrl" class="text-danger text-wrap"></span>
+                </li>
+            </ul>
+            <div class="d-flex flex-row justify-content-between gap-5 mt-1 mb-1">
+                <div class="form-group">
+                    <label asp-for="@Model.FirstName" class="form-label">First name</label>
+                    <input asp-for="@Model.FirstName" class="form-control" required />
+                </div>
+                <div class="form-group">
+                    <label asp-for="@Model.LastName" class="form-label">Last name</label>
+                    <input asp-for="@Model.LastName" class="form-control" required />
+                </div>
+            </div>
+            <div class="d-flex flex-row justify-content-between gap-5 mt-1 mb-1">
+                <div class="form-group">
+                    <label asp-for="@Model.UserName" class="form-label">Username</label>
+                    <input asp-for="@Model.UserName" class="form-control" required />
+                </div>
+                <div class="form-group">
+                    <label asp-for="@Model.Email" class="form-label">Email</label>
+                    <input asp-for="@Model.Email" class="form-control" required />
+                </div>
+            </div>
+            <div class="form-group mt-3 mb-3">
+                <label asp-for="@Model.PhoneNumber" class="form-label">Phone Number </label>
+                <div class="form-floating text-secondary">
+                    <input type="tel" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" placeholder="Format: 123-456-7890" asp-for="@Model.PhoneNumber" class="form-control" />
+                    <label class="form-label">Format: 123-456-7890</label>
+                </div>
+            </div>
+            <div class="flex-shrink-1 align-self-center basic-transition mt-3 mb-3">
+                <img class="border border-info border-5 rounded-4 basic-transition" id="profilePicture"
+                     style="height:250px;width:250px;object-fit:cover"
+                     src="@profilePicture" alt="profilePicture" />
+                <h5 class="m-0 d-flex flex-column align-items-center justify-content-center border border-info border-5 basic-transition d-none text-danger"
+                    id="imageErrorHeader"
+                    style="height:250px;width:250px;object-fit:none">
+                    <span>Image Url does not exist!</span>
+                </h5>
+            </div>
+            <div class="form-group mt-3 mb-3 order-md-0">
+                <label asp-for="@Model.ImageUrl" class="form-label">Image Url</label>
+                <input asp-for="@Model.ImageUrl" id="imageUrl" class="form-control" />
+            </div>
+            <div class="text-center mt-2 mb-2 w-100">
+                <button class="btn btn-success w-100" type="submit" disabled>Save changes</button>
+            </div>
+        </article>
+    </form>
+</section>
+
+<script src="~/js/Users/edit.js"></script>
