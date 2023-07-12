@@ -24,6 +24,12 @@ namespace CarSales.Web.Areas.Owner.Controllers
         public async Task<IActionResult> Edit(string id)
         {
             var model = await userService.CreateUserEditModelAsync(id);
+            var canEditProfile = await userService.CanEditProfileAsync(id, User.Id());
+            if (!canEditProfile)
+            {
+                TempData["error"] = "Can only edit own profile!";
+                return RedirectToAction(nameof(Details), new { id = id });
+            }
             return View(model);
         }
 
@@ -35,7 +41,7 @@ namespace CarSales.Web.Areas.Owner.Controllers
                 return View(model);
             }
             await userService.EditUserAsync(model);
-            return RedirectToAction("Index", "Home", new { area = "Owner" });
+            return RedirectToAction(nameof(Details), new { id = model.Id });
         }
     }
 }
