@@ -2,16 +2,22 @@
 @using Microsoft.AspNetCore.Identity
 @inject SignInManager<User> SignInManager
 @inject UserManager<User> UserManager
+@{
+    var user = await UserManager.GetUserAsync(User);
 
-<ul class="navbar-nav">
+    string defaultImage = $"/img/Profile/{user.Gender}Profile.png";
+    string profilePicture = user.ImageUrl != null ? user.ImageUrl : defaultImage;
+}
+<ul class="navbar-nav me-5 d-flex align-items-lg-center">
     @if (SignInManager.IsSignedIn(User))
     {
-        var user = await UserManager.GetUserAsync(User);
         <li class="nav-item">
             <a class="nav-link active" disabled><span id="userCredits">@user.Credits</span> credits</a>
         </li>
-        <li class="nav-item dropdown">
-            <a class="nav-link active dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">My Account</a>
+        <li class="dropdown">
+            <a class="d-flex align-items-center m-1" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                <img class="custom-avatar-img border border-1 border-info rounded-circle" src="@profilePicture" />
+            </a>
             <div class="dropdown-menu">
                 <a class="nav-link active" asp-area="Admin" asp-controller="Users" asp-action="Details" asp-route-id="@user.Id">My Profile</a>
                 <div class="dropdown-divider"></div>
