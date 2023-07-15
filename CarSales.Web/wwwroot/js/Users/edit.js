@@ -5,7 +5,7 @@ const defaultProfilePictureSrc = document.querySelector('#defaultProfilePicture'
 const form = document.querySelector('form');
 
 const imageErrorHeader = document.querySelector('#imageErrorHeader');
-const urlRegex = new RegExp("(www|http:|https:)+[^\s]+[\w]");
+const urlRegex = /(www|http:|https:)+[^\s]+[\w*]/g;
 
 
 
@@ -19,6 +19,7 @@ for (const input of formInputs) {
                 request.open('GET', imageUrlInput.value, true);
                 request.onreadystatechange = function () {
                     if (request.readyState === 4) {
+                        console.log('image loaded');
                         if (request.status !== 200) {
                             imageErrorHeader.classList.remove('d-none');
                             profilePicture.classList.add('d-none');
