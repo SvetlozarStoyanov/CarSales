@@ -9,7 +9,7 @@
     <form asp-area="Admin" asp-controller="Users" asp-action="Edit" method="post">
         <input asp-for="@Model.Id" hidden />
         <input asp-for="@Model.Gender" hidden />
-        <article class="d-flex flex-column justify-content-between bg-secondary bg-opacity-50 px-5 py-3 border border-5 border-white rounded-5">
+        <article class="d-flex flex-column justify-content-between bg-secondary bg-opacity-10 px-5 py-3 border border-5 border-white rounded-5">
             <ul class="list-unstyled">
                 <li>
                     <span asp-validation-for="@Model.FirstName" class="text-danger"></span>
@@ -61,7 +61,7 @@
                 <img class="border border-info border-5 rounded-4 basic-transition" id="profilePicture"
                      style="height:250px;width:250px;object-fit:cover"
                      src="@profilePicture" alt="profilePicture" />
-                <h5 class="m-0 d-flex flex-column align-items-center justify-content-center border border-info border-5 basic-transition d-none text-danger"
+                <h5 class="m-0 text-center d-flex flex-column align-items-center justify-content-center border border-info border-5 basic-transition d-none text-danger"
                     id="imageErrorHeader"
                     style="height:250px;width:250px;object-fit:none">
                     <span>Image Url does not exist!</span>
