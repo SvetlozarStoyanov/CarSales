@@ -30,9 +30,6 @@ namespace CarSales.Web.Areas.Admin.Controllers
         public async Task<IActionResult> Details(int id)
         {
             var model = await roleRequestService.GetRoleRequestByIdAsync(id);
-            var user = await userManager.FindByIdAsync(model.UserId);
-            var roles = await userManager.GetRolesAsync(user);
-            model.UserRoles = roles;
             return View(model);
         }
 
