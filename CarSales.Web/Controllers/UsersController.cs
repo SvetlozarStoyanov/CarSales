@@ -48,7 +48,10 @@ namespace CarSales.Web.Controllers
                 FirstName = model.FirstName,
                 LastName = model.LastName,
                 UserName = model.Username,
-                Email = model.Email
+                Email = model.Email,
+                Gender = model.Gender,
+                ImageUrl = model.ImageUrl,
+                PhoneNumber = model.PhoneNumber
             };
             var userNameIsTaken = await userManager.Users.AnyAsync(u => u.UserName == model.Username);
             if (userNameIsTaken)
