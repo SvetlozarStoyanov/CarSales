@@ -2,7 +2,7 @@
 @model RoleRequestViewModel
 
 @{
-    ViewBag.Title = "Role Request Details";
+    ViewData["Title"] = $"{Model.UserModel.UserName} request";
     string roleController = Model.RoleName + "s";
     if (Model.RoleName.EndsWith("man"))
     {
@@ -11,33 +11,15 @@
     string roleAction = $"Grant{Model.RoleName}Role";
 }
 
-<h2 class="text-center">@ViewBag.Title</h2>
+<div class="container mt-3 mb-3">
 
-
-<div class="container" style="display:inline">
-    <div class="row">
-        <div class="card col-8 border-0">
-            <p style="font-size:25px;">@Model.UserName</p>
-            <p>
-                Requested Role:
-                <b>@Model.RoleName</b>
-            </p>
-            <span>
-                <a class="btn btn-primary" asp-area="Admin" asp-controller="@roleController" asp-action="@roleAction" asp-route-userid="@Model.UserId" asp-route-roleRequestid="@Model.Id">Grant role</a>
-                <a class="btn btn-danger" asp-area="Admin" asp-controller="RoleRequests" asp-action="DeleteRequest" asp-route-id="@Model.Id">Deny role</a>
-            </span>
-            <div class="container">
-                <h2>Roles</h2>
-                @foreach (var role in Model.UserRoles)
-                {
-                    <div class="card" style="width: 18rem;">
-                        <div class="card-body">
-                            <h5 class="card-title">@role</h5>
-                            <p class="card-text"></p>
-                        </div>
-                    </div>
-                }
-            </div>
-        </div>
+    <partial name="_UserWithRolesPartial" model="Model.UserModel" />
+    <h2 class="text-center mt-3 mb-3">
+        Requested Role:
+        <b>@Model.RoleName</b>
+    </h2>
+    <div class="text-center mt-3 mb-3">
+        <a class="btn btn-lg btn-info mx-2" asp-area="Admin" asp-controller="@roleController" asp-action="@roleAction" asp-route-userid="@Model.UserModel.Id" asp-route-roleRequestid="@Model.Id">Grant role</a>
+        <a class="btn btn-lg btn-danger mx-2" asp-area="Admin" asp-controller="RoleRequests" asp-action="DeleteRequest" asp-route-id="@Model.Id">Deny role</a>
     </div>
 </div>
