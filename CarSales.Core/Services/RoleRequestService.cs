@@ -1,7 +1,10 @@
 ﻿using AirsoftMatchMaker.Infrastructure.Data.Common.Repository;
 using CarSales.Core.Contracts;
 using CarSales.Core.Models.RoleRequests;
+using CarSales.Core.Models.Users;
 using CarSales.Infrastructure.Data.Entities;
+using Microsoft.AspNet.Identity.EntityFramework;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace CarSales.Core.Services
@@ -83,10 +86,28 @@ namespace CarSales.Core.Services
                Id = rrq.Id,
                RoleId = rrq.RoleId,
                RoleName = rrq.Role.Name,
-               UserId = rrq.UserId,
-               UserName = rrq.User.UserName
+               UserModel = new UserWithRolesModel()
+               {
+                   Id = rrq.UserId,
+                   FirstName = rrq.User.FirstName,
+                   LastName = rrq.User.LastName,
+                   UserName = rrq.User.UserName,
+                   Gender = rrq.User.Gender,
+                   ImageUrl = rrq.User.ImageUrl,
+                   Email = rrq.User.Email
+               }
            })
            .FirstOrDefaultAsync();
+
+            var userRoles = await repository.AllReadOnly<Microsoft.AspNetCore.Identity.IdentityUserRole<string>>()
+                .Where(ur => ur.UserId == roleRequest.UserModel.Id)
+                .Select(ur => ur.RoleId)
+                .ToListAsync();
+            var roles = await repository.AllReadOnly<Role>()
+                .Where(r => userRoles.Contains(r.Id))
+                .Select(r => r.Name)
+                .ToListAsync();
+            roleRequest.UserModel.Roles = roles.ToHashSet();
             return roleRequest;
         }
 
