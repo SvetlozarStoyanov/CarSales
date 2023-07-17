@@ -21,9 +21,15 @@ namespace CarSales.Web.Areas.Admin.Controllers
             this.roleRequestService = roleRequestService;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index([FromQuery] RoleRequestsQueryModel model)
         {
-            var model = await roleRequestService.GetAllRoleRequestsAsync();
+            var queryResult = await roleRequestService.GetAllRoleRequestsAsync(model.SearchTerm,
+                model.CurrentPage,
+                model.RoleRequestsPerPage,
+                model.SelectedUserName,
+                model.SelectedRoleNames,
+                model.Sorting);
+            model = queryResult;
             return View(model);
         }
 
