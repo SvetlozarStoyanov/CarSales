@@ -1,8 +1,10 @@
 ﻿using AirsoftMatchMaker.Infrastructure.Data.Common.Repository;
 using CarSales.Core.Contracts;
+using CarSales.Core.Enums;
 using CarSales.Core.Models.RoleRequests;
 using CarSales.Core.Models.Users;
 using CarSales.Infrastructure.Data.Entities;
+using CarSales.Infrastructure.Data.Enums;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -59,21 +61,76 @@ namespace CarSales.Core.Services
             await repository.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<RoleRequestListModel>> GetAllRoleRequestsAsync()
+        public async Task<RoleRequestsQueryModel> GetAllRoleRequestsAsync(string searchTerm = null,
+            int currentPage = 1,
+            int roleRequestsPerPage = 12,
+            string selectedUserName = null,
+            string selectedRoleNames = null,
+            RoleRequestSorting sorting = RoleRequestSorting.Newest)
         {
             var roleRequests = await repository.AllReadOnly<RoleRequest>()
                 .Include(rrq => rrq.Role)
                 .Include(rrq => rrq.User)
-                .Select(rrq => new RoleRequestListModel()
-                {
-                    Id = rrq.Id,
-                    RoleId = rrq.RoleId,
-                    RoleName = rrq.Role.Name,
-                    UserId = rrq.UserId,
-                    UserName = rrq.User.UserName
-                })
                 .ToListAsync();
-            return roleRequests;
+
+            if (!string.IsNullOrWhiteSpace(selectedRoleNames))
+            {
+                var selectedRoles = selectedRoleNames.Split(';', StringSplitOptions.RemoveEmptyEntries)
+                      .ToList();
+                roleRequests = roleRequests
+                     .Where(rrq => selectedRoles.Contains(rrq.Role.Name))
+                     .ToList();
+            }
+            var userNames = roleRequests
+                .Select(rrq => rrq.User.UserName)
+                .ToHashSet();
+
+
+            if (!string.IsNullOrWhiteSpace(searchTerm))
+            {
+                roleRequests = roleRequests
+                    .Where(rrq => rrq.User.UserName.ToLower().Contains(searchTerm) 
+                    || rrq.Role.Name.ToLower().Contains(searchTerm) )
+                    .ToList();
+            }
+
+            if (!string.IsNullOrWhiteSpace(selectedUserName))
+            {
+                roleRequests = roleRequests
+                    .Where(rrq => rrq.User.UserName == selectedUserName)
+                    .ToList();
+            }
+
+
+            switch (sorting)
+            {
+                case RoleRequestSorting.Newest:
+                    roleRequests = roleRequests
+                          .OrderByDescending(rrq => rrq.Id)
+                          .ToList();
+                    break;
+                case RoleRequestSorting.Oldest:
+                    roleRequests = roleRequests
+                          .OrderBy(rrq => rrq.Id)
+                          .ToList();
+                    break;
+            }
+            var roleRequestCount = roleRequests.Count;
+            var sortedRoleRequests = roleRequests
+                    .Skip(roleRequestsPerPage * (currentPage - 1))
+                    .Take(roleRequestsPerPage)
+                    .Select(rrq => new RoleRequestListModel()
+                    {
+                        Id = rrq.Id,
+                        RoleId = rrq.RoleId,
+                        RoleName = rrq.Role.Name,
+                        UserId = rrq.UserId,
+                        UserName = rrq.User.UserName
+                    })
+                   .ToList();
+            var queryModel = await CreateRoleRequestsQueryModel(searchTerm, currentPage, roleRequestsPerPage, selectedUserName, selectedRoleNames, sortedRoleRequests, userNames, roleRequestCount);
+            return queryModel;
+
         }
 
         public async Task<RoleRequestViewModel> GetRoleRequestByIdAsync(int id)
@@ -126,5 +183,55 @@ namespace CarSales.Core.Services
                 .ToListAsync();
             return requestedRoles;
         }
+
+
+        private async Task<RoleRequestsQueryModel> CreateRoleRequestsQueryModel(string searchTerm, int currentPage, int roleRequestsPerPage, string selectedUserName, string selectedRoleNames, List<RoleRequestListModel> roleRequests, HashSet<string?> userNames, int roleRequestCount)
+        {
+            var model = new RoleRequestsQueryModel()
+            {
+                SearchTerm = searchTerm,
+                CurrentPage = currentPage,
+                RoleRequestsPerPage = roleRequestsPerPage,
+                MaxPage = (int)Math.Ceiling(roleRequestCount / (double)roleRequestsPerPage),
+                SelectedUserName = selectedUserName,
+                SelectedRoleNames = selectedRoleNames,
+                RoleRequests = roleRequests,
+                UserNames = userNames
+            };
+            var roleNames = await repository.AllReadOnly<Role>()
+                .Where(r => r.Name != "Owner" && r.Name != "Administrator")
+                .Select(r => r.Name)
+                .ToListAsync();
+            model.RoleNames = roleNames.ToHashSet();
+
+            if (model.MaxPage > 1)
+            {
+                var previousPages = new HashSet<int>();
+                var nextPages = new HashSet<int>();
+                //var pagesToMaxPage = model.MaxPage - model.CurrentPage;
+                var numberOfPages = 0;
+                var index = 1;
+                while (numberOfPages < 4 && numberOfPages < model.MaxPage - 1)
+                {
+                    var previousPage = model.CurrentPage - index;
+                    var nextPage = model.CurrentPage + index;
+                    if (previousPage >= 1)
+                    {
+                        previousPages.Add(previousPage);
+                        numberOfPages++;
+                    }
+                    if (nextPage <= model.MaxPage)
+                    {
+                        nextPages.Add(nextPage);
+                        numberOfPages++;
+                    }
+                    index++;
+                }
+                model.PreviousPages = previousPages.Reverse();
+                model.NextPages = nextPages;
+            }
+            return model;
+        }
+
     }
 }

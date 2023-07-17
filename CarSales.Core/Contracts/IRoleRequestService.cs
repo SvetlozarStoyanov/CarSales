@@ -1,14 +1,27 @@
-﻿using CarSales.Core.Models.RoleRequests;
+﻿using CarSales.Core.Enums;
+using CarSales.Core.Models.RoleRequests;
 
 namespace CarSales.Core.Contracts
 {
     public interface IRoleRequestService
     {
         /// <summary>
-        /// Returns all role requests
+        /// Returns <see cref="RoleRequestsQueryModel"/> and allows filtering and sorting of
+        /// Role Requests
         /// </summary>
-        /// <returns><see cref="IEnumerable{RoleRequestListModel}"/></returns>
-        Task<IEnumerable<RoleRequestListModel>> GetAllRoleRequestsAsync();
+        /// <param name="searchTerm"></param>
+        /// <param name="currentPage"></param>
+        /// <param name="roleRequestsPerPage"></param>
+        /// <param name="selectedUserName"></param>
+        /// <param name="selectedRoleNames"></param>
+        /// <param name="sorting"></param>
+        /// <returns></returns>
+        Task<RoleRequestsQueryModel> GetAllRoleRequestsAsync(string searchTerm = null,
+            int currentPage = 1,
+            int roleRequestsPerPage = 12,
+            string selectedUserName = null,
+            string selectedRoleNames = null,
+            RoleRequestSorting sorting = RoleRequestSorting.Newest);
 
         /// <summary>
         /// Returns role request with given Id
