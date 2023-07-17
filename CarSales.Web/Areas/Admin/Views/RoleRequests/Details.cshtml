@@ -11,15 +11,21 @@
     string roleAction = $"Grant{Model.RoleName}Role";
 }
 
-<div class="container mt-3 mb-3">
+<div class="d-flex flex-column align-items-center mt-3 mb-3">
 
     <partial name="_UserWithRolesPartial" model="Model.UserModel" />
-    <h2 class="text-center mt-3 mb-3">
-        Requested Role:
-        <b>@Model.RoleName</b>
-    </h2>
-    <div class="text-center mt-3 mb-3">
-        <a class="btn btn-lg btn-info mx-2" asp-area="Admin" asp-controller="@roleController" asp-action="@roleAction" asp-route-userid="@Model.UserModel.Id" asp-route-roleRequestid="@Model.Id">Grant role</a>
-        <a class="btn btn-lg btn-danger mx-2" asp-area="Admin" asp-controller="RoleRequests" asp-action="DeleteRequest" asp-route-id="@Model.Id">Deny role</a>
+    <div class="text-center mt-3 mb-3 p-5 bg-primary border border-3 border-white rounded-5">
+        <h2 class="text-center text-white mt-3 mb-3">
+            Requested Role:
+            <b>@Model.RoleName</b>
+        </h2>
+        <a class="btn btn-lg btn-success mx-2" asp-area="Admin" asp-controller="@roleController" asp-action="@roleAction"
+           asp-route-userid="@Model.UserModel.Id" asp-route-roleRequestid="@Model.Id">
+            Grant role
+        </a>
+        <a class="btn btn-lg btn-danger mx-2"
+           asp-area="Admin" asp-controller="RoleRequests" asp-action="DeleteRequest" asp-route-id="@Model.Id">
+            Deny role
+        </a>
     </div>
 </div>
