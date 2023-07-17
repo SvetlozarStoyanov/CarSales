@@ -14,7 +14,6 @@ namespace CarSales.Core.Models.Vehicles
             Vehicles = new List<VehicleListModel>();
         }
 
-        [Display(Name = "Sorting")]
         public string? SearchTerm { get; set; }
         public int VehiclesPerPage { get; set; } = 6;
         public int VehicleCount { get; set; }
@@ -22,6 +21,7 @@ namespace CarSales.Core.Models.Vehicles
         public int FirstPage { get; set; } = 1;
         public int MaxPage { get; set; }
         public string? SelectedVehicleTypes { get; set; }
+        [Display(Name = "Sorting")]
         public VehicleSorting VehicleSorting { get; set; }
         public IEnumerable<VehicleSorting> SortingOptions { get; set; }
         public IEnumerable<int> PreviousPages { get; set; }
