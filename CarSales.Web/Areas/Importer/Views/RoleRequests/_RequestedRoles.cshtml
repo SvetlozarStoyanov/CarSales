@@ -3,43 +3,45 @@
     int i = 0;
 }
 
-<h2 class="text-center">Requested Roles</h2>
-<table class=" table table-bordered  table-striped" style="width:100%">
-    <thead>
-        <tr>
-            <th>
-                Name
-            </th>
-            <th>
-                Description
-            </th>
-            <th>
-
-            </th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var role in Model)
-        {
+<h2 class="text-center mt-3 mb-3">Requested Roles</h2>
+<div class="table-responsive">
+    <table class="table table-hover table-bordered border-white table-striped">
+        <thead>
             <tr>
-                <td width="30%">
-                    @role.Name
-                </td>
-                <td width="50%">
-                    @role.Description
-                </td>
-                <td>
-                    <div class="w-75 btn-group" role="group">
-                        @if (role.Name != "Owner" && role.Name != "Administrator")
-                        {
-                            <a asp-area="Salesman" asp-controller="RoleRequests" asp-action="DeleteRoleRequest" asp-route-id="@ViewBag.RequestedRoleIds[i++]" class="btn btn-danger mx-2">
-                                <i class="bi bi-trash"></i>
-                                Cancel Request
-                            </a>
-                        }
-                    </div>
-                </td>
+                <th>
+                    Name
+                </th>
+                <th>
+                    Description
+                </th>
+                <th>
+
+                </th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var role in Model)
+            {
+                <tr>
+                    <td >
+                        @role.Name
+                    </td>
+                    <td >
+                        @role.Description
+                    </td>
+                    <td>
+                        <div class="d-flex justify-content-center w-100">
+                            @if (role.Name != "Owner" && role.Name != "Administrator")
+                            {
+                                <a class="btn btn-danger mx-2" asp-area="Salesman" asp-controller="RoleRequests" asp-action="DeleteRoleRequest" asp-route-id="@ViewBag.RequestedRoleIds[i++]">
+                                    <i class="bi bi-trash"></i>
+                                    <span class="d-lg-inline d-none">Cancel Request</span>
+                                </a>
+                            }
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
