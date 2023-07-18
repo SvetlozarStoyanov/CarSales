@@ -12,28 +12,89 @@
     @if (SignInManager.IsSignedIn(User))
     {
         <li class="nav-item">
-            <a class="nav-link" disabled><span id="userCredits">@user.Credits </span>credits</a>
+            <a class="nav-link active" disabled><span id="userCredits">@user.Credits</span> credits</a>
         </li>
         <li class="dropdown">
-            <a class="d-flex align-items-center m-1" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-                <img class="custom-avatar-img border border-1 border-info rounded-circle" src="@profilePicture" />
+            <a class="d-flex align-items-center m-1" data-bs-auto-close="outside" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                <img class="custom-avatar-img border border-3 border-dark rounded-circle" src="@profilePicture" />
             </a>
-            <div class="dropdown-menu">
-                <a class="nav-link" asp-area="Salesman" asp-controller="Users" asp-action="Details" asp-route-id="@user.Id">My Profile</a>
-                <div class="dropdown-divider"></div>
-                <h5 class="p-2 text-light">My Vehicles</h5>
-                <a class="nav-link" asp-area="Salesman" asp-controller="Vehicles" asp-action="Mine">Owned</a>
-                <a class="nav-link" asp-area="Salesman" asp-controller="Vehicles" asp-action="MyVehiclesOnSale">On Sale</a>
-                <div class="dropdown-divider"></div>
-                <h5 class="p-2 text-light">My Offers</h5>
-                <a class="nav-link" asp-area="Salesman" asp-controller="Offers" asp-action="Outgoing">Outgoing</a>
-                <a class="nav-link" asp-area="Salesman" asp-controller="Offers" asp-action="Incoming">Incoming</a>
-                <div class="dropdown-divider"></div>
-                <a class="nav-link" asp-area="" asp-controller="Users" asp-action="Logout">Logout</a>
-            </div>
+            <ul class="dropdown-menu">
+                <li class="dropstart">
+                    <a class="nav-link active" data-bs-toggle="dropdown" href="#">
+                        <span class="d-none d-md-inline">
+                            <i class="bi bi-caret-left-fill"></i>
+                        </span>
+                        My Profile
+                        <span class="d-md-none d-sm-inline">
+                            <i class="bi bi-caret-down-fill"></i>
+                        </span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-submenu">
+                        <li>
+                            <a class="nav-link active" asp-area="Salesman" asp-controller="Users" asp-action="Details" asp-route-id="@user.Id">Details</a>
+                        </li>
+                        <li>
+                            <a class="nav-link active" asp-area="Salesman" asp-controller="Users" asp-action="Edit" asp-route-id="@user.Id">Edit</a>
+                        </li>
+                        <li>
+                            <a class="nav-link active" asp-area="Salesman" asp-controller="RoleRequests" asp-action="Index">Roles</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <div class="dropdown-divider"></div>
+                </li>
+                <li class="dropstart">
+                    <a class="nav-link active" data-bs-toggle="dropdown" href="#">
+                        <span class="d-none d-md-inline">
+                            <i class="bi bi-caret-left-fill"></i>
+                        </span>
+                        My Vehicles
+                        <span class="d-md-none d-sm-inline">
+                            <i class="bi bi-caret-down-fill"></i>
+                        </span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-submenu">
+                        <li>
+                            <a class="nav-link active" asp-area="Salesman" asp-controller="Vehicles" asp-action="Mine">Owned</a>
+                        </li>
+                        <li>
+                            <a class="nav-link active" asp-area="Salesman" asp-controller="Vehicles" asp-action="MyVehiclesOnSale">On Sale</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <div class="dropdown-divider"></div>
+                </li>
+                <li class="dropstart">
+                    <a class="nav-link active" data-bs-toggle="dropdown" href="#">
+                        <span class="d-none d-md-inline">
+                            <i class="bi bi-caret-left-fill"></i>
+                        </span>
+                        My Offers
+                        <span class="d-md-none d-sm-inline">
+                            <i class="bi bi-caret-down-fill"></i>
+                        </span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-submenu">
+                        <li>
+                            <a class="nav-link active" asp-area="Salesman" asp-controller="Offers" asp-action="Outgoing">Outgoing</a>
+                        </li>
+                        <li>
+                            <a class="nav-link active" asp-area="Salesman" asp-controller="Offers" asp-action="Incoming">Incoming</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <div class="dropdown-divider"></div>
+                </li>
+                <li>
+                    <a class="nav-link active" asp-area="" asp-controller="Users" asp-action="Logout">Logout</a>
+                </li>
+            </ul>
         </li>
 
-    
+
 
     }
     else
