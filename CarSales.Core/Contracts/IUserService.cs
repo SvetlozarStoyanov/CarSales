@@ -7,7 +7,24 @@ namespace CarSales.Core.Contracts
     public interface IUserService
     {
 
+        /// <summary>
+        /// Returns true if <see cref="User"/> with different <see cref="User"/>.Id <paramref name="userName"/> exists,
+        /// returns false otherwise
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="userName"></param>
+        /// <returns><see cref="bool"/></returns>
+        Task<bool> IsUserNameTakenAsync(string id, string userName);
+
+        /// <summary>
+        /// Returns true if <paramref name="userId"/> is equal to <paramref name="loggedInUserId"/>,
+        /// returns false otherwise
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="loggedInUserId"></param>
+        /// <returns><see cref="bool"/></returns>
         Task<bool> CanEditProfileAsync(string userId, string loggedInUserId);
+
         /// <summary>
         /// Returns the <see cref="User.Credits"/> of <see cref="User"/>
         /// with <paramref name="userId"/> taking into account all <see cref="Offer"/>s the <see cref="User"/>

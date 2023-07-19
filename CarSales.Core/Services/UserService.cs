@@ -15,6 +15,22 @@ namespace CarSales.Core.Services
             this.repository = repository;
         }
 
+        public async Task<bool> IsUserNameTakenAsync(string id, string userName)
+        {
+            var userWithUserName = await repository.AllReadOnly<User>()
+                .FirstOrDefaultAsync(u => u.UserName == userName);
+
+            if (userWithUserName != null)
+            {
+                if (userWithUserName.Id == id)
+                {
+                    return false;
+                }
+                return true;
+            }
+            return false;
+        }
+
         public async Task<bool> CanEditProfileAsync(string id, string loggedInUserId)
         {
             if (loggedInUserId == id)
@@ -23,6 +39,7 @@ namespace CarSales.Core.Services
             }
             return false;
         }
+
         public async Task<decimal> GetUserAvailableCreditsAsync(string id)
         {
             var owner = await repository.AllReadOnly<Owner>()
