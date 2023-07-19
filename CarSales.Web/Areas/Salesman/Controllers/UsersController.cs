@@ -40,6 +40,13 @@ namespace CarSales.Web.Areas.Salesman.Controllers
             {
                 return View(model);
             }
+
+            if (await userService.IsUserNameTakenAsync(User.Id(), model.UserName))
+            {
+                TempData["error"] = $"Username {model.UserName} is already taken!";
+                return View(model);
+            }
+
             await userService.EditUserAsync(model);
             return RedirectToAction(nameof(Details), new { id = model.Id });
         }

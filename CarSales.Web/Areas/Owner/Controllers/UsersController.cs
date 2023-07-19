@@ -23,13 +23,13 @@ namespace CarSales.Web.Areas.Owner.Controllers
         [HttpGet]
         public async Task<IActionResult> Edit(string id)
         {
-            var model = await userService.CreateUserEditModelAsync(id);
             var canEditProfile = await userService.CanEditProfileAsync(id, User.Id());
             if (!canEditProfile)
             {
                 TempData["error"] = "Can only edit own profile!";
                 return RedirectToAction(nameof(Details), new { id = id });
             }
+            var model = await userService.CreateUserEditModelAsync(id);
             return View(model);
         }
 
@@ -40,6 +40,13 @@ namespace CarSales.Web.Areas.Owner.Controllers
             {
                 return View(model);
             }
+
+            if (await userService.IsUserNameTakenAsync(User.Id(), model.UserName))
+            {
+                TempData["error"] = $"Username {model.UserName} is already taken!";
+                return View(model);
+            }
+
             await userService.EditUserAsync(model);
             return RedirectToAction(nameof(Details), new { id = model.Id });
         }
