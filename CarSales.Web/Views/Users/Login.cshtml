@@ -11,9 +11,9 @@
             <form id="account" method="post">
                 <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
                 <div class="form-floating mb-3">
-                    <input asp-for="@Model.Username" class="form-control" autocomplete="username" aria-required="true" placeholder="johndoe" />
-                    <label asp-for="@Model.Username" class="form-label">Username</label>
-                    <span asp-validation-for="@Model.Username" class="text-danger"></span>
+                    <input asp-for="@Model.UserName" class="form-control" autocomplete="username" aria-required="true" placeholder="johndoe" />
+                    <label asp-for="@Model.UserName" class="form-label">Username</label>
+                    <span asp-validation-for="@Model.UserName" class="text-danger"></span>
                 </div>
                 <div class="form-floating mb-3">
                     <input asp-for="@Model.Password" class="form-control" autocomplete="current-password" aria-required="true" placeholder="password" />
