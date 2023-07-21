@@ -10,33 +10,35 @@ namespace CarSales.Core.Models.Users
         {
             Genders = Enum.GetValues<Gender>().ToHashSet();
         }
-        [Required]
-        [MinLength(2), MaxLength(60)]
+        [Required(ErrorMessage = "Required field")]
+        [StringLength(60, MinimumLength = 2, ErrorMessage = "Length in range 2-60")]
         public string FirstName { get; set; } = null!;
 
-        [Required]
-        [MinLength(2), MaxLength(60)]
+        [Required(ErrorMessage = "Required field")]
+        [StringLength(60, MinimumLength = 2, ErrorMessage = "Length in range 2-60")]
         public string LastName { get; set; } = null!;
 
-        [Required]
-        [MinLength(5), MaxLength(60)]
-        public string Username { get; set; } = null!;
-        [Required]
-        [DataType(DataType.EmailAddress)]
+        [Required(ErrorMessage = "Required field")]
+        [StringLength(60, MinimumLength = 5, ErrorMessage = "Length in range 5-60")]
+        public string UserName { get; set; } = null!;
+
+        [Required(ErrorMessage = "Required field")]
+        [EmailAddress(ErrorMessage = "Must be valid email")]
         public string Email { get; set; } = null!;
         public Gender Gender { get; set; }
         public string? ImageUrl { get; set; }
-        [Phone]
+        [Phone(ErrorMessage = "Incorrect format")]
+        [RegularExpression("[0-9]{3}-[0-9]{3}-[0-9]{4}", ErrorMessage = "Incorrect format")]
         public string? PhoneNumber { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Required field")]
         [DataType(DataType.Password)]
-        [MinLength(6), MaxLength(60)]
+        [StringLength(60, MinimumLength = 6, ErrorMessage = "Length in range 6-60")]
         public string Password { get; set; } = null!;
 
-        [Required]
+        [Required(ErrorMessage = "Required field")]
         [DataType(DataType.Password)]
-        [Compare(nameof(Password))]
+        [Compare(nameof(Password), ErrorMessage = "Passwords do not match!")]
         [DisplayName("Confirm Password")]
         public string ConfirmPassword { get; set; } = null!;
 
