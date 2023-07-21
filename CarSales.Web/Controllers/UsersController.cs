@@ -47,13 +47,13 @@ namespace CarSales.Web.Controllers
             {
                 FirstName = model.FirstName,
                 LastName = model.LastName,
-                UserName = model.Username,
+                UserName = model.UserName,
                 Email = model.Email,
                 Gender = model.Gender,
                 ImageUrl = model.ImageUrl,
                 PhoneNumber = model.PhoneNumber
             };
-            var userNameIsTaken = await userManager.Users.AnyAsync(u => u.UserName == model.Username);
+            var userNameIsTaken = await userManager.Users.AnyAsync(u => u.UserName == model.UserName);
             if (userNameIsTaken)
             {
                 ModelState.AddModelError(string.Empty, "Username already taken!");
@@ -88,7 +88,7 @@ namespace CarSales.Web.Controllers
             {
                 return View(model);
             }
-            var result = await signInManager.PasswordSignInAsync(model.Username, model.Password, false, false);
+            var result = await signInManager.PasswordSignInAsync(model.UserName, model.Password, false, false);
             if (!result.Succeeded)
             {
                 ModelState.AddModelError(string.Empty, "Invalid login!");
