@@ -1,22 +1,45 @@
 ﻿const submitBtn = document.querySelector('button[type="submit"]');
 const profilePicture = document.querySelector('#profilePicture');
-const genderSelect = document.querySelector('#gender');
+const genderRadioButtons = document.querySelectorAll('.form-check-input');
+const genderInput = document.querySelector('#genderHiddenInput');
 const form = document.querySelector('form');
 const imageUrlInput = document.querySelector('#imageUrl');
 const imageErrorHeader = document.querySelector('#imageErrorHeader');
 const urlRegex = /(www|http:|https:)+[^\s]+[\w*]/g;
-let defaultProfilePicture = `/img/Profile/${genderSelect.value}Profile.png`;
+let defaultProfilePicture = `/img/Profile/${genderRadioButtons.value}Profile.png`;
 
 window.addEventListener('load', function (e) {
+    if (genderInput.value.length > 1) {
+        for (let genderRadioButton of genderRadioButtons) {
+            if (genderRadioButton.value === genderInput.value) {
+                genderRadioButton.checked = true;
+                defaultProfilePicture = `/img/Profile/${genderRadioButton.value}Profile.png`;
+
+            }
+        }
+    }
+    else {
+        genderRadioButtons[0].checked = true;
+        genderInput.value = genderRadioButtons[0].value;
+        defaultProfilePicture = `/img/Profile/${genderRadioButtons[0].value}Profile.png`;
+    }
+
+
     profilePicture.src = defaultProfilePicture;
 });
 
-genderSelect.addEventListener('change', function (e) {
-    defaultProfilePicture = `/img/Profile/${genderSelect.value}Profile.png`
-    if (imageUrlInput.value.length === 0) {
-        profilePicture.src = defaultProfilePicture;
-    }
-});
+for (const genderRadioButton of genderRadioButtons) {
+    genderRadioButton.addEventListener('change', function (e) {
+        e.currentTarget.checked = true;
+        const genderValue = e.currentTarget.value;
+        genderInput.value = genderValue;
+        defaultProfilePicture = `/img/Profile/${genderValue}Profile.png`;
+        Array.from(genderRadioButtons).filter(btn => btn.value != genderValue).map(btn => btn.checked = false);
+        if (imageUrlInput.value.length === 0) {
+            profilePicture.src = defaultProfilePicture;
+        }
+    });
+}
 
 imageUrlInput.addEventListener('input', function (e) {
     let imageUrl = e.currentTarget.value;
@@ -31,7 +54,6 @@ imageUrlInput.addEventListener('input', function (e) {
         request.open('GET', imageUrlInput.value, true);
         request.onreadystatechange = function () {
             if (request.readyState === 4) {
-                console.log('image loaded');
                 if (request.status !== 200) {
                     imageErrorHeader.classList.remove('d-none');
                     profilePicture.classList.add('d-none');
