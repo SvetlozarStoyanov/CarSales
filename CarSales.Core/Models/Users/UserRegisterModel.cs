@@ -26,6 +26,7 @@ namespace CarSales.Core.Models.Users
         [EmailAddress(ErrorMessage = "Must be valid email")]
         public string Email { get; set; } = null!;
         public Gender Gender { get; set; }
+        [Url(ErrorMessage = "Must be valid URL")]
         public string? ImageUrl { get; set; }
         [Phone(ErrorMessage = "Incorrect format")]
         [RegularExpression("[0-9]{3}-[0-9]{3}-[0-9]{4}", ErrorMessage = "Incorrect format")]
