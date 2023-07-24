@@ -1,4 +1,5 @@
-﻿using CarSales.Infrastructure.Data.Enums;
+﻿using CarSales.Core.Models.Offers;
+using CarSales.Infrastructure.Data.Enums;
 
 namespace CarSales.Core.Models.Vehicles
 {
@@ -26,5 +27,6 @@ namespace CarSales.Core.Models.Vehicles
         public int? ImporterId { get; set; }
         public string? ImporterUserId { get; set; }
         public string? ImporterName { get; set; }
+        public OfferCreateModel? OfferCreateModel { get; set; }
     }
 }
