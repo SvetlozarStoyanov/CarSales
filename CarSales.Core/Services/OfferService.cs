@@ -127,7 +127,8 @@ namespace CarSales.Core.Services
                         SalesmanId = o.Vehicle.SalesmanId,
                         SalesmanName = $"{o.Vehicle.Salesman.User.FirstName} {o.Vehicle.Salesman.User.LastName}",
                         VehicleType = o.Vehicle.VehicleType,
-                        VehicleRating = (VehicleRating)o.Vehicle.Reviews.Where(r => r.ReviewStatus == ReviewStatus.Completed).Average(r => (int)r.VehicleRating),
+                        VehicleRating = o.Vehicle.Reviews.Count() > 0 ? (VehicleRating)o.Vehicle.Reviews.Where(r => r.ReviewStatus == ReviewStatus.Completed).Average(r => (int)r.VehicleRating)
+                        : VehicleRating.NotRated,
                     },
                     OfferorId = o.OfferorId,
                     OfferorName = $"{o.Offeror.User.FirstName} {o.Offeror.User.LastName}",
