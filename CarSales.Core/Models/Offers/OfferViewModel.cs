@@ -15,5 +15,6 @@ namespace CarSales.Core.Models.Offers
         public string OfferorName { get; set; }
         public int SalesmanId { get; set; }
         public string SalesmanName { get; set; }
+        public OfferEditModel? OfferEditModel { get; set; }
     }
 }
