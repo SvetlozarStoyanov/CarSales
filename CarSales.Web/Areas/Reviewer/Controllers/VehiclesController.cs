@@ -47,6 +47,7 @@ namespace CarSales.Web.Areas.Reviewer.Controllers
             }
             else
             {
+                model.OfferCreateModel = await offerService.CreateOfferCreateModelAsync(User.Id(), id);
                 ViewBag.AvailableCredits = await userService.GetUserAvailableCreditsAsync(User.Id());
             }
             return View(model);

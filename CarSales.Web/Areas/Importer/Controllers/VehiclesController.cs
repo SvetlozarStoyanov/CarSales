@@ -63,6 +63,7 @@ namespace CarSales.Web.Areas.Importer.Controllers
             }
             else
             {
+                model.OfferCreateModel = await offerService.CreateOfferCreateModelAsync(User.Id(), id);
                 ViewBag.AvailableCredits = await userService.GetUserAvailableCreditsAsync(User.Id());
             }
 

@@ -1,0 +1,39 @@
+﻿@model OfferEditModel
+
+<section class="w-100 h-100">
+    <form asp-area="Reviewer" asp-controller="Offers" asp-action="Edit" method="post">
+        <article class="d-flex flex-column px-5 py-2 text-white bg-black border border-5 border-white rounded-5">
+            <h1 class="text-center mt-1 mb-3">Edit offer</h1>
+            <div class="form-group mb-3">
+                <label asp-for="@Model.Description" class="form-label">Description (not required)</label>
+                <textarea style="resize:none" asp-for="@Model.Description text-black" class="form-control"></textarea>
+                <span asp-validation-for="@Model.Description" class="small text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="@Model.Price" class="form-label">New Offered Price</label>
+                <input type="number" asp-for="@Model.Price" class="form-control text-black" id="offeredPrice" name="Price" />
+                <span asp-validation-for="@Model.Price" class="small text-danger" id="priceValidation"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="@Model.Price" class="form-label">Old Price</label>
+                <input type="number" asp-for="@Model.OldPrice" disabled class="form-control text-black" style="background-color:gray!important" name="InitialPrice" />
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="@Model.AvailableCredits" class="form-label">Available credits</label>
+                <input type="number" asp-for="@Model.AvailableCredits" disabled class="form-control text-black" style="background-color:gray!important" name="AvailableCredits" />
+            </div>
+            <input asp-for="@Model.OldPrice" hidden />
+            <input asp-for="@Model.Id" hidden />
+            <input id="availableCredits" asp-for="@Model.AvailableCredits" hidden />
+            <div class="text-center mt-4 mb-4 d-flex justify-content-evenly">
+                <div>
+                    <button class="btn btn-lg btn-info" id="submitBtn">Edit</button>
+                </div>
+                <div>
+                    <button class="btn btn-lg btn-danger" id="cancelBtn" data-bs-dismiss="modal" aria-label="Close">Cancel</button>
+                </div>
+            </div>
+        </article>
+    </form>
+</section>
+<script src="~/js/Offers/editOfferPartial.js"></script>

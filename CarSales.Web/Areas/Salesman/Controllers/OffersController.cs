@@ -1,5 +1,6 @@
 ﻿using CarSales.Core.Contracts;
 using CarSales.Core.Models.Offers;
+using CarSales.Infrastructure.Data.Enums;
 using CarSales.Web.Extensions;
 using Microsoft.AspNetCore.Mvc;
 
@@ -31,6 +32,11 @@ namespace CarSales.Web.Areas.Salesman.Controllers
                 return RedirectToAction(nameof(Outgoing));
             }
             var model = await offerService.GetOfferByIdAsync(id);
+            //Must be optimized to be included only for user's outgoing offers
+            if (model.Status == OfferStatus.Pending)
+            {
+                model.OfferEditModel = await offerService.CreateOfferEditModelAsync(id);
+            }
             ViewBag.CanRespondToOffer = await offerService.CanRespondToOfferAsync(User.Id(), id);
             
             return View(model);

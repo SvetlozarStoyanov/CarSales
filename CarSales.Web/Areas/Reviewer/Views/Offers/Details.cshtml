@@ -22,16 +22,27 @@
         <partial name="_VehicleMinPartial" model="@Model.Vehicle" />
     </div>
 
-    <div class="text-center mt-3 mb-3">
-        @if (Model.Status == OfferStatus.Pending)
-        {
-            <a class="btn btn-lg btn-info mx-2" asp-area="Reviewer" asp-controller="Offers" asp-action="Edit" asp-route-id="@Model.Id">
+    @if (Model.Status == OfferStatus.Pending)
+    {
+        <div class="text-center mt-3 mb-3">
+            <button type="button" class="btn btn-lg btn-info" data-bs-toggle="modal" data-bs-target="#offerModal">
                 Edit
-            </a>
+            </button>
+
+            <!-- Modal -->
+            <div class="modal fade" id="offerModal" tabindex="-1" aria-labelledby="offerModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content bg-transparent border-0">
+                        <div class="modal-body">
+                            <partial name="_EditOfferPartial" model="@Model.OfferEditModel" />
+                        </div>
+                    </div>
+                </div>
+            </div>
             <a class="btn btn-lg btn-danger mx-2" asp-area="Reviewer" asp-controller="Offers" asp-action="Cancel" asp-route-id="@Model.Id">
                 Cancel
             </a>
-        }
-    </div>
+        </div>
+    }
 </section>
 
