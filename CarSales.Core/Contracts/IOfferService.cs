@@ -1,4 +1,5 @@
-﻿using CarSales.Core.Models.Offers;
+﻿using CarSales.Core.Enums;
+using CarSales.Core.Models.Offers;
 using CarSales.Infrastructure.Data.Entities;
 using CarSales.Infrastructure.Data.Enums;
 using System.Runtime.Intrinsics.X86;
@@ -45,11 +46,20 @@ namespace CarSales.Core.Contracts
         Task<int> GetOfferIdAsync(string userId, int vehicleId);
 
         /// <summary>
-        /// Returns all Offers of <see cref="Owner"/> with <paramref name="userId"/>
+        /// Returns all <see cref="Offer"/> of <see cref="Owner"/> with <paramref name="userId"/>
+        /// which match the given criteria
         /// </summary>
         /// <param name="userId"></param>
-        /// <returns></returns>
-        Task<IEnumerable<OfferListModel>> GetOwnerOffersAsync(string userId);
+        /// <param name="currentPage"></param>
+        /// <param name="offersPerPage"></param>
+        /// <param name="vehicleName"></param>
+        /// <param name="offerSorting"></param>
+        /// <returns><see cref="OffersQueryModel"/></returns>
+        Task<OffersQueryModel> GetOwnerOffersAsync(string userId,
+            int currentPage = 1,
+            int offersPerPage = 12,
+            string vehicleName = null,
+            OfferSorting offerSorting = OfferSorting.Newest);
 
         /// <summary>
         /// Returns all Offers of <see cref="Salesman"/> with <paramref name="userId"/>
