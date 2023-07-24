@@ -47,6 +47,7 @@ namespace CarSales.Web.Areas.Owner.Controllers
             }
             else
             {
+                model.OfferCreateModel = await offerService.CreateOfferCreateModelAsync(User.Id(), id);
                 ViewBag.AvailableCredits = await userService.GetUserAvailableCreditsAsync(User.Id());
             }
             return View(model);
@@ -66,7 +67,7 @@ namespace CarSales.Web.Areas.Owner.Controllers
 
             return View(model);
         }
-        
+
         public async Task<IActionResult> Buy(int id)
         {
             try

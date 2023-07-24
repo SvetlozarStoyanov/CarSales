@@ -1,5 +1,7 @@
 ﻿using CarSales.Core.Contracts;
 using CarSales.Core.Models.Offers;
+using CarSales.Infrastructure.Data.Entities;
+using CarSales.Infrastructure.Data.Enums;
 using CarSales.Web.Extensions;
 using Microsoft.AspNetCore.Mvc;
 
@@ -26,6 +28,10 @@ namespace CarSales.Web.Areas.Owner.Controllers
                 return RedirectToAction(nameof(Outgoing));
             }
             var model = await offerService.GetOfferByIdAsync(id);
+            if (model.Status == OfferStatus.Pending)
+            {
+                model.OfferEditModel = await offerService.CreateOfferEditModelAsync(id);
+            }
             return View(model);
         }
 
@@ -50,7 +56,7 @@ namespace CarSales.Web.Areas.Owner.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Edit (int id)
+        public async Task<IActionResult> Edit(int id)
         {
             var model = await offerService.CreateOfferEditModelAsync(id);
 
