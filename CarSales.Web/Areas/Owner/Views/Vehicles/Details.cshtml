@@ -85,9 +85,21 @@
     if (ViewBag.CanMakeOffer)
     {
         <div class="text-center mt-3 mb-3">
-            <a class="btn btn-lg btn-secondary" asp-area="Owner" asp-controller="Offers" asp-action="Create" asp-route-vehicleId="@Model.Id">
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-lg btn-light" data-bs-toggle="modal" data-bs-target="#offerModal">
                 Make an offer
-            </a>
+            </button>
+
+            <!-- Modal -->
+            <div class="modal fade" id="offerModal" tabindex="-1" aria-labelledby="offerModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content bg-transparent border-0">
+                        <div class="modal-body">
+                            <partial name="_CreateOfferPartial" model="@Model.OfferCreateModel" />
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     }
 }
