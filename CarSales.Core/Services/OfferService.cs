@@ -79,6 +79,7 @@ namespace CarSales.Core.Services
             int offersPerPage = 6,
             string? vehicleName = null,
             string? salesmanName = null,
+            OfferStatus offerStatus = OfferStatus.Pending,
             OfferSorting offerSorting = OfferSorting.Newest)
         {
             var owner = await repository.AllReadOnly<Owner>()
@@ -93,6 +94,7 @@ namespace CarSales.Core.Services
 
             var vehicleNames = offers.Select(o => $"{o.Vehicle.Brand} {o.Vehicle.Model}").ToHashSet();
             var salesmenNames = offers.Select(o => $"{o.Salesman.User.FirstName} {o.Salesman.User.LastName}").ToHashSet();
+            offers = offers.Where(o => o.Status == offerStatus).ToList();
             if (!string.IsNullOrWhiteSpace(vehicleName))
             {
                 offers = offers
@@ -138,7 +140,7 @@ namespace CarSales.Core.Services
                 .ToList();
 
 
-            var queryModel = CreateOffersQueryModel(currentPage, offersPerPage, vehicleName, salesmanName, null, offerSorting, offerCount, vehicleNames, salesmenNames,null, sortedOffers);
+            var queryModel = CreateOffersQueryModel(currentPage, offersPerPage, vehicleName, salesmanName, null, offerStatus, offerSorting, offerCount, vehicleNames, salesmenNames, null, sortedOffers);
 
             return queryModel;
         }
@@ -207,7 +209,7 @@ namespace CarSales.Core.Services
                 .ToList();
 
 
-            var queryModel = CreateOffersQueryModel(currentPage, offersPerPage, vehicleName, null, offerorName, offerSorting, offerCount, vehicleNames, null, offerorNames, sortedOffers);
+            var queryModel = CreateOffersQueryModel(currentPage, offersPerPage, vehicleName, null, offerorName, OfferStatus.Pending, offerSorting, offerCount, vehicleNames, null, offerorNames, sortedOffers);
 
             return queryModel;
 
@@ -374,6 +376,7 @@ namespace CarSales.Core.Services
             string? vehicleName,
             string? salesmanName,
             string? offerorName,
+            OfferStatus offerStatus,
             OfferSorting offerSorting,
             int offerCount,
             ICollection<string> vehicleNames,
@@ -389,6 +392,7 @@ namespace CarSales.Core.Services
                 VehicleName = vehicleName,
                 SalesmanName = salesmanName,
                 OfferorName = offerorName,
+                OfferStatus = offerStatus,
                 OfferSorting = offerSorting,
                 OfferCount = offerCount,
                 VehicleNames = vehicleNames,

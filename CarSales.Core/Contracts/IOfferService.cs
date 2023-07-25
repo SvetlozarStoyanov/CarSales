@@ -59,6 +59,7 @@ namespace CarSales.Core.Contracts
             int offersPerPage = 6,
             string? vehicleName = null,
             string? salesmanName = null,
+            OfferStatus offerStatus = OfferStatus.Pending,
             OfferSorting offerSorting = OfferSorting.Newest);
 
         /// <summary>
