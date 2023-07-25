@@ -14,9 +14,16 @@ namespace CarSales.Web.Areas.Importer.Controllers
             this.offerService = offerService;
         }
 
-        public async Task<IActionResult> Outgoing()
+        public async Task<IActionResult> Outgoing([FromQuery] OffersQueryModel model)
         {
-            var model = await offerService.GetOwnerOffersAsync(User.Id());
+            var queryResult = await offerService.GetOwnerOffersAsync(User.Id(),
+                model.CurrentPage,
+                model.OffersPerPage,
+                model.VehicleName,
+                model.SalesmanName,
+                model.OfferSorting);
+
+            model = queryResult;
             return View(model);
         }
 

@@ -13,15 +13,29 @@ namespace CarSales.Web.Areas.Salesman.Controllers
         {
             this.offerService = offerService;
         }
-        public async Task<IActionResult> Outgoing()
+        public async Task<IActionResult> Outgoing([FromQuery] OffersQueryModel model)
         {
-            var model = await offerService.GetOwnerOffersAsync(User.Id());
+            var queryResult = await offerService.GetOwnerOffersAsync(User.Id(),
+                model.CurrentPage,
+                model.OffersPerPage,
+                model.VehicleName,
+                model.SalesmanName,
+                model.OfferSorting);
+
+            model = queryResult;
             return View(model);
         }
 
-        public async Task<IActionResult> Incoming()
+        public async Task<IActionResult> Incoming([FromQuery] OffersQueryModel model)
         {
-            var model = await offerService.GetSalesmanOffersAsync(User.Id());
+            var queryResult = await offerService.GetSalesmanOffersAsync(User.Id(),
+                model.CurrentPage,
+                model.OffersPerPage,
+                model.VehicleName,
+                model.OfferorName,
+                model.OfferSorting);
+
+            model = queryResult;
             return View(model);
         }
 
