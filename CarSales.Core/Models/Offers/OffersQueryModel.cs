@@ -1,4 +1,5 @@
 ﻿using CarSales.Core.Enums;
+using CarSales.Infrastructure.Data.Enums;
 
 namespace CarSales.Core.Models.Offers
 {
@@ -7,6 +8,7 @@ namespace CarSales.Core.Models.Offers
         public OffersQueryModel()
         {
             VehicleNames = new HashSet<string>();
+            OfferStatuses = Enum.GetValues<OfferStatus>().ToHashSet();
             SortingOptions = Enum.GetValues<OfferSorting>().ToHashSet();
             Offers = new List<OfferListModel>();
         }
@@ -18,12 +20,14 @@ namespace CarSales.Core.Models.Offers
         public string? VehicleName { get; set; }
         public string? SalesmanName { get; set; }
         public string? OfferorName { get; set; }
+        public OfferStatus OfferStatus{ get; set; }
         public OfferSorting OfferSorting { get; set; }
         public ICollection<string> VehicleNames { get; set; }
         public ICollection<string> SalesmenNames { get; set; }
         public ICollection<string> OfferorNames { get; set; }
         public IEnumerable<int> PreviousPages { get; set; }
         public IEnumerable<int> NextPages { get; set; }
+        public ICollection<OfferStatus> OfferStatuses { get; set; }
         public ICollection<OfferSorting> SortingOptions { get; set; }
         public IEnumerable<OfferListModel> Offers { get; set; }
     }
