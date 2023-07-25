@@ -2,7 +2,6 @@
 using CarSales.Core.Models.Offers;
 using CarSales.Infrastructure.Data.Entities;
 using CarSales.Infrastructure.Data.Enums;
-using System.Runtime.Intrinsics.X86;
 
 namespace CarSales.Core.Contracts
 {
@@ -57,8 +56,9 @@ namespace CarSales.Core.Contracts
         /// <returns><see cref="OffersQueryModel"/></returns>
         Task<OffersQueryModel> GetOwnerOffersAsync(string userId,
             int currentPage = 1,
-            int offersPerPage = 12,
-            string vehicleName = null,
+            int offersPerPage = 6,
+            string? vehicleName = null,
+            string? salesmanName = null,
             OfferSorting offerSorting = OfferSorting.Newest);
 
         /// <summary>
@@ -66,7 +66,12 @@ namespace CarSales.Core.Contracts
         /// </summary>
         /// <param name="userId"></param>
         /// <returns></returns>
-        Task<IEnumerable<OfferListModel>> GetSalesmanOffersAsync(string userId);
+        Task<OffersQueryModel> GetSalesmanOffersAsync(string userId,
+            int currentPage = 1,
+            int offersPerPage = 6,
+            string? vehicleName = null,
+            string? offerorName = null,
+            OfferSorting offerSorting = OfferSorting.Newest);
 
         /// <summary>
         /// Returns <see cref="Offer"/> with given <paramref name="id"/>

@@ -76,8 +76,9 @@ namespace CarSales.Core.Services
 
         public async Task<OffersQueryModel> GetOwnerOffersAsync(string userId,
             int currentPage = 1,
-            int offersPerPage = 12,
-            string vehicleName = null,
+            int offersPerPage = 6,
+            string? vehicleName = null,
+            string? salesmanName = null,
             OfferSorting offerSorting = OfferSorting.Newest)
         {
             var owner = await repository.AllReadOnly<Owner>()
@@ -90,11 +91,18 @@ namespace CarSales.Core.Services
                 .ThenInclude(s => s.User)
                 .ToListAsync();
 
-            var vehicleNames = offers.Select(r => $"{r.Vehicle.Brand} {r.Vehicle.Model}").ToHashSet();
+            var vehicleNames = offers.Select(o => $"{o.Vehicle.Brand} {o.Vehicle.Model}").ToHashSet();
+            var salesmenNames = offers.Select(o => $"{o.Salesman.User.FirstName} {o.Salesman.User.LastName}").ToHashSet();
             if (!string.IsNullOrWhiteSpace(vehicleName))
             {
                 offers = offers
                     .Where(o => $"{o.Vehicle.Brand} {o.Vehicle.Model}".ToLower() == vehicleName.ToLower())
+                    .ToList();
+            }
+            if (!string.IsNullOrWhiteSpace(salesmanName))
+            {
+                offers = offers
+                    .Where(o => $"{o.Salesman.User.FirstName} {o.Salesman.User.LastName}".ToLower() == salesmanName.ToLower())
                     .ToList();
             }
             switch (offerSorting)
@@ -123,32 +131,86 @@ namespace CarSales.Core.Services
                     Status = o.Status,
                     VehicleId = o.VehicleId,
                     VehicleName = $"{o.Vehicle.Brand} {o.Vehicle.Model}",
+                    Price = o.Price,
                     SalesmanId = o.SalesmanId,
                     SalesmanName = $"{o.Salesman.User.FirstName} {o.Salesman.User.LastName}"
                 })
                 .ToList();
 
 
-            var queryModel = CreateOffersQueryModel(currentPage, offersPerPage, vehicleName, offerSorting, offerCount, vehicleNames, sortedOffers);
+            var queryModel = CreateOffersQueryModel(currentPage, offersPerPage, vehicleName, salesmanName, null, offerSorting, offerCount, vehicleNames, salesmenNames,null, sortedOffers);
 
             return queryModel;
         }
 
-        public async Task<IEnumerable<OfferListModel>> GetSalesmanOffersAsync(string userId)
+        public async Task<OffersQueryModel> GetSalesmanOffersAsync(string userId,
+            int currentPage = 1,
+            int offersPerPage = 6,
+            string? vehicleName = null,
+            string? offerorName = null,
+            OfferSorting offerSorting = OfferSorting.Newest)
         {
-            var offers = await repository.AllReadOnly<Salesman>()
-                .Where(s => s.UserId == userId)
-                .Select(s => s.Offers.Where(o => o.Status == OfferStatus.Pending).Select(o => new OfferListModel()
+            var salesman = await repository.AllReadOnly<Salesman>()
+                .FirstOrDefaultAsync(o => o.UserId == userId);
+
+            var offers = await repository.AllReadOnly<Offer>()
+                .Where(o => o.SalesmanId == salesman.Id)
+                .Include(o => o.Vehicle)
+                .Include(o => o.Offeror)
+                .ThenInclude(s => s.User)
+                .ToListAsync();
+
+            var vehicleNames = offers.Select(o => $"{o.Vehicle.Brand} {o.Vehicle.Model}").ToHashSet();
+            var offerorNames = offers.Select(o => $"{o.Offeror.User.FirstName} {o.Offeror.User.LastName}").ToHashSet();
+            if (!string.IsNullOrWhiteSpace(vehicleName))
+            {
+                offers = offers
+                    .Where(o => $"{o.Vehicle.Brand} {o.Vehicle.Model}".ToLower() == vehicleName.ToLower())
+                    .ToList();
+            }
+            if (!string.IsNullOrWhiteSpace(offerorName))
+            {
+                offers = offers
+                    .Where(o => $"{o.Offeror.User.FirstName} {o.Offeror.User.LastName}".ToLower() == offerorName.ToLower())
+                    .ToList();
+            }
+            switch (offerSorting)
+            {
+                case OfferSorting.Newest:
+                    offers = offers.OrderByDescending(o => o.Id).ToList();
+                    break;
+                case OfferSorting.Oldest:
+                    offers = offers.OrderBy(o => o.Id).ToList();
+                    break;
+                case OfferSorting.PriceDescending:
+                    offers = offers.OrderByDescending(o => o.Price).ToList();
+                    break;
+                case OfferSorting.PriceAscending:
+                    offers = offers.OrderBy(o => o.Price).ToList();
+                    break;
+            }
+
+            var offerCount = offers.Count;
+            var sortedOffers = offers
+                .Skip(offersPerPage * (currentPage - 1))
+                .Take(offersPerPage)
+                .Select(o => new OfferListModel()
                 {
                     Id = o.Id,
+                    Status = o.Status,
                     VehicleId = o.VehicleId,
                     VehicleName = $"{o.Vehicle.Brand} {o.Vehicle.Model}",
+                    Price = o.Price,
                     OfferorId = o.OfferorId,
                     OfferorName = $"{o.Offeror.User.FirstName} {o.Offeror.User.LastName}"
-                }))
-                .FirstOrDefaultAsync();
+                })
+                .ToList();
 
-            return offers;
+
+            var queryModel = CreateOffersQueryModel(currentPage, offersPerPage, vehicleName, null, offerorName, offerSorting, offerCount, vehicleNames, null, offerorNames, sortedOffers);
+
+            return queryModel;
+
         }
 
         public async Task<OfferViewModel> GetOfferByIdAsync(int id)
@@ -310,9 +372,13 @@ namespace CarSales.Core.Services
         private OffersQueryModel CreateOffersQueryModel(int currentPage,
             int offersPerPage,
             string? vehicleName,
+            string? salesmanName,
+            string? offerorName,
             OfferSorting offerSorting,
             int offerCount,
             ICollection<string> vehicleNames,
+            ICollection<string> salesmenNames,
+            ICollection<string> offerorNames,
             IEnumerable<OfferListModel> offers)
         {
             var model = new OffersQueryModel()
@@ -321,9 +387,13 @@ namespace CarSales.Core.Services
                 OffersPerPage = offersPerPage,
                 MaxPage = (int)Math.Ceiling(offerCount / (double)offersPerPage),
                 VehicleName = vehicleName,
+                SalesmanName = salesmanName,
+                OfferorName = offerorName,
                 OfferSorting = offerSorting,
                 OfferCount = offerCount,
                 VehicleNames = vehicleNames,
+                SalesmenNames = salesmenNames,
+                OfferorNames = offerorNames,
                 Offers = offers
             };
             if (model.MaxPage > 1)
