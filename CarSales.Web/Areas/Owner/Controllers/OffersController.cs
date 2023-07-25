@@ -21,6 +21,7 @@ namespace CarSales.Web.Areas.Owner.Controllers
                 model.CurrentPage,
                 model.OffersPerPage,
                 model.VehicleName,
+                model.SalesmanName, 
                 model.OfferSorting);
 
             model = queryResult;
