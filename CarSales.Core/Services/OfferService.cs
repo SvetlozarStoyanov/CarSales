@@ -228,6 +228,7 @@ namespace CarSales.Core.Services
                     VehicleId = o.VehicleId,
                     Vehicle = new VehicleMinModel()
                     {
+                        Id = o.VehicleId,
                         Name = $"{o.Vehicle.Brand} {o.Vehicle.Model}",
                         ImageUrl = o.Vehicle.ImageUrl,
                         Price = o.Vehicle.Price,
