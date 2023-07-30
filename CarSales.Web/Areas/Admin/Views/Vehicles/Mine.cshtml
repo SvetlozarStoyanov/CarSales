@@ -10,14 +10,14 @@
     var shouldButtonBeDisabled = Model.CurrentPage >= Model.MaxPage;
 }
 
-<h1 class="text-center">@ViewData["Title"]</h1>
+<h1 class="text-center text-white">@ViewData["Title"]</h1>
 
 
-<section class="d-flex flex-column justify-content-between align-content-center">
+<section class="d-flex flex-column justify-content-between align-content-center text-white">
     <form id="form" method="get">
         <div class="form-group mt-3 mb-3">
             <div class="d-flex">
-                <input asp-for="@Model.SearchTerm" placeholder="Search..." class="form-control" />
+                <input asp-for="@Model.SearchTerm" placeholder="Search..." class="form-control text-black" />
                 <button type="submit" id="submitBtn" class="w-10 btn btn-lg btn-info">
                     <i class="bi bi-search"></i>
                 </button>
@@ -37,7 +37,7 @@
 
                 <div class="form-group">
                     <label asp-for="@Model.VehiclesPerPage" class="form-label custom-label">Vehicles Per Page</label>
-                    <select asp-for="@Model.VehiclesPerPage" class="form-select">
+                    <select asp-for="@Model.VehiclesPerPage" class="form-select text-black">
                         @for (int i = 1; i <= 12; i++)
                         {
                             <option value="@i">@i</option>
@@ -65,7 +65,7 @@
                 </div>
                 <div class="form-group">
                     <label asp-for="@Model.VehicleSorting" class="form-label custom-label">Sorting</label>
-                    <select asp-for="@Model.VehicleSorting" class="form-select">
+                    <select asp-for="@Model.VehicleSorting" class="form-select text-black">
                         @foreach (var sortingOption in Model.SortingOptions)
                         {
                             <option value="@sortingOption">@(string.Join(" ", Regex.Matches(sortingOption.ToString(), "[A-Z][a-z]*").Select(m => m.Value).ToArray()))</option>
@@ -151,9 +151,9 @@
     }
     else
     {
-        <h4 class="text-center mt-5">No vehicles meet the given criteria!</h4>
+        <h4 class="text-center text-white mt-5">No vehicles meet the given criteria!</h4>
     }
 
 </section>
 
-<script src="~/js/Vehicles/selectVehicleTypes.js"></script>
+<script src="~/js/Vehicles/index.js"></script>
