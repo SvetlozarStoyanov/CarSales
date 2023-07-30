@@ -33,27 +33,27 @@
             <div class="d-flex flex-row justify-content-between gap-5 mt-1 mb-1">
                 <div class="form-group">
                     <label asp-for="@Model.FirstName" class="form-label">First name</label>
-                    <input asp-for="@Model.FirstName" class="form-control" required />
+                    <input asp-for="@Model.FirstName" class="form-control text-black" required />
                 </div>
                 <div class="form-group">
                     <label asp-for="@Model.LastName" class="form-label">Last name</label>
-                    <input asp-for="@Model.LastName" class="form-control" required />
+                    <input asp-for="@Model.LastName" class="form-control text-black" required />
                 </div>
             </div>
             <div class="d-flex flex-row justify-content-between gap-5 mt-1 mb-1">
                 <div class="form-group">
                     <label asp-for="@Model.UserName" class="form-label">Username</label>
-                    <input asp-for="@Model.UserName" class="form-control" required />
+                    <input asp-for="@Model.UserName" class="form-control text-black" required />
                 </div>
                 <div class="form-group">
                     <label asp-for="@Model.Email" class="form-label">Email</label>
-                    <input asp-for="@Model.Email" class="form-control" required />
+                    <input asp-for="@Model.Email" class="form-control text-black" required />
                 </div>
             </div>
             <div class="form-group mt-3 mb-3">
                 <label asp-for="@Model.PhoneNumber" class="form-label">Phone Number </label>
                 <div class="form-floating text-secondary">
-                    <input type="tel" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" placeholder="Format: 123-456-7890" asp-for="@Model.PhoneNumber" class="form-control" />
+                    <input type="tel" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" placeholder="Format: 123-456-7890" asp-for="@Model.PhoneNumber" class="form-control text-black" />
                     <label class="form-label">Format: 123-456-7890</label>
                 </div>
             </div>
@@ -69,7 +69,7 @@
             </div>
             <div class="form-group mt-3 mb-3 order-md-0">
                 <label asp-for="@Model.ImageUrl" class="form-label">Image Url</label>
-                <input asp-for="@Model.ImageUrl" id="imageUrl" class="form-control" />
+                <input asp-for="@Model.ImageUrl" id="imageUrl" class="form-control text-black" />
             </div>
             <div class="text-center mt-2 mb-2 w-100">
                 <button class="btn btn-success w-100" type="submit" disabled>Save changes</button>
