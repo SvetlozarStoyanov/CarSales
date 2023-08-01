@@ -1,12 +1,12 @@
 ﻿using CarSales.Core.Models.Users;
 using CarSales.Infrastructure.Data.Entities;
 using CarSales.Infrastructure.Data.Enums;
+using StackExchange.Redis;
 
 namespace CarSales.Core.Contracts
 {
     public interface IUserService
     {
-
         /// <summary>
         /// Returns true if <see cref="User"/> with different <see cref="User"/>.Id <paramref name="userName"/> exists,
         /// returns false otherwise
@@ -43,6 +43,9 @@ namespace CarSales.Core.Contracts
         /// <param name="offerId"></param>
         /// <returns><see cref="decimal"/></returns>
         Task<decimal> GetUserAvailableCreditsAsync(string userId, int offerId);
+
+
+        Task<UserNavbarModel> GetUserNavbarModelAsync(string id);
 
         /// <summary>
         /// Gets <see cref="User"/> with given <paramref name="userId"/>

@@ -4,15 +4,21 @@ using CarSales.Core.Models.Users;
 using CarSales.Infrastructure.Data.Entities;
 using CarSales.Infrastructure.Data.Enums;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Distributed;
+using CarSales.Core.Extensions;
+using CarSales.Core.Constants;
+using StackExchange.Redis;
 
 namespace CarSales.Core.Services
 {
     public class UserService : IUserService
     {
         private readonly IRepository repository;
-        public UserService(IRepository repository)
+        private readonly IDistributedCache cache;
+        public UserService(IRepository repository, IDistributedCache cache)
         {
             this.repository = repository;
+            this.cache = cache;
         }
 
         public async Task<bool> IsUserNameTakenAsync(string id, string userName)
@@ -49,8 +55,8 @@ namespace CarSales.Core.Services
                 .FirstOrDefaultAsync();
 
             var availableCredits = owner.User.Credits - owner.Offers
-                .Where(off => off.Status == OfferStatus.Pending)
-                .Sum(off => off.Price);
+                  .Where(off => off.Status == OfferStatus.Pending)
+                  .Sum(off => off.Price);
 
             return availableCredits;
         }
@@ -69,7 +75,36 @@ namespace CarSales.Core.Services
 
             return availableCredits;
         }
+        public async Task<UserNavbarModel> GetUserNavbarModelAsync(string id)
+        {
 
+            var recordId = $"{DateTime.Now.ToString(RedisConstants.KeyStringFormat)}_GetUserNavbarModelAsync";
+
+            var userNavbarModel = await cache.GetRecordAsync<UserNavbarModel>(recordId);
+
+            if (userNavbarModel is null || userNavbarModel.Id != id)
+            {
+                userNavbarModel = await repository.AllReadOnly<User>()
+                    .Where(u => u.Id == id)
+                    .Select(u => new UserNavbarModel()
+                    {
+                        Id = u.Id,
+                        Gender = u.Gender,
+                        ProfilePicture = u.ImageUrl != null ? u.ImageUrl : $"/img/Profile/{u.Gender}Profile.png",
+                        Credits = u.Credits
+                    })
+                    .FirstOrDefaultAsync();
+
+
+                await cache.SetRecordAsync<UserNavbarModel>(recordId,
+                    userNavbarModel,
+                    TimeSpan.FromSeconds(60),
+                    TimeSpan.FromSeconds(60));
+            }
+
+
+            return userNavbarModel;
+        }
         public async Task<UserViewModel> GetUserByIdAsync(string id)
         {
             var user = await repository.AllReadOnly<User>()
@@ -144,7 +179,5 @@ namespace CarSales.Core.Services
 
             return editModel;
         }
-
-
     }
 }
