@@ -353,6 +353,17 @@ namespace CarSales.Core.Services
             offer.Salesman.User.Credits += offer.Price;
             offer.Vehicle.OwnerId = offer.OfferorId;
             offer.Vehicle.SalesmanId = null;
+
+            var sale = new Sale()
+            {
+                SalePrice = offer.Price,
+                VehicleId = offer.VehicleId,
+                SalesmanId = offer.SalesmanId,
+                OwnerId = offer.OfferorId,
+                ImporterId = null,
+            };
+
+            await repository.AddAsync<Sale>(sale);
             await repository.SaveChangesAsync();
 
             await DeclineAllOffersForVehicleAsync(offer.VehicleId);
