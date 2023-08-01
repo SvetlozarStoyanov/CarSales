@@ -2,21 +2,19 @@
 @using Microsoft.AspNetCore.Identity
 @inject SignInManager<User> SignInManager
 @inject UserManager<User> UserManager
+@inject IUserService userService
 @{
-    var user = await UserManager.GetUserAsync(User);
-
-    string defaultImage = $"/img/Profile/{user.Gender}Profile.png";
-    string profilePicture = user.ImageUrl != null ? user.ImageUrl : defaultImage;
+    var userNavbarModel = await userService.GetUserNavbarModelAsync(User.Id());
 }
 <ul class="navbar-nav me-5 d-flex align-items-lg-center">
     @if (SignInManager.IsSignedIn(User))
     {
         <li class="nav-item">
-            <a class="nav-link active" disabled><span id="userCredits">@user.Credits</span> credits</a>
+            <a class="nav-link active" disabled><span id="userCredits">@userNavbarModel.Credits</span> credits</a>
         </li>
         <li class="dropdown">
             <a class="d-flex align-items-center m-1" data-bs-auto-close="outside" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-                <img class="custom-avatar-img border border-5 border-black rounded-circle" src="@profilePicture" />
+                <img class="custom-avatar-img border border-5 border-black rounded-circle" src="@userNavbarModel.ProfilePicture" />
             </a>
             <ul class="dropdown-menu">
                 <li class="dropstart">
@@ -31,10 +29,10 @@
                     </a>
                     <ul class="dropdown-menu dropdown-submenu">
                         <li>
-                            <a class="nav-link active" asp-area="Admin" asp-controller="Users" asp-action="Details" asp-route-id="@user.Id">Details</a>
+                            <a class="nav-link active" asp-area="Admin" asp-controller="Users" asp-action="Details" asp-route-id="@userNavbarModel.Id">Details</a>
                         </li>
                         <li>
-                            <a class="nav-link active" asp-area="Admin" asp-controller="Users" asp-action="Edit" asp-route-id="@user.Id">Edit</a>
+                            <a class="nav-link active" asp-area="Admin" asp-controller="Users" asp-action="Edit" asp-route-id="@userNavbarModel.Id">Edit</a>
                         </li>
                     </ul>
                 </li>
