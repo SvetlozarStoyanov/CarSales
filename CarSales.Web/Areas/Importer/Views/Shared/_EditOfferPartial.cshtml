@@ -23,7 +23,8 @@
                 <input type="number" asp-for="@Model.AvailableCredits" disabled class="form-control text-black" style="background-color:gray!important" name="AvailableCredits" />
             </div>
             <input asp-for="@Model.OldPrice" hidden />
-            <input asp-for="@Model.Id" hidden />
+            <input asp-for="@Model.Id" value="@this.Model.Id" hidden />
+            <input id="returnUrl" asp-for="@Model.ReturnUrl" hidden />
             <input id="availableCredits" asp-for="@Model.AvailableCredits" hidden />
             <div class="text-center mt-4 mb-4 d-flex justify-content-evenly">
                 <div>
