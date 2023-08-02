@@ -82,16 +82,17 @@
             Buy
         </a>
     </div>
-    if (ViewBag.CanMakeOffer)
+
+    if (ViewBag.CanCreateOffer)
     {
         <div class="text-center mt-3 mb-3">
             <!-- Button trigger modal -->
-            <button type="button" class="btn btn-lg btn-light" data-bs-toggle="modal" data-bs-target="#offerModal">
+            <button type="button" class="btn btn-lg btn-light" data-bs-toggle="modal" data-bs-target="#offerCreateModal">
                 Make an offer
             </button>
 
             <!-- Modal -->
-            <div class="modal fade" id="offerModal" tabindex="-1" aria-labelledby="offerModalLabel" aria-hidden="true">
+            <div class="modal fade" id="offerCreateModal" tabindex="-1" aria-labelledby="offerCreateModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content bg-transparent border-0">
                         <div class="modal-body">
@@ -102,7 +103,28 @@
             </div>
         </div>
     }
+    else if (Model.OfferEditModel != null)
+    {
+        <div class="text-center mt-3 mb-3">
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-lg btn-light" data-bs-toggle="modal" data-bs-target="#offerEditModal">
+                Edit Offer
+            </button>
+
+            <!-- Modal -->
+            <div class="modal fade" id="offerEditModal" tabindex="-1" aria-labelledby="offerEditModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content bg-transparent border-0">
+                        <div class="modal-body">
+                            <partial name="_EditOfferPartial" model="@Model.OfferEditModel" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
 }
+
 @if (Model.ReviewCount > 0)
 {
     <div class="text-center mt-3 mb-3">

@@ -9,10 +9,10 @@
 <input id="availableCredits" value="@ViewBag.AvailableCredits" hidden />
 <input id="price" value="@Model.Price" hidden />
 
-<h1 class="text-center mt-3 mb-3">
+<h1 class="text-center mt-3 mb-3 text-white">
     @Model.Brand @Model.Model
 </h1>
-<section class="d-flex p-5">
+<section class="d-flex p-5 text-white">
     <article class="mx-2">
         <div class="vehicle-image-container">
             <img style="width:500px;height:400px" class="border border-3 border-primary" src="@imageUrl" />
@@ -103,16 +103,17 @@ else if (Model.SalesmanUserId != null && Model.SalesmanUserId != User.Id())
         <a id="buyBtn" class="btn btn-lg btn-success" asp-area="Salesman" asp-controller="Vehicles" asp-action="BuyFromSalesman" asp-route-id="@Model.Id">
             Buy
         </a>
-        @if (ViewBag.CanMakeOffer)
+
+        @if (ViewBag.CanCreateOffer)
         {
             <div class="text-center mt-3 mb-3">
                 <!-- Button trigger modal -->
-                <button type="button" class="btn btn-lg btn-light" data-bs-toggle="modal" data-bs-target="#offerModal">
+                <button type="button" class="btn btn-lg btn-light" data-bs-toggle="modal" data-bs-target="#offerCreateModal">
                     Make an offer
                 </button>
 
                 <!-- Modal -->
-                <div class="modal fade" id="offerModal" tabindex="-1" aria-labelledby="offerModalLabel" aria-hidden="true">
+                <div class="modal fade" id="offerCreateModal" tabindex="-1" aria-labelledby="offerCreateModalLabel" aria-hidden="true">
                     <div class="modal-dialog">
                         <div class="modal-content bg-transparent border-0">
                             <div class="modal-body">
@@ -123,6 +124,27 @@ else if (Model.SalesmanUserId != null && Model.SalesmanUserId != User.Id())
                 </div>
             </div>
         }
+        else if (Model.OfferEditModel != null)
+        {
+            <div class="text-center mt-3 mb-3">
+                <!-- Button trigger modal -->
+                <button type="button" class="btn btn-lg btn-light" data-bs-toggle="modal" data-bs-target="#offerEditModal">
+                    Edit Offer
+                </button>
+
+                <!-- Modal -->
+                <div class="modal fade" id="offerEditModal" tabindex="-1" aria-labelledby="offerEditModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content bg-transparent border-0">
+                            <div class="modal-body">
+                                <partial name="_EditOfferPartial" model="@Model.OfferEditModel" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+
     </div>
 }
 else if (Model.ImporterUserId != null && Model.ImporterUserId != User.Id())
