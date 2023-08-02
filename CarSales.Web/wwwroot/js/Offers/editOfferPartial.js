@@ -4,6 +4,7 @@ const offeredPrice = document.querySelector('#offeredPrice');
 
 const submitBtn = document.querySelector('#submitBtn');
 const cancelBtn = document.querySelector('#cancelBtn');
+const returnUrlInput = document.querySelector('#returnUrl');
 
 window.addEventListener('load', function () {
     let priceParsed = parseFloat(offeredPrice.value);
@@ -12,6 +13,7 @@ window.addEventListener('load', function () {
     } else {
         submitBtn.disabled = true;
     }
+    returnUrlInput.value = window.location.href;
 });
 
 offeredPrice.addEventListener('input', function () {
