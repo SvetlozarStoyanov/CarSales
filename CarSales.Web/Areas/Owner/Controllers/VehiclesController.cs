@@ -39,10 +39,14 @@ namespace CarSales.Web.Areas.Owner.Controllers
                 TempData["error"] = "Vehicle does not exist!";
                 return RedirectToAction("Index");
             }
-            ViewBag.CanMakeOffer = await offerService.CanCreateOfferAsync(User.Id(), id);
-            if (!ViewBag.CanMakeOffer)
+            ViewBag.CanCreateOffer = await offerService.CanCreateOfferAsync(User.Id(), id);
+            if (!ViewBag.CanCreateOffer)
             {
                 var offerId = await offerService.GetOfferIdAsync(User.Id(), id);
+                if (await offerService.CanEditOfferAsync(User.Id(),id))
+                {
+                    model.OfferEditModel = await offerService.CreateOfferEditModelAsync(offerId);
+                }
                 ViewBag.AvailableCredits = await userService.GetUserAvailableCreditsAsync(User.Id(), offerId);
             }
             else
