@@ -72,8 +72,13 @@ namespace CarSales.Web.Areas.Salesman.Controllers
                 return View(model);
             }
             await offerService.CreateOfferAsync(model);
-            TempData["success"] = "Succesfully created offer";
-            return RedirectToAction("Index", "Vehicles");
+            TempData["success"] = "Succesfully created offer!";
+            if (model.ReturnUrl != null)
+            {
+                return Redirect(model.ReturnUrl);
+
+            }
+            return RedirectToAction("Details", "Vehicles", new { id = model.VehicleId });
         }
 
         [HttpGet]
@@ -92,7 +97,11 @@ namespace CarSales.Web.Areas.Salesman.Controllers
                 return View(model);
             }
             await offerService.EditOfferAsync(model);
-
+            TempData["success"] = "Successfully edited offer";
+            if (model.ReturnUrl != null)
+            {
+                return Redirect(model.ReturnUrl);
+            }
             return RedirectToAction("Details", "Offers", new { id = model.Id });
         }
 
