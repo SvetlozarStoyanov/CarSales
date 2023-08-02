@@ -18,6 +18,15 @@ namespace CarSales.Core.Contracts
         Task<bool> CanCreateOfferAsync(string userId, int vehicleId);
 
         /// <summary>
+        /// Verifies if <see cref="User"/> with <paramref name="userId"/> can edit <see cref="OfferStatus.Pending"/> <see cref="Offer"/> for <see cref="Vehicle"/> with
+        /// <paramref name="vehicleId"/>
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="vehicleId"></param>
+        /// <returns><see cref="bool"/></returns>
+        Task<bool> CanEditOfferAsync(string userId, int vehicleId);
+
+        /// <summary>
         /// Returns true if <see cref="User"/> with <paramref name="userId"/> has created or received an <see cref="Offer"/>
         /// with given <paramref name="offerId"/>, returns false otherwise
         /// </summary>

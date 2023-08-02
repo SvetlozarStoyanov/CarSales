@@ -35,6 +35,20 @@ namespace CarSales.Core.Services
             return true;
         }
 
+        public async Task<bool> CanEditOfferAsync(string userId, int vehicleId)
+        {
+            var offer = await repository.AllReadOnly<Offer>()
+                .Where(o => o.Status == OfferStatus.Pending
+                        && o.VehicleId == vehicleId
+                        && o.Offeror.UserId == userId)
+                .FirstOrDefaultAsync();
+            if (offer != null)
+            {
+                return true;
+            }
+            return false;
+        }
+
         public async Task<bool> CanViewOfferAsync(string userId, int offerId)
         {
             var offer = await repository.AllReadOnly<Offer>()
