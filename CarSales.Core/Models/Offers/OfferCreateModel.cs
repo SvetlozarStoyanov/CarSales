@@ -3,6 +3,7 @@
     public class OfferCreateModel
     {
         public string? Description { get; set; }
+        public string ReturnUrl { get; set; } = null!;
         public decimal Price { get; set; }
         public decimal InitialPrice { get; set; }
         public decimal AvailableCredits { get; set; }
