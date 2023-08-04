@@ -10,6 +10,7 @@ namespace CarSales.Infrastructure.Data
         public CarSalesDbContext(DbContextOptions<CarSalesDbContext> options)
             : base(options)
         {
+            this.Database.Migrate();
         }
         public DbSet<Salesman> Salesmen { get; set; } = null!;
         public DbSet<Owner> Owners { get; set; } = null!;
