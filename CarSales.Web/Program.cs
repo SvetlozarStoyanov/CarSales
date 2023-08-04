@@ -15,7 +15,7 @@ namespace CarSales.Web
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+            var connectionString = builder.Configuration.GetConnectionString("SqlServer") ?? throw new InvalidOperationException("Connection string 'SqlServer' not found.");
             builder.Services.AddDbContext<CarSalesDbContext>(options =>
                 options.UseSqlServer(connectionString));
 
@@ -66,7 +66,7 @@ namespace CarSales.Web
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
-            if (app.Environment.IsDevelopment())
+            if (app.Environment.IsDevelopment() || app.Environment.IsStaging())
             {
                 app.UseMigrationsEndPoint();
             }
