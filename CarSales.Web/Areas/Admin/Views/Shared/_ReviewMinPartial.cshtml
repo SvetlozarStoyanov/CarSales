@@ -1,0 +1,33 @@
+﻿@model ReviewMinModel
+
+<article class="col mt-3 mb-3 text-white text-break" style="max-height:300px">
+    <div class="d-flex flex-column gap-2 justify-content-evenly align-items-center basic-transition custom-border-white-lightblue p-0">
+        <h5 class="text-center mt-2 mb-2">
+            @Model.Title
+        </h5>
+        <div>
+            @{
+                var ratingAsInt = (int)Model.VehicleRating;
+                for (int i = 0; i < ratingAsInt; i++)
+                {
+                    <span class="m-1 p-1">
+                        <i style="font-size:15px;color:goldenrod" class="bi bi-star-fill"></i>
+                    </span>
+                }
+                for (int i = 0; i < 5 - ratingAsInt; i++)
+                {
+                    <span class="m-1 p-1">
+                        <i style="font-size:15px;color:goldenrod" class="bi bi-star"></i>
+                    </span>
+                }
+            }
+        </div>
+        <h5 class="text-center mt-2 mb-2">
+            @Model.ReviewerName
+        </h5>
+        <div class="text-center mt-2 mb-2">
+            <a class="btn btn-secondary" asp-area="Admin" asp-controller="Reviews" asp-action="Details" asp-route-id="@Model.Id">Read Full Review</a>
+        </div>
+    </div>
+
+</article>
