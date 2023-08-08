@@ -2,6 +2,7 @@
 using CarSales.Core.Contracts;
 using CarSales.Core.Enums;
 using CarSales.Core.Exceptions;
+using CarSales.Core.Models.Reviews;
 using CarSales.Core.Models.Vehicles;
 using CarSales.Infrastructure.Data.Entities;
 using CarSales.Infrastructure.Data.Enums;
@@ -418,6 +419,13 @@ namespace CarSales.Core.Services
                     ImporterId = v.ImporterId,
                     ImporterUserId = v.Importer != null ? v.Importer.UserId : null,
                     ImporterName = v.Importer != null ? $"{v.Importer.User.FirstName} {v.Importer.User.LastName}" : null,
+                    Reviews = v.Reviews.Count > 0 ? v.Reviews.OrderByDescending(r => r.Id).Take(3).Select(r => new ReviewMinModel()
+                    {
+                        Id = r.Id,
+                        Title = r.Title,
+                        VehicleRating = r.VehicleRating,
+                        ReviewerName = r.Reviewer.User.UserName
+                    }).ToList() : null
 
                 })
                 .FirstOrDefaultAsync();
