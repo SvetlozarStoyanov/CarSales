@@ -80,10 +80,31 @@
     </article>
     @if (Model.ReviewCount > 0)
     {
-        <div class="text-center mt-3 mb-3">
-            <a asp-area="" asp-controller="Reviews" asp-action="Index" asp-route-vehicleName="@Model.Name" class="btn btn-lg btn-info">
-                Reviews
-            </a>
-        </div>
+        <article class="mt-5">
+            <div class="d-flex justify-content-between align-items-center bg-dark p-3 rounded-4">
+                <h2 class="ms-3 text-white">
+                    Reviews
+                </h2>
+                <div>
+                    @if (Model.ReviewCount > 0)
+                    {
+                        <a asp-area="" asp-controller="Reviews" asp-action="Index" asp-route-vehicleName="@Model.Name" class="btn btn-light ">
+                            <b>View All</b>
+                        </a>
+                    }
+                    <button class="btn" type="button" data-bs-toggle="collapse" data-bs-target="#reviewsCollapse" aria-expanded="true" aria-controls="reviewsCollapse">
+                        <i class="bi bi-caret-down-fill text-white"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="collapse show" id="reviewsCollapse">
+                <div class="row justify-content-between row-cols-lg-3 row-cols-md-2 row-cols-1">
+                    @foreach (var review in Model.Reviews)
+                    {
+                        <partial name="_ReviewMinPartial" model="review" />
+                    }
+                </div>
+            </div>
+        </article>
     }
 </section>
