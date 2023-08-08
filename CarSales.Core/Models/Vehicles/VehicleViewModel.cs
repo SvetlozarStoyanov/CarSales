@@ -1,4 +1,5 @@
 ﻿using CarSales.Core.Models.Offers;
+using CarSales.Core.Models.Reviews;
 using CarSales.Infrastructure.Data.Enums;
 
 namespace CarSales.Core.Models.Vehicles
@@ -29,5 +30,6 @@ namespace CarSales.Core.Models.Vehicles
         public string? ImporterName { get; set; }
         public OfferCreateModel? OfferCreateModel { get; set; }
         public OfferEditModel? OfferEditModel { get; set; }
+        public IEnumerable<ReviewMinModel>? Reviews { get; set; }
     }
 }
