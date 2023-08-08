@@ -170,7 +170,7 @@ namespace CarSales.Core.Services
                 .FirstOrDefaultAsync(o => o.UserId == userId);
 
             var offers = await repository.AllReadOnly<Offer>()
-                .Where(o => o.SalesmanId == salesman.Id)
+                .Where(o =>o.Status == OfferStatus.Pending && o.SalesmanId == salesman.Id)
                 .Include(o => o.Vehicle)
                 .Include(o => o.Offeror)
                 .ThenInclude(s => s.User)
