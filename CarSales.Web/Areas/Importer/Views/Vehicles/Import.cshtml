@@ -3,45 +3,45 @@
     ViewData["Title"] = "Import Vehicle";
 }
 
-<section class="d-flex justify-content-center">
+<section class="d-flex justify-content-center mt-3">
     <article class="d-flex flex-column justify-content-between gap-3 py-2 px-5 border border-4 border-primary rounded rounded-5">
         <h1 class="text-center mt-1 mb-1">
             @ViewData["Title"]
         </h1>
         <form asp-area="Importer" asp-controller="Vehicles" asp-action="Import" method="post">
-            <div class="d-flex flex-row justify-content-between gap-5 mt-2 mb-2">
+            <div class="d-flex flex-row justify-content-between gap-5 mt-1 mb-2">
                 <div class="form-group">
                     <label asp-for="@Model.Brand" class="form-label col-form-label-lg"></label>
-                    <input asp-for="@Model.Brand" class="form-control" />
+                    <input asp-for="@Model.Brand" class="form-control" required />
                     <span asp-validation-for="@Model.Brand" class="small text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label asp-for="@Model.ModelName" class="form-label col-form-label-lg">Model</label>
-                    <input asp-for="@Model.ModelName" class="form-control" />
+                    <input asp-for="@Model.ModelName" class="form-control" required />
                     <span asp-validation-for="@Model.ModelName" class="small text-danger"></span>
                 </div>
             </div>
             <div class="d-flex flex-row justify-content-between gap-5 mt-2 mb-2">
                 <div class="form-group">
                     <label asp-for="@Model.YearProduced" class="form-label col-form-label-lg">Year Produced</label>
-                    <input type="number" asp-for="@Model.YearProduced" class="form-control" />
+                    <input type="number" value="@null" asp-for="@Model.YearProduced" class="form-control" required />
                     <span asp-validation-for="@Model.YearProduced" class="small text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label asp-for="@Model.TopSpeed" class="form-label col-form-label-lg">Top speed</label>
-                    <input type="number" asp-for="@Model.TopSpeed" class="form-control" />
+                    <input type="number" value="@null" asp-for="@Model.TopSpeed" class="form-control" required />
                     <span asp-validation-for="@Model.TopSpeed" class="small text-danger"></span>
                 </div>
             </div>
             <div class="d-flex flex-row justify-content-between gap-5 mt-2 mb-2">
                 <div class="form-group w-100">
                     <label asp-for="@Model.Price" class="form-label col-form-label-lg"></label>
-                    <input type="number" asp-for="@Model.Price" class="form-control" id="price" name="Price" />
+                    <input type="number" value="@null" asp-for="@Model.Price" class="form-control" id="price" name="Price" />
                     <span asp-validation-for="@Model.Price" class="small text-danger" id="priceValidation"></span>
                 </div>
                 <div class="form-group w-100">
                     <label asp-for="@Model.VehicleType" class="form-label col-form-label-lg">Vehicle Type</label>
-                    <select asp-for="@Model.VehicleType" class="form-control" id="vehicleType">
+                    <select asp-for="@Model.VehicleType" class="form-select" id="vehicleType">
                         @foreach (var type in Model.VehicleTypes)
                         {
                             <option value="@type">@type</option>
@@ -55,10 +55,10 @@
                 <span asp-validation-for="@Model.Description" class="small text-danger"></span>
             </div>
             <div class="d-flex justify-content-center mt-5 mb-2">
-                <img class="border border-primary border-5 rounded-4 basic-transition" id="vehicleImg"
+                <img class="border border-primary border-5 basic-transition" id="vehicleImg"
                      style="height:200px;width:200px;object-fit:cover"
                      alt="vehicleImg" />
-                <h5 class="m-0 text-center d-flex flex-column align-items-center justify-content-center border border-dark border-5 basic-transition d-none text-danger"
+                <h5 class="m-0 text-center d-flex flex-column align-items-center justify-content-center border border-primary border-5 basic-transition d-none text-danger"
                     id="imageErrorHeader"
                     style="height:200px;width:200px;object-fit:none">
                     <span>Image Url does not exist!</span>
