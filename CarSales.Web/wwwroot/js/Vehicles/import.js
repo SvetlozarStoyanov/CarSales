@@ -17,7 +17,7 @@ window.addEventListener('load', function (e) {
         request.open('GET', imageUrlInput.value, true);
         request.onreadystatechange = function () {
             if (request.readyState === 4) {
-                console.log('image loaded');
+
                 if (request.status !== 200) {
                     imageErrorHeader.classList.remove('d-none');
                     vehicleImg.classList.add('d-none');
@@ -37,7 +37,7 @@ window.addEventListener('load', function (e) {
 
 price.addEventListener('change', function () {
     let priceCalc = parseFloat(price.value) * 0.9;
-    console.log(priceCalc);
+
     if (parseFloat(userCredits.textContent) >= priceCalc) {
         submitBtn.disabled = false;
     } else {
@@ -47,12 +47,11 @@ price.addEventListener('change', function () {
 
 vehicleImgUrlInput.addEventListener('input', function (e) {
     let imageUrlInput = e.currentTarget;
-    if (imageUrlInput.value.match(urlRegex)) {
+    if (imageUrlInput.value.match(urlRegex) && imageUrlInput.value.length > 0) {
         let request = new XMLHttpRequest();
         request.open('GET', imageUrlInput.value, true);
         request.onreadystatechange = function () {
             if (request.readyState === 4) {
-                console.log('image loaded');
                 if (request.status !== 200) {
                     imageErrorHeader.classList.remove('d-none');
                     vehicleImg.classList.add('d-none');
@@ -65,6 +64,8 @@ vehicleImgUrlInput.addEventListener('input', function (e) {
         };
         request.send();
     } else {
+        imageErrorHeader.classList.add('d-none');
+        vehicleImg.classList.remove('d-none');
         vehicleImg.src = defaultVehicleImgSrc;
     }
 });
