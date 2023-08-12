@@ -585,7 +585,6 @@ namespace CarSales.Core.Services
                 ImageUrl = model.ImageUrl,
                 YearProduced = model.YearProduced,
                 TopSpeed = model.TopSpeed,
-                KilometersDriven = model.KilometersDriven,
                 Price = model.Price,
                 VehicleType = model.VehicleType,
                 ImporterId = model.ImporterId
