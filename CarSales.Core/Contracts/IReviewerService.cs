@@ -1,4 +1,5 @@
 ﻿
+using CarSales.Core.Enums;
 using CarSales.Core.Models.Reviewers;
 using CarSales.Infrastructure.Data.Entities;
 using CarSales.Infrastructure.Data.Enums;
@@ -35,7 +36,6 @@ namespace CarSales.Core.Contracts
         Task<ReviewersQueryModel> GetAllReviewersAsync(string searchTerm = null
             );
 
-
         /// <summary>
         /// Returns <see cref="ReviewersQueryModel"/> with <see cref="ReviewersQueryModel.Reviewers"/> who can create
         /// a review for <see cref="Vehicle"/> with <paramref name="vehicleId"/>
@@ -43,10 +43,16 @@ namespace CarSales.Core.Contracts
         /// <param name="userId"></param>
         /// <param name="vehicleId"></param>
         /// <param name="searchTerm"></param>
-        /// <returns><see cref="ReviewersQueryModel"/></returns>
-        Task<ReviewersQueryModel> GetAllReviewersAsync(string userId,
+        /// <param name="currentPage"></param>
+        /// <param name="reviewersPerPage"></param>
+        /// <param name="sorting"></param>
+        /// <returns></returns>
+        Task<ReviewersQueryModel> GetReviewersAsync(string userId,
             int vehicleId,
-            string? searchTerm = null
+            string? searchTerm = null,
+            int currentPage = 1,
+            int reviewersPerPage = 6,
+            ReviewerSorting sorting = ReviewerSorting.Alphabetically
             );
 
         /// <summary>
