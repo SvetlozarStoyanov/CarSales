@@ -16,13 +16,14 @@ namespace CarSales.Web.Areas.Salesman.Controllers
 
         public async Task<IActionResult> Index(int vehicleId, [FromQuery] ReviewersQueryModel model)
         {
-            var queryResult = await reviewerService.GetAllReviewersAsync(User.Id(),
+            var queryResult = await reviewerService.GetReviewersAsync(User.Id(),
                 vehicleId,
-                model.SearchTerm);
+                model.SearchTerm,
+                model.CurrentPage,
+                model.ReviewersPerPage,
+                model.ReviewerSorting);
 
-            model.SearchTerm = queryResult.SearchTerm;
-            model.VehicleId = vehicleId;
-            model.Reviewers = queryResult.Reviewers;
+            model = queryResult;
             return View(model);
         }
     }
