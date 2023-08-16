@@ -2,6 +2,7 @@
 using CarSales.Core.Contracts;
 using CarSales.Core.Enums;
 using CarSales.Core.Models.Reviewers;
+using CarSales.Core.Models.Reviews;
 using CarSales.Infrastructure.Data.Entities;
 using CarSales.Infrastructure.Data.Enums;
 using Microsoft.EntityFrameworkCore;
@@ -51,33 +52,6 @@ namespace CarSales.Core.Services
             }
         }
 
-        public async Task<ReviewerPriceEditModel> CreateReviewerPriceEditModelAsync(string userId)
-        {
-            var model = await repository.All<Reviewer>()
-                .Where(r => r.UserId == userId)
-                .Select(r => new ReviewerPriceEditModel()
-                {
-                    Id = r.Id,
-                    ShortReviewPrice = r.ShortReviewPrice,
-                    StandartReviewPrice = r.StandartReviewPrice,
-                    PremiumReviewPrice = r.PremiumReviewPrice
-                })
-                .FirstOrDefaultAsync();
-
-            return model;
-        }
-
-        public async Task EditReviewPricesAsync(ReviewerPriceEditModel model)
-        {
-            var reviewer = await repository.All<Reviewer>()
-                .FirstOrDefaultAsync(r => r.Id == model.Id);
-
-            reviewer.ShortReviewPrice = model.ShortReviewPrice;
-            reviewer.StandartReviewPrice = model.StandartReviewPrice;
-            reviewer.PremiumReviewPrice = model.PremiumReviewPrice;
-
-            await repository.SaveChangesAsync();
-        }
 
         public async Task<ReviewersQueryModel> GetAllReviewersAsync(string? searchTerm = null)
         {
@@ -136,6 +110,73 @@ namespace CarSales.Core.Services
             return queryModel;
         }
 
+        public async Task<ReviewerViewModel> GetReviewerByIdAsync(int reviewerId, int vehicleId)
+        {
+            var reviewer = await repository.AllReadOnly<Reviewer>()
+                .Where(r => r.Id == reviewerId)
+                .Select(r => new ReviewerViewModel()
+                {
+                    Id = r.Id,
+                    Name = $"{r.User.FirstName} {r.User.LastName}",
+                    Email = r.User.Email,
+                    CanCreateReview = r.Reviews.All(r => r.VehicleId != vehicleId),
+                    ProfilePicture = r.User.ImageUrl != null ? r.User.ImageUrl : $"/img/Profile/{r.User.Gender}Profile.png",
+                    PhoneNumber = r.User.PhoneNumber,
+                    VehicleId = vehicleId,
+                    ShortReviewPrice = r.ShortReviewPrice,
+                    StandartReviewPrice = r.StandartReviewPrice,
+                    PremiumReviewPrice = r.PremiumReviewPrice,
+                    Reviews = r.Reviews
+                    .OrderByDescending(r => r.Id)
+                    .Take(3)
+                    .Select(rv => new ReviewListModel()
+                    {
+                        Id = rv.Id,
+                        Title = rv.Title,
+                        Overview = rv.Overview,
+                        Price = rv.Price,
+                        ReviewType = rv.ReviewType,
+                        ReviewStatus = rv.ReviewStatus,
+                        ReviewerId = rv.ReviewerId,
+                        VehicleId = rv.VehicleId,
+                        VehicleName = $"{rv.Vehicle.Brand} {rv.Vehicle.Model}",
+                        VehicleImageUrl = rv.Vehicle.ImageUrl,
+                        VehicleType = rv.Vehicle.VehicleType,
+                        VehiclePrice = rv.Vehicle.Price,
+                    })
+                })
+                .FirstOrDefaultAsync();
+
+            return reviewer;
+        }
+
+        public async Task<ReviewerPriceEditModel> CreateReviewerPriceEditModelAsync(string userId)
+        {
+            var model = await repository.All<Reviewer>()
+                .Where(r => r.UserId == userId)
+                .Select(r => new ReviewerPriceEditModel()
+                {
+                    Id = r.Id,
+                    ShortReviewPrice = r.ShortReviewPrice,
+                    StandartReviewPrice = r.StandartReviewPrice,
+                    PremiumReviewPrice = r.PremiumReviewPrice
+                })
+                .FirstOrDefaultAsync();
+
+            return model;
+        }
+
+        public async Task EditReviewPricesAsync(ReviewerPriceEditModel model)
+        {
+            var reviewer = await repository.All<Reviewer>()
+                .FirstOrDefaultAsync(r => r.Id == model.Id);
+
+            reviewer.ShortReviewPrice = model.ShortReviewPrice;
+            reviewer.StandartReviewPrice = model.StandartReviewPrice;
+            reviewer.PremiumReviewPrice = model.PremiumReviewPrice;
+
+            await repository.SaveChangesAsync();
+        }
 
         public async Task<IDictionary<ReviewType, decimal>> GetReviewTypesAndPricesAsync(int reviewerId)
         {
@@ -174,6 +215,7 @@ namespace CarSales.Core.Services
                 {
                     Id = r.Id,
                     Name = $"{r.User.FirstName} {r.User.LastName}",
+                    ProfilePicture = r.User.ImageUrl != null ? r.User.ImageUrl : $"/img/Profile/{r.User.Gender}Profile.png",
                     ShortReviewPrice = r.ShortReviewPrice,
                     StandartReviewPrice = r.StandartReviewPrice,
                     PremiumReviewPrice = r.PremiumReviewPrice,
@@ -229,9 +271,11 @@ namespace CarSales.Core.Services
                 }).ToList()
             };
 
-            
+
 
             return model;
         }
+
+
     }
 }

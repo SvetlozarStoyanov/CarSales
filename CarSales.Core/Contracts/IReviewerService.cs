@@ -55,6 +55,8 @@ namespace CarSales.Core.Contracts
             ReviewerSorting sorting = ReviewerSorting.Alphabetically
             );
 
+        Task<ReviewerViewModel> GetReviewerByIdAsync(int reviewerId, int vehicleId);
+
         /// <summary>
         /// Creates <see cref="ReviewerPriceEditModel"/> for editing <see cref="Review.Price"/> of 
         /// individual <see cref="ReviewType"/>
