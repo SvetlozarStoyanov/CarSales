@@ -23,7 +23,14 @@ namespace CarSales.Web.Areas.Salesman.Controllers
                 model.ReviewersPerPage,
                 model.ReviewerSorting);
 
+            ViewBag.VehicleId = vehicleId;
             model = queryResult;
+            return View(model);
+        }
+
+        public async Task<IActionResult> Details(int reviewerId, int vehicleId)
+        {
+            var model = await reviewerService.GetReviewerByIdAsync(reviewerId, vehicleId);
             return View(model);
         }
     }
