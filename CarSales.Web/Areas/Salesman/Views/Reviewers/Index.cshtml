@@ -65,48 +65,30 @@
     </form>
     @if (Model.Reviewers.Count > 0)
     {
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <td>
-                        Name
-                    </td>
-                    <td>
-                        Short Review Price
-                    </td>
-                    <td>
-                        Standart Review Price
-                    </td>
-                    <td>
-                        Premium Review Price
-                    </td>
-                    <td>
-                    </td>
-                </tr>
-            </thead>
-            <tbody>
+        @if (Model.Reviewers.Count > 1)
+        {
+            <article class="row row-cols-lg-2 row-cols-1 justify-content-between">
                 @foreach (var reviewer in Model.Reviewers)
                 {
-                    <tr>
-                        <td>
-                            @reviewer.Name
-                        </td>
-                        <td>
-                            @reviewer.ShortReviewPrice credits
-                        </td>
-                        <td>
-                            @reviewer.StandartReviewPrice credits
-                        </td>
-                        <td>
-                            @reviewer.PremiumReviewPrice credits
-                        </td>
-                        <td>
-                            <a class="btn btn-primary" asp-area="Salesman" asp-controller="Reviews" asp-action="Order" asp-route-reviewerId="@reviewer.Id" asp-route-vehicleId="@Model.VehicleId">Choose</a>
-                        </td>
-                    </tr>
+                    <div class="col mt-3 mb-3">
+
+                        <partial name="_ReviewerListPartial" model="reviewer" />
+                    </div>
                 }
-            </tbody>
-        </table>
+            </article>
+
+        }
+        else
+        {
+            <article class="d-flex  row-cols-3 justify-content-center">
+                @foreach (var reviewer in Model.Reviewers)
+                {
+                    <div class="col-lg-6 col-12 text-center">
+                        <partial name="_ReviewerListPartial" model="reviewer" />
+                    </div>
+                }
+            </article>
+        }
         @if (Model.MaxPage > 1)
         {
             <div class="d-flex justify-content-between mt-3 mb-3">
