@@ -1,0 +1,19 @@
+﻿@model ReviewerListModel
+
+
+<div class="d-flex align-items-center justify-content-evenly border border-2 border-light rounded-5 py-1 px-5 bg-light bg-opacity-10">
+
+
+    <img class="border border-3 border-primary rounded-circle img-fluid object-fit-cover" src="@Model.ProfilePicture" alt="profilePicture" style="width:100px;height:100px" />
+
+
+    <div class="row row-cols-2 align-items-center">
+        <div class="col text-center">
+            <h3>@Model.Name</h3>
+        </div>
+        <div class="col d-flex flex-lg-row flex-column gap-2">
+            <a class="btn btn-info" asp-area="Salesman" asp-controller="Reviewers" asp-action="Details" asp-route-reviewerId="@Model.Id" asp-route-vehicleId="@ViewBag.VehicleId">Details</a>
+            <a class="btn btn-primary" asp-area="Salesman" asp-controller="Reviews" asp-action="Order" asp-route-reviewerId="@Model.Id" asp-route-vehicleId="@ViewBag.VehicleId">Choose</a>
+        </div>
+    </div>
+</div>
