@@ -13,10 +13,12 @@ namespace CarSales.Core.Services
     public class VehicleService : IVehicleService
     {
         private readonly IRepository repository;
+
         public VehicleService(IRepository repository)
         {
             this.repository = repository;
         }
+
         public async Task<VehiclesQueryModel> GetAllVehiclesForSaleAsync(string searchTerm = null,
             int vehiclesPerPage = 6,
             int currentPage = 1,
@@ -74,7 +76,7 @@ namespace CarSales.Core.Services
                 {
                     Id = v.Id,
                     Name = $"{v.Brand} {v.Model} {v.YearProduced}",
-                    ImageUrl = v.ImageUrl,
+                    ImageUrl = v.ImageUrl ?? $"/img/VehicleTypes/{v.VehicleType}.png",
                     VehicleType = v.VehicleType,
                     VehicleRating = v.Reviews.Count(r => r.ReviewStatus == ReviewStatus.Completed) > 0
                     ? (VehicleRating)v.Reviews.Where(r => r.ReviewStatus == ReviewStatus.Completed).Average(r => (int)r.VehicleRating)
@@ -145,7 +147,7 @@ namespace CarSales.Core.Services
                 {
                     Id = v.Id,
                     Name = $"{v.Brand} {v.Model} {v.YearProduced}",
-                    ImageUrl = v.ImageUrl,
+                    ImageUrl = v.ImageUrl ?? $"/img/VehicleTypes/{v.VehicleType}.png",
                     VehicleType = v.VehicleType,
                     VehicleRating = VehicleRating.NotRated,
                     Price = v.Price,
@@ -221,7 +223,7 @@ namespace CarSales.Core.Services
                 {
                     Id = v.Id,
                     Name = $"{v.Brand} {v.Model} {v.YearProduced}",
-                    ImageUrl = v.ImageUrl,
+                    ImageUrl = v.ImageUrl ?? $"/img/VehicleTypes/{v.VehicleType}.png",
                     VehicleType = v.VehicleType,
                     VehicleRating = v.Reviews.Count(r => r.ReviewStatus == ReviewStatus.Completed) > 0
                     ? (VehicleRating)v.Reviews.Where(r => r.ReviewStatus == ReviewStatus.Completed).Average(r => (int)r.VehicleRating)
@@ -297,7 +299,7 @@ namespace CarSales.Core.Services
                 {
                     Id = v.Id,
                     Name = $"{v.Brand} {v.Model} {v.YearProduced}",
-                    ImageUrl = v.ImageUrl,
+                    ImageUrl = v.ImageUrl ?? $"/img/VehicleTypes/{v.VehicleType}.png",
                     VehicleType = v.VehicleType,
                     VehicleRating = v.Reviews.Count(r => r.ReviewStatus == ReviewStatus.Completed) > 0
                     ? (VehicleRating)v.Reviews.Where(r => r.ReviewStatus == ReviewStatus.Completed).Average(r => (int)r.VehicleRating)
@@ -369,7 +371,7 @@ namespace CarSales.Core.Services
                 {
                     Id = v.Id,
                     Name = $"{v.Brand} {v.Model} {v.YearProduced}",
-                    ImageUrl = v.ImageUrl,
+                    ImageUrl = v.ImageUrl ?? $"/img/VehicleTypes/{v.VehicleType}.png",
                     VehicleType = v.VehicleType,
                     VehicleRating = v.Reviews.Count(r => r.ReviewStatus == ReviewStatus.Completed) > 0
                     ? (VehicleRating)v.Reviews.Where(r => r.ReviewStatus == ReviewStatus.Completed).Average(r => (int)r.VehicleRating)
@@ -400,7 +402,7 @@ namespace CarSales.Core.Services
                     Model = v.Model,
                     Name = $"{v.Brand} {v.Model}",
                     Description = v.Description,
-                    ImageUrl = v.ImageUrl,
+                    ImageUrl = v.ImageUrl ?? $"/img/VehicleTypes/{v.VehicleType}.png",
                     YearProduced = v.YearProduced,
                     TopSpeed = v.TopSpeed,
                     KilometersDriven = v.KilometersDriven,

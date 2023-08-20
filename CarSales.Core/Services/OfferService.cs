@@ -244,7 +244,7 @@ namespace CarSales.Core.Services
                     {
                         Id = o.VehicleId,
                         Name = $"{o.Vehicle.Brand} {o.Vehicle.Model}",
-                        ImageUrl = o.Vehicle.ImageUrl,
+                        ImageUrl = o.Vehicle.ImageUrl ?? $"/img/VehicleTypes/{o.Vehicle.VehicleType}.png",
                         Price = o.Vehicle.Price,
                         SalesmanId = o.Vehicle.SalesmanId,
                         SalesmanName = $"{o.Vehicle.Salesman.User.FirstName} {o.Vehicle.Salesman.User.LastName}",
