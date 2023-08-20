@@ -1,7 +1,6 @@
 ﻿@model VehicleViewModel
 @{
     ViewData["Title"] = Model.Name;
-    string imageUrl = Model.ImageUrl ?? $"/img/VehicleTypes/{Model.VehicleType}.png";
 }
 <h1 class="text-center mt-3 mb-3">
     @Model.Name
@@ -9,10 +8,10 @@
 <section class="container mt-4 mb-4">
     <article class="row row-cols-lg-2 row-cols-1 justify-content-center">
         <div class="col d-lg-block d-none">
-            <img class="w-100 h-100 border border-4 border-primary" src="@imageUrl" alt="vehicleImage" />
+            <img class="w-100 h-100 border border-4 border-primary" src="@Model.ImageUrl" alt="vehicleImage" />
         </div>
         <div class="text-center justify-self-center d-lg-none d-block w-50 h-50">
-            <img class="w-100 h-100 border border-4 border-primary" src="@imageUrl" alt="vehicleImage" />
+            <img class="w-100 h-100 border border-4 border-primary" src="@Model.ImageUrl" alt="vehicleImage" />
         </div>
         <div class="col d-flex flex-column justify-content-evenly align-items-center">
             <ul class="mt-3 mb-3">

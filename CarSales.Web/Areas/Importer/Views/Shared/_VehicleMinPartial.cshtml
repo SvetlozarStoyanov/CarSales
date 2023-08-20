@@ -1,12 +1,8 @@
 ﻿@model VehicleMinModel
 
-@{
-    string imageUrl = Model.ImageUrl ?? $"/img/VehicleTypes/{Model.VehicleType}.png";
-}
-
-<article class="d-flex flex-column justify-content-between gap-1 custom-border-white-blue basic-transition text-white">
+<div class="d-flex flex-column justify-content-between gap-1 custom-border-white-blue basic-transition text-white">
     <div class="w-100 mh-50 bg-white bg-opacity-10" style="height:250px;">
-        <img class="img-fluid w-100 mh-100" src="@imageUrl" alt="vehicleImage" />
+        <img class="img-fluid w-100 mh-100" src="@Model.ImageUrl" alt="vehicleImage" />
     </div>
     <div class="flex-grow-1 text-center bg-dark bg-opacity-10">
         <h5 class="mt-1 mb-1">
@@ -60,4 +56,4 @@
             </a>
         </div>
     </div>
-</article>
+</div>

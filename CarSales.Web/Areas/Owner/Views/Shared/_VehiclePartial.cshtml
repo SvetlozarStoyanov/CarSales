@@ -1,12 +1,9 @@
 ﻿@model VehicleListModel
-@{
-    string imageUrl = Model.ImageUrl ?? $"/img/VehicleTypes/{Model.VehicleType}.png";
-}
 
 <div class="col mt-3">
-    <article class="card text-white m-4 basic-transition custom-border-white-lightblue">
+    <div class="card text-white m-4 basic-transition custom-border-white-lightblue">
         <div class="text-center bg-dark bg-opacity-25" style="height:250px;">
-            <img class="card-img-top h-100" src="@imageUrl" alt="vehicleImg" />
+            <img class="card-img-top h-100" src="@Model.ImageUrl" alt="vehicleImg" />
         </div>
         <div class="card-body text-center bg-dark bg-opacity-10">
             <h5 class="mt-1 mb-1 card-title">
@@ -66,5 +63,5 @@
                 </a>
             </div>
         </div>
-    </article>
+    </div>
 </div>
