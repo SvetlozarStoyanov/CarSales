@@ -4,9 +4,6 @@ using CarSales.Core.Enums;
 using CarSales.Core.Models.RoleRequests;
 using CarSales.Core.Models.Users;
 using CarSales.Infrastructure.Data.Entities;
-using CarSales.Infrastructure.Data.Enums;
-using Microsoft.AspNet.Identity.EntityFramework;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace CarSales.Core.Services
