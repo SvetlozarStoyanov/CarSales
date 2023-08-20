@@ -1,13 +1,12 @@
 ﻿using AirsoftMatchMaker.Infrastructure.Data.Common.Repository;
+using CarSales.Core.Constants;
 using CarSales.Core.Contracts;
+using CarSales.Core.Extensions;
 using CarSales.Core.Models.Users;
 using CarSales.Infrastructure.Data.Entities;
 using CarSales.Infrastructure.Data.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
-using CarSales.Core.Extensions;
-using CarSales.Core.Constants;
-using StackExchange.Redis;
 
 namespace CarSales.Core.Services
 {
@@ -15,6 +14,7 @@ namespace CarSales.Core.Services
     {
         private readonly IRepository repository;
         private readonly IDistributedCache cache;
+
         public UserService(IRepository repository, IDistributedCache cache)
         {
             this.repository = repository;
