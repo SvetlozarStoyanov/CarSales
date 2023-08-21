@@ -18,19 +18,17 @@ namespace CarSales.Core.Contracts
         /// <returns><see cref="bool"/></returns>
         Task<bool> CanCreateReviewAsync(string userId, int reviewId);
 
+        /// <summary>
+        /// Returns latest <see cref="Review"/>s 
+        /// </summary>
+        /// <returns><see cref="IEnumerable{T}"/> of <see cref="ReviewListModel"/></returns>
+        Task<IEnumerable<ReviewListModel>> GetLatestReviewsAsync();
 
         /// <summary>
-        /// Returns latest (max 6) <see cref="Review"/> excluding the one with <paramref name="id"/>
+        /// Returns a random <see cref="Review"/> from the given <paramref name="reviews"/>
         /// </summary>
-        /// <param name="id"></param>
-        /// <returns><see cref="IEnumerable"/> of <see cref="ReviewListModel"/></returns>
-        Task<IEnumerable<ReviewListModel>> GetLatestReviewsAsync(int? id);
-
-        /// <summary>
-        /// Returns a random <see cref="Review"/> from the latest 7
-        /// </summary>
-        /// <returns><see cref="ReviewListModel"/></returns>
-        Task<ReviewListModel> GetRandomReviewAsync();
+        /// <returns><see cref="ReviewListModel"/> review</returns>
+        Task<ReviewListModel> GetRandomReviewAsync(IEnumerable<ReviewListModel> reviews);
 
         /// <summary>
         /// Returns all <see cref="Review"/> which match criteria given in parameters

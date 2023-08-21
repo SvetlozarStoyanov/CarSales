@@ -1,21 +1,28 @@
 ﻿using AirsoftMatchMaker.Infrastructure.Data.Common.Repository;
+using CarSales.Core.Constants;
 using CarSales.Core.Contracts;
 using CarSales.Core.Enums;
 using CarSales.Core.Exceptions;
+using CarSales.Core.Extensions;
 using CarSales.Core.Models.Reviews;
+using CarSales.Core.Models.Users;
 using CarSales.Core.Models.Vehicles;
 using CarSales.Infrastructure.Data.Entities;
 using CarSales.Infrastructure.Data.Enums;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Distributed;
 
 namespace CarSales.Core.Services
 {
     public class ReviewService : IReviewService
     {
         private readonly IRepository repository;
-        public ReviewService(IRepository repository)
+        private readonly IDistributedCache cache;
+
+        public ReviewService(IRepository repository, IDistributedCache cache)
         {
             this.repository = repository;
+            this.cache = cache;
         }
 
 
@@ -37,61 +44,49 @@ namespace CarSales.Core.Services
             return true;
         }
 
-        public async Task<IEnumerable<ReviewListModel>> GetLatestReviewsAsync(int? id)
+        public async Task<IEnumerable<ReviewListModel>> GetLatestReviewsAsync()
         {
-            var reviews = await repository.AllReadOnly<Review>()
-                .Where(r => r.ReviewStatus == ReviewStatus.Completed && r.Id != id)
-                .OrderByDescending(r => r.Id)
-                .Take(6)
-                .Select(r => new ReviewListModel()
-                {
-                    Id = r.Id,
-                    Title = r.Title,
-                    Overview = r.Overview.Substring(0, 70).TrimEnd() + "...",
-                    ReviewType = r.ReviewType,
-                    ReviewStatus = r.ReviewStatus,
-                    ReviewerName = $"{r.Reviewer.User.FirstName} {r.Reviewer.User.LastName}",
-                    VehicleId = r.VehicleId,
-                    VehicleName = $"{r.Vehicle.Brand} {r.Vehicle.Model}",
-                    VehicleImageUrl = r.Vehicle.ImageUrl,
-                    VehicleType = r.Vehicle.VehicleType,
-                    VehiclePrice = r.Vehicle.Price,
-                })
-                .ToListAsync();
+            var recordId = $"{DateTime.Now.ToString(RedisConstants.KeyStringFormat)}_GetLatestReviewsAsync";
+
+            var reviews = await cache.GetRecordAsync<IEnumerable<ReviewListModel>>(recordId);
+            if (reviews is null)
+            {
+
+                reviews = await repository.AllReadOnly<Review>()
+                    .Where(r => r.ReviewStatus == ReviewStatus.Completed)
+                    .OrderByDescending(r => r.Id)
+                    .Take(7)
+                    .Select(r => new ReviewListModel()
+                    {
+                        Id = r.Id,
+                        Title = r.Title,
+                        Overview = r.Overview.Substring(0, 70).TrimEnd() + "...",
+                        ReviewType = r.ReviewType,
+                        ReviewStatus = r.ReviewStatus,
+                        ReviewerName = $"{r.Reviewer.User.FirstName} {r.Reviewer.User.LastName}",
+                        VehicleId = r.VehicleId,
+                        VehicleName = $"{r.Vehicle.Brand} {r.Vehicle.Model}",
+                        VehicleImageUrl = r.Vehicle.ImageUrl ?? $"/img/VehicleTypes/{r.Vehicle.VehicleType}.png",
+                        VehicleType = r.Vehicle.VehicleType,
+                        VehiclePrice = r.Vehicle.Price,
+                    })
+                    .ToListAsync();
+
+                await cache.SetRecordAsync<IEnumerable<ReviewListModel>>(recordId,
+                    reviews,
+                    TimeSpan.FromSeconds(180),
+                    TimeSpan.FromSeconds(180));
+            }
 
             return reviews;
         }
 
-        public async Task<ReviewListModel> GetRandomReviewAsync()
+        public async Task<ReviewListModel> GetRandomReviewAsync(IEnumerable<ReviewListModel> reviews)
         {
-            var latestReviews = await repository.AllReadOnly<Review>()
-                .OrderByDescending(v => v.Id)
-                .Take(7)
-                .Where(r => r.VehicleRating > VehicleRating.Average)
-                .Include(r => r.Vehicle)
-                .Include(r => r.Reviewer)
-                .ThenInclude(rv => rv.User)
-                .ToListAsync();
-
             var random = new Random();
-            var randomIndex = random.Next(0, latestReviews.Count);
-            var randomReview = latestReviews[randomIndex];
-
-            var review = new ReviewListModel() 
-            {
-                Id = randomReview.Id,
-                Title = randomReview.Title,
-                Overview = randomReview.Overview,
-                ReviewType = randomReview.ReviewType,
-                ReviewerName = $"{randomReview.Reviewer.User.FirstName} {randomReview.Reviewer.User.LastName}",
-                VehicleId = randomReview.VehicleId,
-                VehicleName = $"{randomReview.Vehicle.Brand} {randomReview.Vehicle.Model}",
-                VehicleImageUrl = randomReview.Vehicle.ImageUrl,
-                VehicleType = randomReview.Vehicle.VehicleType,
-                VehiclePrice = randomReview.Vehicle.Price,
-            };
-
-            return review;
+            var randomIndex = random.Next(0, reviews.Count());
+            var randomReview = reviews.ElementAt(randomIndex);
+            return randomReview;
         }
 
         public async Task<ReviewsQueryModel> GetAllReviewsAsync(string? searchTerm = null,
@@ -191,7 +186,7 @@ namespace CarSales.Core.Services
                         Id = r.VehicleId,
                         Name = $"{r.Vehicle.Brand} {r.Vehicle.Model}",
                         Price = r.Vehicle.Price,
-                        ImageUrl = r.Vehicle.ImageUrl,
+                        ImageUrl = r.Vehicle.ImageUrl ?? $"/img/VehicleTypes/{r.Vehicle.VehicleType}.png",
                         VehicleType = r.Vehicle.VehicleType,
                         VehicleRating = r.VehicleRating
                     }
@@ -410,7 +405,7 @@ namespace CarSales.Core.Services
                     ReviewerId = r.ReviewerId,
                     VehicleId = r.VehicleId,
                     VehicleName = $"{r.Vehicle.Brand} {r.Vehicle.Model}",
-                    VehicleImageUrl = r.Vehicle.ImageUrl,
+                    VehicleImageUrl = r.Vehicle.ImageUrl ?? $"/img/VehicleTypes/{r.Vehicle.VehicleType}.png",
                     VehicleType = r.Vehicle.VehicleType,
                     VehiclePrice = r.Vehicle.Price,
                 })
