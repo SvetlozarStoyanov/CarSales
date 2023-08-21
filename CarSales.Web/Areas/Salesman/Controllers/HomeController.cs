@@ -17,8 +17,9 @@ namespace CarSales.Web.Areas.Salesman.Controllers
 
         public async Task<IActionResult> Index()
         {
-            ViewBag.NewestVehicleReview = await reviewService.GetRandomReviewAsync();
-            var model = await reviewService.GetLatestReviewsAsync(ViewBag.NewestVehicleReview.Id);
+            var model = await reviewService.GetLatestReviewsAsync();
+            ViewBag.HighlightedVehicleReview = await reviewService.GetRandomReviewAsync(model);
+            model = model.Where(r => r.Id != ViewBag.HighlightedVehicleReview.Id).ToList();
             return View(model);
         }
 
