@@ -119,5 +119,13 @@ namespace CarSales.Core.Contracts
         /// <returns></returns>
         Task CreateCompletedReviewAsync(ReviewCreateModel model);
 
+        /// <summary>
+        /// Returns a <see cref="ReviewPreviewModel"/> using data from <paramref name="model"/>.
+        /// Does not require a valid <paramref name="model"/> to work
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns><see cref="ReviewPreviewModel"/></returns>
+        Task<ReviewPreviewModel> CreateReviewPreviewModelAsync(ReviewCreateModel model);
+
     }
 }

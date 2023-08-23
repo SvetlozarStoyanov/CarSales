@@ -5,12 +5,12 @@ using CarSales.Core.Enums;
 using CarSales.Core.Exceptions;
 using CarSales.Core.Extensions;
 using CarSales.Core.Models.Reviews;
-using CarSales.Core.Models.Users;
 using CarSales.Core.Models.Vehicles;
 using CarSales.Infrastructure.Data.Entities;
 using CarSales.Infrastructure.Data.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
+using System.Text.Json;
 
 namespace CarSales.Core.Services
 {
@@ -289,7 +289,22 @@ namespace CarSales.Core.Services
                 {
                     Id = r.Id,
                     VehicleName = $"{r.Vehicle.Brand} {r.Vehicle.Model}",
-                    ReviewType = r.ReviewType
+                    ReviewType = r.ReviewType,
+                    ReviewPreviewModel = new ReviewPreviewModel()
+                    {
+                        Interior = r.ReviewType > ReviewType.Short ? "" : null,
+                        Longevity = r.ReviewType > ReviewType.Short ? "" : null,
+                        Features = r.ReviewType > ReviewType.Standart ? "" : null,
+                        Vehicle = new VehicleReviewModel
+                        {
+                            Id = r.VehicleId,
+                            Name = $"{r.Vehicle.Brand} {r.Vehicle.Model}",
+                            Price = r.Vehicle.Price,
+                            ImageUrl = r.Vehicle.ImageUrl ?? $"/img/VehicleTypes/{r.Vehicle.VehicleType}.png",
+                            VehicleType = r.Vehicle.VehicleType,
+                            VehicleRating = r.VehicleRating
+                        }
+                    }
                 })
                 .FirstOrDefaultAsync();
 
@@ -366,6 +381,24 @@ namespace CarSales.Core.Services
             review.VehicleRating = model.VehicleRating;
 
             await repository.SaveChangesAsync();
+        }
+
+        public async Task<ReviewPreviewModel> CreateReviewPreviewModelAsync(ReviewCreateModel model)
+        {
+            //var createModel = JsonSerializer.Deserialize<ReviewCreateModel>(model);
+            var previewModel = new ReviewPreviewModel()
+            {
+                Title = model.Title,
+                Overview = model.Overview,
+                Performance = model.Performance,
+                Interior = model.Interior,
+                Longevity = model.Longevity,
+                Features = model.Features,
+                VehicleRating = model.VehicleRating,
+                VehicleRatingAsInt = (int)model.VehicleRating
+            };
+            //JsonSerializer.Serialize(previewModel);
+            return previewModel;
         }
 
         private ReviewsQueryModel CreateReviewsQueryModel(string? searchTerm,
