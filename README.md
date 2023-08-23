@@ -12,7 +12,7 @@ The migration will be applied on startup.
 The app will be accessible at localhost:80
 Use "docker-compose down --volumes" when removing.
 
-There are 5 types of users - Admin, Importer, Owner, Reviewer, Salesman/
+There are 5 types of users - Admin, Importer, Owner, Reviewer, Salesman.
 
 - Admin:
  + Approves or denies role requests sent by other users
