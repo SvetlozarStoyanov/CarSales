@@ -129,7 +129,7 @@
             </div>
         </div>
     </article>
-    @if (Model.ReviewCount > 0)
+    @if (Model.Reviews.Count() > 0)
     {
         <article class="mt-5">
             <div class="d-flex justify-content-between align-items-center bg-white bg-opacity-75 p-3 rounded-4">
@@ -137,7 +137,7 @@
                     Reviews
                 </h2>
                 <div>
-                    @if (Model.ReviewCount > 3)
+                    @if (Model.Reviews.Count() > 3)
                     {
                         <a asp-area="Reviewer" asp-controller="Reviews" asp-action="Index" asp-route-vehicleName="@Model.Name" class="btn btn-light">
                             <b>View All</b>
