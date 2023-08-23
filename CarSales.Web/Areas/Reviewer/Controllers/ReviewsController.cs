@@ -74,5 +74,12 @@ namespace CarSales.Web.Areas.Reviewer.Controllers
             TempData["success"] = "Successfully created review!";
             return RedirectToAction("Index", "Home");
         }
+
+        [HttpPost]
+        public async Task<IActionResult> CreatePreviewModel(ReviewCreateModel model)
+        {
+            var previewModel = await reviewService.CreateReviewPreviewModelAsync(model);
+            return Json(previewModel);
+        }
     }
 }
