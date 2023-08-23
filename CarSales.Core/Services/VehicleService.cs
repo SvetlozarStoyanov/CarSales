@@ -407,7 +407,6 @@ namespace CarSales.Core.Services
                     TopSpeed = v.TopSpeed,
                     KilometersDriven = v.KilometersDriven,
                     Price = v.Price,
-                    ReviewCount = v.Reviews.Count,
                     VehicleType = v.VehicleType,
                     VehicleRating = v.Reviews.Count(r => r.ReviewStatus == ReviewStatus.Completed) > 0
                     ? (VehicleRating)v.Reviews.Where(r => r.ReviewStatus == ReviewStatus.Completed).Average(r => (int)r.VehicleRating)
@@ -421,13 +420,13 @@ namespace CarSales.Core.Services
                     ImporterId = v.ImporterId,
                     ImporterUserId = v.Importer != null ? v.Importer.UserId : null,
                     ImporterName = v.Importer != null ? $"{v.Importer.User.FirstName} {v.Importer.User.LastName}" : null,
-                    Reviews = v.Reviews.Count > 0 ? v.Reviews.Where(r => r.ReviewStatus == ReviewStatus.Completed).OrderByDescending(r => r.Id).Take(3).Select(r => new ReviewMinModel()
+                    Reviews = v.Reviews.Where(r => r.ReviewStatus == ReviewStatus.Completed).OrderByDescending(r => r.Id).Take(3).Select(r => new ReviewMinModel()
                     {
                         Id = r.Id,
                         Title = r.Title,
                         VehicleRating = r.VehicleRating,
                         ReviewerName = r.Reviewer.User.UserName
-                    }).ToList() : null
+                    }).ToList()
 
                 })
                 .FirstOrDefaultAsync();

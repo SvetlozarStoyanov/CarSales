@@ -1,10 +1,8 @@
 using CarSales.Infrastructure.Data;
 using CarSales.Infrastructure.Data.Entities;
 using CarSales.Web.Extensions;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Antiforgery;
+using Microsoft.EntityFrameworkCore;
 
 namespace CarSales.Web
 {
@@ -43,7 +41,6 @@ namespace CarSales.Web
                 options.Filters.Add<AutoValidateAntiforgeryTokenAttribute>();
             });
 
-
             //builder.Services.AddAntiforgery(options =>
             //{
             //    // Set Cookie properties using CookieBuilder properties†.
@@ -78,6 +75,7 @@ namespace CarSales.Web
             }
 
             app.UseHttpsRedirection();
+            app.UseDefaultFiles();
             app.UseStaticFiles();
 
             app.UseRouting();
