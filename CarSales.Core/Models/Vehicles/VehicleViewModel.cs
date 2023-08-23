@@ -16,7 +16,6 @@ namespace CarSales.Core.Models.Vehicles
         public double TopSpeed { get; set; }
         public double KilometersDriven { get; set; }
         public decimal Price { get; set; }
-        public int ReviewCount { get; set; }
         public VehicleType VehicleType { get; set; }
         public VehicleRating VehicleRating { get; set; }
         public int? OwnerId { get; set; }
