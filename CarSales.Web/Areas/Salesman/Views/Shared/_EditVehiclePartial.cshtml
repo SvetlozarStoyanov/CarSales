@@ -1,0 +1,51 @@
+﻿@model VehicleEditModel
+
+<div class="w-100 h-100">
+    <form asp-area="Salesman" asp-controller="Vehicles" asp-action="Edit" id="editForm" method="post">
+        <div class="d-flex flex-column gap-3 px-5 py-2 bg-dark text-white border border-4 border-white rounded-5">
+            <input asp-for="Id" hidden />
+            <input id="defaultVehicleImage" asp-for=DefaultImageUrl value="@Model.DefaultImageUrl" hidden />
+            <input id="originalVehicleImage" value="@Model.ImageUrl" hidden />
+
+            <h1 class="text-center mt-4 mb-4">Edit @Model.Name</h1>
+            <div class="form-group">
+                <label asp-for="@Model.Description" class="form-label col-form-label-lg"></label>
+                <textarea style="resize:none" asp-for="@Model.Description" value="@Model.Description" class="form-control"></textarea>
+                <span asp-validation-for="@Model.Description" class="small text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="@Model.Price" class="form-label col-form-label-lg"></label>
+                <input value="@Model.OldPrice" asp-for="@Model.OldPrice" id="oldPrice" hidden />
+                <input id="newPrice" type="number" asp-for="@Model.Price" value="@Model.OldPrice" class="form-control" data-val="true" data-val-number="The field Price must be a number." data-val-range="Price cannot be greater than the original price!" data-val-range-max="@Model.OldPrice" data-val-range-min="1" data-val-required="The Price field is required." name="Price" />
+                <span asp-validation-for="@Model.Price" class="small text-danger" id="priceValidation"></span>
+            </div>
+            <div class="flex-shrink-1 align-self-center basic-transition mt-3 mb-3">
+                <img class="border border-primary border-5 rounded-4 basic-transition" id="vehiclePreviewImage"
+                     style="height:200px;width:200px;object-fit:cover"
+                     src="@Model.ImageUrl" alt="Vehicle Image" />
+                <h5 class="m-0 d-flex flex-column align-items-center justify-content-center border border-info border-5 basic-transition d-none text-danger"
+                    id="imageErrorHeader"
+                    style="height:200px;width:200px;object-fit:none">
+                    <span>Image Url does not exist!</span>
+                </h5>
+            </div>
+            <div class="form-group mt-3 mb-3">
+                <label asp-for="@Model.ImageUrl" class="form-label">Image Url</label>
+                <input asp-for="@Model.ImageUrl" id="imageUrl" class="form-control" />
+            </div>
+            <div class="text-center mt-4 mb-4">
+                <div class="d-flex flex-row gap-2 justify-content-center align-items-center">
+                    <button class="btn btn-lg btn-success" id="submitBtn">
+                        Save Changes
+                    </button>
+                    <button class="btn btn-lg btn-danger" id="cancelBtn" data-bs-dismiss="modal" aria-label="Close">
+                        Cancel
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script src="~/js/Vehicles/editVehiclePartial.js"></script>

@@ -1,0 +1,35 @@
+﻿@model VehicleSellModel
+
+<div class="w-100 h-100">
+    <form asp-area="Salesman" asp-controller="Vehicles" asp-action="Sell" method="post">
+        <div class="d-flex flex-column gap-3 px-5 py-2 bg-dark text-white border border-4 border-white rounded-5">
+        <h1 class="text-center">
+            Sell @Model.Name
+        </h1>
+            <div class="form-group">
+                <label asp-for="@Model.Description" class="form-label col-form-label-lg"></label>
+                <textarea style="resize:none" asp-for="@Model.Description" value="@Model.Description" class="form-control"></textarea>
+                <span asp-validation-for="@Model.Description" class="small text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="@Model.Price" class="form-label col-form-label-lg"></label>
+                <input value="@Model.OldPrice" asp-for="@Model.OldPrice" id="oldPrice" hidden />
+                <input id="newPrice" type="number" asp-for="@Model.Price" value="@Model.OldPrice" class="form-control" data-val="true" data-val-number="The field Price must be a number." data-val-range="Price cannot be greater than the original price!" data-val-range-max="@Model.OldPrice" data-val-range-min="1" data-val-required="The Price field is required." name="Price" />
+                <span asp-validation-for="@Model.Price" class="small text-danger" id="priceValidation"></span>
+            </div>
+
+            <div class="text-center mt-4 mb-4 ">
+                <div class="d-flex flex-row gap-2 justify-content-center align-items-center">
+                    <button class="btn btn-lg btn-success" id="submitBtn">
+                        Sell
+                    </button>
+                    <button class="btn btn-lg btn-danger" id="cancelBtn" data-bs-dismiss="modal" aria-label="Close">
+                        Cancel
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script src="~/js/Vehicles/sellVehiclePartial.js"></script>
