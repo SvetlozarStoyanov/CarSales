@@ -50,11 +50,11 @@ form.addEventListener('submit', async function (e) {
             if (request.status !== 200) {
                 imageUrlInput.value = null;
             }
-            
+
             await form.submit();
         }
 
     };
     await request.send();
     /*e.currentTarget.submit();*/
-})
+});
