@@ -160,7 +160,7 @@ namespace CarSales.Core.Services
                 currentPage = 1;
             }
             var queryModel = CreateVehiclesQueryModel(searchTerm, vehiclesPerPage, currentPage, selectedVehicleTypes, sortedVehicles, vehicles.Count);
-            
+
             queryModel.SortingOptions = queryModel.SortingOptions.Take(queryModel.SortingOptions.Count() - 2);
 
             return queryModel;
@@ -420,6 +420,24 @@ namespace CarSales.Core.Services
                     ImporterId = v.ImporterId,
                     ImporterUserId = v.Importer != null ? v.Importer.UserId : null,
                     ImporterName = v.Importer != null ? $"{v.Importer.User.FirstName} {v.Importer.User.LastName}" : null,
+                    VehicleSellModel = v.OwnerId != null ? new VehicleSellModel()
+                    {
+                        Id = v.Id,
+                        Name = $"{v.Brand} {v.Model}",
+                        Description = v.Description,
+                        Price = v.Price,
+                        OldPrice = v.Price
+                    } : null,
+                    VehicleEditModel = (v.SalesmanId != null || v.ImporterId != null) ? new VehicleEditModel()
+                    {
+                        Id = v.Id,
+                        Name = $"{v.Brand} {v.Model}",
+                        Description = v.Description,
+                        ImageUrl = v.ImageUrl ?? $"/img/VehicleTypes/{v.VehicleType}.png",
+                        DefaultImageUrl = $"/img/VehicleTypes/{v.VehicleType}.png",
+                        Price = v.Price,
+                        OldPrice = v.Price
+                    } : null,
                     Reviews = v.Reviews.Where(r => r.ReviewStatus == ReviewStatus.Completed).OrderByDescending(r => r.Id).Take(3).Select(r => new ReviewMinModel()
                     {
                         Id = r.Id,
@@ -525,7 +543,6 @@ namespace CarSales.Core.Services
                     Price = v.Price,
                     OldPrice = v.Price,
                     OwnerUserId = v.Owner.UserId,
-                    //VehicleRatings = Enum.GetValues<VehicleRating>()
                 })
                 .FirstOrDefaultAsync();
             return vehicle;
@@ -550,7 +567,7 @@ namespace CarSales.Core.Services
             await repository.SaveChangesAsync();
         }
 
-        public async Task EditVehicleForSaleAsync(VehicleSellModel model)
+        public async Task EditVehicleAsync(VehicleEditModel model)
         {
             var vehicle = await repository.All<Vehicle>()
                 .Where(v => v.Id == model.Id)
@@ -560,6 +577,7 @@ namespace CarSales.Core.Services
 
             vehicle.Description = model.Description;
             vehicle.Price = model.Price;
+            vehicle.ImageUrl = model.ImageUrl;
 
             await repository.SaveChangesAsync();
         }
