@@ -1,5 +1,4 @@
-﻿using CarSales.Infrastructure.Data.Enums;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace CarSales.Core.Models.Vehicles
 {
@@ -10,11 +9,8 @@ namespace CarSales.Core.Models.Vehicles
         [MinLength(5), MaxLength(100)]
         public string Description { get; set; } = null!;
         public string Name { get; set; } = null!;
-
         public decimal Price { get; set; }
         public decimal OldPrice { get; set; }
-        public VehicleRating VehicleRating { get; set; }
-        public VehicleRating[] VehicleRatings { get; set; }
         public string? OwnerUserId { get; set; }
     }
 }
