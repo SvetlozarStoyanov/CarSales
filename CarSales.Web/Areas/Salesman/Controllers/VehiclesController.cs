@@ -162,7 +162,7 @@ namespace CarSales.Web.Areas.Salesman.Controllers
                 {
                     return View(model);
                 }
-                await vehicleService.EditVehicleForSaleAsync(model);
+                await vehicleService.EditVehicleAsync(model);
             }
             catch (Exception e)
             {

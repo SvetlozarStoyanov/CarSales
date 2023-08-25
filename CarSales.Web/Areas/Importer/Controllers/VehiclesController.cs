@@ -129,7 +129,7 @@ namespace CarSales.Web.Areas.Importer.Controllers
                     //model = await vehicleService.CreateVehicleSellModelAsync(model.Id);
                     return View(model);
                 }
-                await vehicleService.EditVehicleForSaleAsync(model);
+                await vehicleService.EditVehicleAsync(model);
             }
             catch (Exception e)
             {
