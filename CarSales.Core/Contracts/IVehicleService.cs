@@ -140,7 +140,7 @@ namespace CarSales.Core.Contracts
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        Task EditVehicleForSaleAsync(VehicleSellModel model);
+        Task EditVehicleAsync(VehicleEditModel model);
 
         /// <summary>
         /// Creates <see cref="VehicleImportModel"/> and sets the <see cref="VehicleImportModel.ImporterId"/>
