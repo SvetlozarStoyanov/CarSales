@@ -133,8 +133,25 @@
                 {
                     <h2 class="mt-3 mb-3">Importer: @Model.ImporterName</h2>
                     <h3 class="mt-3 mb-3">@Model.Price credits</h3>
+                    @if (Model.ImporterUserId == User.Id())
+                    {
+                        <button type="button" class="btn btn-lg btn-warning" data-bs-toggle="modal" data-bs-target="#sellModal">
+                            Edit
+                        </button>
+
+                        <!-- Modal -->
+                        <div class="modal fade" id="sellModal" tabindex="-1" aria-labelledby="sellModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content bg-transparent border-0">
+                                    <div class="modal-body">
+                                        <partial name="_EditVehiclePartial" model="Model.VehicleEditModel" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
                 }
-            </div>
+        </div>
         </div>
     </article>
     @if (Model.Reviews.Count() > 0)
@@ -169,4 +186,4 @@
 </section>
 
 
-<script src="~/js/Vehicles/canBuyVehicle.js"></script>
+<script src="~/js/Vehicles/details.js"></script>
