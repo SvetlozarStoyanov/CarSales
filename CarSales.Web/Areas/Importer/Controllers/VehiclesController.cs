@@ -1,6 +1,5 @@
 ﻿using CarSales.Core.Contracts;
 using CarSales.Core.Models.Vehicles;
-using CarSales.Core.Services;
 using CarSales.Web.Extensions;
 using Microsoft.AspNetCore.Mvc;
 
@@ -119,21 +118,15 @@ namespace CarSales.Web.Areas.Importer.Controllers
             return RedirectToAction(nameof(Details), new { id = id });
         }
 
-        [HttpGet]
-        public async Task<IActionResult> Edit(int id)
-        {
-            var model = await vehicleService.CreateVehicleSellModelAsync(id);
-            return View(model);
-        }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(VehicleSellModel model)
+        public async Task<IActionResult> Edit(VehicleEditModel model)
         {
             try
             {
                 if (model.OldPrice < model.Price)
                 {
-                    model = await vehicleService.CreateVehicleSellModelAsync(model.Id);
+                    //model = await vehicleService.CreateVehicleSellModelAsync(model.Id);
                     return View(model);
                 }
                 await vehicleService.EditVehicleForSaleAsync(model);
@@ -142,7 +135,7 @@ namespace CarSales.Web.Areas.Importer.Controllers
             {
 
             }
-            return RedirectToAction(nameof(MyImportedVehicles));
+            return RedirectToAction(nameof(Details), new { id = model.Id });
         }
 
         [HttpGet]

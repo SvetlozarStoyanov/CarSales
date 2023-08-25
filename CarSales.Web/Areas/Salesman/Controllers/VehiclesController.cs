@@ -132,13 +132,6 @@ namespace CarSales.Web.Areas.Salesman.Controllers
             return RedirectToAction(nameof(Details), new { id = id });
         }
 
-        [HttpGet]
-        public async Task<IActionResult> Sell(int id)
-        {
-            var model = await vehicleService.CreateVehicleSellModelAsync(id);
-
-            return View(model);
-        }
 
         [HttpPost]
         public async Task<IActionResult> Sell(VehicleSellModel model)
@@ -156,24 +149,17 @@ namespace CarSales.Web.Areas.Salesman.Controllers
             {
 
             }
-            return RedirectToAction(nameof(MyVehiclesOnSale));
+            return RedirectToAction(nameof(Details), new { id = model.Id });
         }
 
-        [HttpGet]
-        public async Task<IActionResult> Edit(int id)
-        {
-            var model = await vehicleService.CreateVehicleSellModelAsync(id);
-            return View(model);
-        }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(VehicleSellModel model)
+        public async Task<IActionResult> Edit(VehicleEditModel model)
         {
             try
             {
                 if (model.OldPrice < model.Price)
                 {
-                    model = await vehicleService.CreateVehicleSellModelAsync(model.Id);
                     return View(model);
                 }
                 await vehicleService.EditVehicleForSaleAsync(model);
@@ -182,7 +168,7 @@ namespace CarSales.Web.Areas.Salesman.Controllers
             {
 
             }
-            return RedirectToAction(nameof(MyVehiclesOnSale));
+            return RedirectToAction(nameof(Details), new { id = model.Id });
         }
     }
 }
