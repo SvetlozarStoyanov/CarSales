@@ -4,9 +4,10 @@ const price = parseFloat(document.querySelector('#price').value);
 
 const buyBtn = document.querySelector('#buyBtn');
 
-
-if (availableCredits < price) {
-    buyBtn.classList.add('disabled');
-} else {
-    buyBtn.classList.remove('disabled');
+if (buyBtn !== null) {
+    if (availableCredits < price) {
+        buyBtn.classList.add('disabled');
+    } else {
+        buyBtn.classList.remove('disabled');
+    }
 }
