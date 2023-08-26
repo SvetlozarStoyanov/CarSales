@@ -49,7 +49,11 @@ imageUrlInput.addEventListener('input', function (e) {
 });
 
 cancelBtn.addEventListener('click', function (e) {
-    imageUrlInput.value = originalImageUrl.value;
+    if (originalImageUrl.value !== defaultVehicleImageSrc.value) {
+        imageUrlInput.value = originalImageUrl.value;
+    } else {
+        imageUrlInput.value = "";
+    }
     vehiclePreviewImage.src = originalImageUrl.value;
     imageErrorHeader.classList.add('d-none');
     vehiclePreviewImage.classList.remove('d-none');
@@ -67,14 +71,11 @@ form.addEventListener('submit', async function (e) {
                 if (request.status !== 200) {
                     imageUrlInput.value = null;
                 }
-
                 await form.submit();
             }
-
         };
         await request.send();
+    } else {
+        e.currentTarget.submit();
     }
-    //} else {
-    //    e.currentTarget.submit();
-    //}
 });
