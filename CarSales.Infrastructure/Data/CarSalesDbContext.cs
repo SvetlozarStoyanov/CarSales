@@ -12,6 +12,12 @@ namespace CarSales.Infrastructure.Data
         {
             this.Database.Migrate();
         }
+        public CarSalesDbContext(DbContextOptions<CarSalesDbContext> options, bool applyMigrations) 
+            : base(options)
+        {
+
+        }
+        public bool ApplyConfiguration { get; set; } = true;
         public DbSet<Salesman> Salesmen { get; set; } = null!;
         public DbSet<Owner> Owners { get; set; } = null!;
         public DbSet<Importer> Importers { get; set; } = null!;
