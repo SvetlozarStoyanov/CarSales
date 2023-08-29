@@ -7,7 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CarSales.Infrastructure", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CarSales.Web", "CarSales.Web\CarSales.Web.csproj", "{D3976DC4-2F19-4786-ABBF-9E5CFD85A0FC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarSales.Core", "CarSales.Core\CarSales.Core.csproj", "{30212A36-7AF2-4B01-8F7A-81E9CA1D32F9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CarSales.Core", "CarSales.Core\CarSales.Core.csproj", "{30212A36-7AF2-4B01-8F7A-81E9CA1D32F9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarSales.Tests", "CarSales.Tests\CarSales.Tests.csproj", "{0FA7A188-50D5-48FE-936D-E14610335D3B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{30212A36-7AF2-4B01-8F7A-81E9CA1D32F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{30212A36-7AF2-4B01-8F7A-81E9CA1D32F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{30212A36-7AF2-4B01-8F7A-81E9CA1D32F9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0FA7A188-50D5-48FE-936D-E14610335D3B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0FA7A188-50D5-48FE-936D-E14610335D3B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0FA7A188-50D5-48FE-936D-E14610335D3B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0FA7A188-50D5-48FE-936D-E14610335D3B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
