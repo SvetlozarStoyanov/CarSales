@@ -1,7 +1,6 @@
 ﻿using CarSales.Core.Enums;
 using CarSales.Core.Models.Vehicles;
 using CarSales.Infrastructure.Data.Entities;
-using CarSales.Infrastructure.Data.Enums;
 
 namespace CarSales.Core.Contracts
 {
@@ -13,14 +12,14 @@ namespace CarSales.Core.Contracts
         /// <param name="searchTerm"></param>
         /// <param name="vehiclesPerPage"></param>
         /// <param name="currentPage"></param>
-        /// <param name="sorting"></param>
+        /// <param name="vehicleSorting"></param>
         /// <param name="selectedVehicleTypes"></param>
         /// <returns><see cref="VehiclesQueryModel"/></returns>
-        Task<VehiclesQueryModel> GetAllVehiclesForSaleAsync(string searchTerm = null,
+        Task<VehiclesQueryModel> GetVehiclesForSaleAsync(string searchTerm = null,
             int vehiclesPerPage = 6,
             int currentPage = 1,
             string selectedVehicleTypes = null,
-            VehicleSorting sorting = VehicleSorting.Alphabetically
+            VehicleSorting vehicleSorting = VehicleSorting.Alphabetically
             );
 
         /// <summary>
@@ -29,14 +28,14 @@ namespace CarSales.Core.Contracts
         /// <param name="searchTerm"></param>
         /// <param name="vehiclesPerPage"></param>
         /// <param name="currentPage"></param>
-        /// <param name="sorting"></param>
         /// <param name="selectedVehicleTypes"></param>
+        /// <param name="vehicleSorting"></param>
         /// <returns><see cref="VehiclesQueryModel"/></returns>
         Task<VehiclesQueryModel> GetImportedVehicles(string searchTerm = null,
             int vehiclesPerPage = 6,
             int currentPage = 1,
             string selectedVehicleTypes = null,
-            VehicleSorting sorting = VehicleSorting.Alphabetically
+            VehicleSorting vehicleSorting = VehicleSorting.Alphabetically
             );
 
         /// <summary>
@@ -47,14 +46,14 @@ namespace CarSales.Core.Contracts
         /// <param name="vehiclesPerPage"></param>
         /// <param name="currentPage"></param>
         /// <param name="selectedVehicleTypes"></param>
-        /// <param name="sorting"></param>
+        /// <param name="vehicleSorting"></param>
         /// <returns><see cref="VehiclesQueryModel"/></returns>
         Task<VehiclesQueryModel> GetOwnerVehiclesAsync(string userId,
             string searchTerm = null,
             int vehiclesPerPage = 6,
             int currentPage = 1,
             string selectedVehicleTypes = null,
-            VehicleSorting sorting = VehicleSorting.Alphabetically);
+            VehicleSorting vehicleSorting = VehicleSorting.Alphabetically);
 
         /// <summary>
         /// Returns all <see cref="Vehicle"/> being sold by <see cref="Salesman"/> with given <paramref name="userId"/>
@@ -64,14 +63,14 @@ namespace CarSales.Core.Contracts
         /// <param name="vehiclesPerPage"></param>
         /// <param name="currentPage"></param>
         /// <param name="selectedVehicleTypes"></param>
-        /// <param name="sorting"></param>
+        /// <param name="vehicleSorting"></param>
         /// <returns><see cref="VehiclesQueryModel"/></returns>
         Task<VehiclesQueryModel> GetSalesmanVehiclesAsync(string userId,
             string searchTerm = null,
             int vehiclesPerPage = 6,
             int currentPage = 1,
             string selectedVehicleTypes = null,
-            VehicleSorting sorting = VehicleSorting.Alphabetically);
+            VehicleSorting vehicleSorting = VehicleSorting.Alphabetically);
 
         /// <summary>
         /// Returns all <see cref="Vehicle"/> imported by <see cref="Importer"/> with given <paramref name="userId"/>
@@ -81,14 +80,14 @@ namespace CarSales.Core.Contracts
         /// <param name="vehiclesPerPage"></param>
         /// <param name="currentPage"></param>
         /// <param name="selectedVehicleTypes"></param>
-        /// <param name="sorting"></param>
+        /// <param name="vehicleSorting"></param>
         /// <returns><see cref="VehiclesQueryModel"/></returns>
         Task<VehiclesQueryModel> GetImporterVehiclesAsync(string userId,
             string searchTerm = null,
             int vehiclesPerPage = 6,
             int currentPage = 1,
             string selectedVehicleTypes = null,
-            VehicleSorting sorting = VehicleSorting.Alphabetically);
+            VehicleSorting vehicleSorting = VehicleSorting.Alphabetically);
 
         /// <summary>
         /// Returns <see cref="Vehicle"/> by given <paramref name="id"/>
