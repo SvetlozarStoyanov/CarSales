@@ -42,7 +42,7 @@ namespace CarSales.Infrastructure.Data.Configuration
                     ImageUrl = "https://i.ytimg.com/vi/rvn4lHrr6AQ/maxresdefault.jpg",
                     TopSpeed = 350,
                     KilometersDriven = 0,
-                    Price = 30000,
+                    Price = 60000,
                     SalesmanId = 1,
                     OwnerId = null,
                     ImporterId = null,
