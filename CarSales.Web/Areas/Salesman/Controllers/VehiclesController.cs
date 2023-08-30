@@ -20,7 +20,7 @@ namespace CarSales.Web.Areas.Salesman.Controllers
 
         public async Task<IActionResult> Index([FromQuery] VehiclesQueryModel model)
         {
-            var queryResult = await vehicleService.GetAllVehiclesForSaleAsync(
+            var queryResult = await vehicleService.GetVehiclesForSaleAsync(
                 model.SearchTerm,
                 model.VehiclesPerPage,
                 model.CurrentPage,
