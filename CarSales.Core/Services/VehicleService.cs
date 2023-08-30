@@ -19,11 +19,11 @@ namespace CarSales.Core.Services
             this.repository = repository;
         }
 
-        public async Task<VehiclesQueryModel> GetAllVehiclesForSaleAsync(string searchTerm = null,
+        public async Task<VehiclesQueryModel> GetVehiclesForSaleAsync(string searchTerm = null,
             int vehiclesPerPage = 6,
             int currentPage = 1,
             string? selectedVehicleTypes = null,
-            VehicleSorting sorting = VehicleSorting.Alphabetically
+            VehicleSorting vehicleSorting = VehicleSorting.Alphabetically
             )
         {
 
@@ -49,7 +49,7 @@ namespace CarSales.Core.Services
                     vehicles = vehicles.Where(v => selectedTypes.Contains(v.VehicleType))
                         .ToList();
                 }
-                switch (sorting)
+                switch (vehicleSorting)
                 {
                     case VehicleSorting.Alphabetically:
                         vehicles = vehicles.OrderBy(v => v.Brand).ToList();
@@ -61,10 +61,12 @@ namespace CarSales.Core.Services
                         vehicles = vehicles.OrderBy(v => v.Price).ToList();
                         break;
                     case VehicleSorting.RatingDescending:
-                        vehicles = vehicles.OrderByDescending(v => v.Reviews.Average(r => (int)r.VehicleRating)).ToList();
+                        vehicles = vehicles.OrderByDescending(v => v.Reviews.Count(r => r.ReviewStatus == ReviewStatus.Completed) > 0
+                        ? v.Reviews.Average(r => (int)r.VehicleRating) : 1).ToList();
                         break;
                     case VehicleSorting.RatingAscending:
-                        vehicles = vehicles.OrderBy(v => v.Reviews.Average(r => (int)r.VehicleRating)).ToList();
+                        vehicles = vehicles.OrderBy(v => v.Reviews.Count(r => r.ReviewStatus == ReviewStatus.Completed) > 0
+                        ? v.Reviews.Average(r => (int)r.VehicleRating) : 1).ToList();
                         break;
                 }
             }
@@ -90,7 +92,7 @@ namespace CarSales.Core.Services
             {
                 currentPage = 1;
             }
-            var queryModel = CreateVehiclesQueryModel(searchTerm, vehiclesPerPage, currentPage, selectedVehicleTypes, sortedVehicles, vehicles.Count);
+            var queryModel = CreateVehiclesQueryModel(searchTerm, vehiclesPerPage, currentPage, selectedVehicleTypes, vehicleSorting, sortedVehicles, vehicles.Count);
 
             return queryModel;
         }
@@ -99,7 +101,7 @@ namespace CarSales.Core.Services
             int vehiclesPerPage = 6,
             int currentPage = 1,
             string selectedVehicleTypes = null,
-            VehicleSorting sorting = VehicleSorting.Alphabetically
+            VehicleSorting vehicleSorting = VehicleSorting.Alphabetically
             )
         {
             var vehicles = await repository.AllReadOnly<Vehicle>()
@@ -125,7 +127,7 @@ namespace CarSales.Core.Services
                     vehicles = vehicles.Where(v => selectedTypes.Contains(v.VehicleType))
                         .ToList();
                 }
-                switch (sorting)
+                switch (vehicleSorting)
                 {
                     case VehicleSorting.Alphabetically:
                         vehicles = vehicles.OrderBy(v => v.Brand).ToList();
@@ -135,8 +137,6 @@ namespace CarSales.Core.Services
                         break;
                     case VehicleSorting.PriceAscending:
                         vehicles = vehicles.OrderBy(v => v.Price).ToList();
-                        break;
-                    default:
                         break;
                 }
             }
@@ -159,7 +159,7 @@ namespace CarSales.Core.Services
             {
                 currentPage = 1;
             }
-            var queryModel = CreateVehiclesQueryModel(searchTerm, vehiclesPerPage, currentPage, selectedVehicleTypes, sortedVehicles, vehicles.Count);
+            var queryModel = CreateVehiclesQueryModel(searchTerm, vehiclesPerPage, currentPage, selectedVehicleTypes, vehicleSorting, sortedVehicles, vehicles.Count);
 
             queryModel.SortingOptions = queryModel.SortingOptions.Take(queryModel.SortingOptions.Count() - 2);
 
@@ -171,7 +171,7 @@ namespace CarSales.Core.Services
             int vehiclesPerPage = 6,
             int currentPage = 1,
             string selectedVehicleTypes = null,
-            VehicleSorting sorting = VehicleSorting.Alphabetically)
+            VehicleSorting vehicleSorting = VehicleSorting.Alphabetically)
         {
             var vehicles = await repository.AllReadOnly<Vehicle>()
                 .Where(v => v.Owner.UserId == userId)
@@ -196,7 +196,7 @@ namespace CarSales.Core.Services
                     vehicles = vehicles.Where(v => selectedTypes.Contains(v.VehicleType))
                         .ToList();
                 }
-                switch (sorting)
+                switch (vehicleSorting)
                 {
                     case VehicleSorting.Alphabetically:
                         vehicles = vehicles.OrderBy(v => v.Brand).ToList();
@@ -208,10 +208,12 @@ namespace CarSales.Core.Services
                         vehicles = vehicles.OrderBy(v => v.Price).ToList();
                         break;
                     case VehicleSorting.RatingDescending:
-                        vehicles = vehicles.OrderByDescending(v => v.Reviews.Average(r => (int)r.VehicleRating)).ToList();
+                        vehicles = vehicles.OrderByDescending(v => v.Reviews.Count(r => r.ReviewStatus == ReviewStatus.Completed) > 0
+                        ? v.Reviews.Average(r => (int)r.VehicleRating) : 1).ToList();
                         break;
                     case VehicleSorting.RatingAscending:
-                        vehicles = vehicles.OrderBy(v => v.Reviews.Average(r => (int)r.VehicleRating)).ToList();
+                        vehicles = vehicles.OrderBy(v => v.Reviews.Count(r => r.ReviewStatus == ReviewStatus.Completed) > 0
+                        ? v.Reviews.Average(r => (int)r.VehicleRating) : 1).ToList();
                         break;
                 }
             }
@@ -237,7 +239,7 @@ namespace CarSales.Core.Services
             {
                 currentPage = 1;
             }
-            var queryModel = CreateVehiclesQueryModel(searchTerm, vehiclesPerPage, currentPage, selectedVehicleTypes, sortedVehicles, vehicles.Count);
+            var queryModel = CreateVehiclesQueryModel(searchTerm, vehiclesPerPage, currentPage, selectedVehicleTypes, vehicleSorting, sortedVehicles, vehicles.Count);
 
             return queryModel;
         }
@@ -247,7 +249,7 @@ namespace CarSales.Core.Services
             int vehiclesPerPage = 6,
             int currentPage = 1,
             string selectedVehicleTypes = null,
-            VehicleSorting sorting = VehicleSorting.Alphabetically)
+            VehicleSorting vehicleSorting = VehicleSorting.Alphabetically)
         {
             var vehicles = await repository.AllReadOnly<Vehicle>()
                 .Where(v => v.Salesman.UserId == userId)
@@ -272,7 +274,7 @@ namespace CarSales.Core.Services
                     vehicles = vehicles.Where(v => selectedTypes.Contains(v.VehicleType))
                         .ToList();
                 }
-                switch (sorting)
+                switch (vehicleSorting)
                 {
                     case VehicleSorting.Alphabetically:
                         vehicles = vehicles.OrderBy(v => v.Brand).ToList();
@@ -284,10 +286,12 @@ namespace CarSales.Core.Services
                         vehicles = vehicles.OrderBy(v => v.Price).ToList();
                         break;
                     case VehicleSorting.RatingDescending:
-                        vehicles = vehicles.OrderByDescending(v => v.Reviews.Average(r => (int)r.VehicleRating)).ToList();
+                        vehicles = vehicles.OrderByDescending(v => v.Reviews.Count(r => r.ReviewStatus == ReviewStatus.Completed) > 0
+                        ? v.Reviews.Average(r => (int)r.VehicleRating) : 1).ToList();
                         break;
                     case VehicleSorting.RatingAscending:
-                        vehicles = vehicles.OrderBy(v => v.Reviews.Average(r => (int)r.VehicleRating)).ToList();
+                        vehicles = vehicles.OrderBy(v => v.Reviews.Count(r => r.ReviewStatus == ReviewStatus.Completed) > 0
+                        ? v.Reviews.Average(r => (int)r.VehicleRating) : 1).ToList();
                         break;
                 }
             }
@@ -313,7 +317,7 @@ namespace CarSales.Core.Services
             {
                 currentPage = 1;
             }
-            var queryModel = CreateVehiclesQueryModel(searchTerm, vehiclesPerPage, currentPage, selectedVehicleTypes, sortedVehicles, vehicles.Count);
+            var queryModel = CreateVehiclesQueryModel(searchTerm, vehiclesPerPage, currentPage, selectedVehicleTypes, vehicleSorting, sortedVehicles, vehicles.Count);
 
             return queryModel;
         }
@@ -323,7 +327,7 @@ namespace CarSales.Core.Services
             int vehiclesPerPage = 6,
             int currentPage = 1,
             string selectedVehicleTypes = null,
-            VehicleSorting sorting = VehicleSorting.Alphabetically)
+            VehicleSorting vehicleSorting = VehicleSorting.Alphabetically)
         {
             var vehicles = await repository.AllReadOnly<Vehicle>()
                 .Where(v => v.Importer.UserId == userId)
@@ -348,7 +352,7 @@ namespace CarSales.Core.Services
                     vehicles = vehicles.Where(v => selectedTypes.Contains(v.VehicleType))
                         .ToList();
                 }
-                switch (sorting)
+                switch (vehicleSorting)
                 {
                     case VehicleSorting.Alphabetically:
                         vehicles = vehicles.OrderBy(v => v.Brand).ToList();
@@ -358,8 +362,6 @@ namespace CarSales.Core.Services
                         break;
                     case VehicleSorting.PriceAscending:
                         vehicles = vehicles.OrderBy(v => v.Price).ToList();
-                        break;
-                    default:
                         break;
                 }
             }
@@ -385,7 +387,7 @@ namespace CarSales.Core.Services
             {
                 currentPage = 1;
             }
-            var queryModel = CreateVehiclesQueryModel(searchTerm, vehiclesPerPage, currentPage, selectedVehicleTypes, sortedVehicles, vehicles.Count);
+            var queryModel = CreateVehiclesQueryModel(searchTerm, vehiclesPerPage, currentPage, selectedVehicleTypes, vehicleSorting, sortedVehicles, vehicles.Count);
 
             queryModel.SortingOptions = queryModel.SortingOptions.Take(queryModel.SortingOptions.Count() - 2);
             return queryModel;
@@ -617,7 +619,7 @@ namespace CarSales.Core.Services
             await repository.SaveChangesAsync();
         }
 
-        private VehiclesQueryModel CreateVehiclesQueryModel(string? searchTerm, int vehiclesPerPage, int currentPage, string? selectedVehicleTypes, IEnumerable<VehicleListModel> vehicles, int vehicleCount)
+        private VehiclesQueryModel CreateVehiclesQueryModel(string? searchTerm, int vehiclesPerPage, int currentPage, string? selectedVehicleTypes, VehicleSorting vehicleSorting, IEnumerable<VehicleListModel> vehicles, int vehicleCount)
         {
             var model = new VehiclesQueryModel()
             {
@@ -626,6 +628,7 @@ namespace CarSales.Core.Services
                 CurrentPage = currentPage,
                 MaxPage = (int)Math.Ceiling(vehicleCount / (double)vehiclesPerPage),
                 SelectedVehicleTypes = selectedVehicleTypes,
+                VehicleSorting = vehicleSorting,
                 SortingOptions = Enum.GetValues<VehicleSorting>().ToHashSet(),
                 VehicleTypes = Enum.GetValues<VehicleType>().ToHashSet(),
                 VehicleCount = vehicleCount,
