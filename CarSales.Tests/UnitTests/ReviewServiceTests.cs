@@ -28,8 +28,6 @@ namespace CarSales.Tests.UnitTests
 
             context = new CarSalesDbContext(contextOptions, false);
 
-            context.ApplyConfiguration = false;
-
             context.Database.EnsureDeleted();
             context.Database.EnsureCreated();
 
@@ -56,7 +54,7 @@ namespace CarSales.Tests.UnitTests
             reviewService = new ReviewService(repository, cache);
         }
 
-        [TearDown]
+        [OneTimeTearDown]
         public async Task TearDown()
         {
             await container.StopAsync();
