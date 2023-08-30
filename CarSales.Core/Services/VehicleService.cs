@@ -475,7 +475,7 @@ namespace CarSales.Core.Services
             }
             if (salesman == null)
             {
-                throw new ArgumentNullException("Item is not for sale!");
+                throw new NotForSaleException("Item is not for sale!");
             }
             vehicle.OwnerId = buyer.Id;
             vehicle.SalesmanId = null;
@@ -515,7 +515,7 @@ namespace CarSales.Core.Services
             }
             if (importer == null)
             {
-                throw new ArgumentNullException("Item is not for sale!");
+                throw new NotForSaleException("Item is not for sale!");
             }
             vehicle.OwnerId = buyer.Id;
             vehicle.ImporterId = null;
