@@ -83,43 +83,46 @@ namespace CarSales.Tests.UnitTests
         [Test]
         public async Task Test_GetImportedVehicles_WithNoFilters_ReturnsAllImportedVehicles()
         {
-            var vehicles = await vehicleService.GetImportedVehicles();
-            Assert.That(vehicles.VehicleCount, Is.EqualTo(1));
+            var vehicles = await vehicleService.GetImportedVehiclesAsync();
+            Assert.That(vehicles.VehicleCount, Is.EqualTo(2));
         }
 
         [Test]
         public async Task Test_GetImportedVehicles_WithSearchTerm_ReturnsAppropriateVehicles()
         {
-            var vehicles = await vehicleService.GetImportedVehicles("BMW");
-            Assert.That(vehicles.VehicleCount, Is.EqualTo(1));
-            vehicles = await vehicleService.GetImportedVehicles("Audi");
+            var vehicles = await vehicleService.GetImportedVehiclesAsync("BMW");
+            Assert.That(vehicles.VehicleCount, Is.EqualTo(2));
+            vehicles = await vehicleService.GetImportedVehiclesAsync("Audi");
             Assert.That(vehicles.VehicleCount, Is.EqualTo(0));
-            vehicles = await vehicleService.GetImportedVehicles("Opel");
+            vehicles = await vehicleService.GetImportedVehiclesAsync("Opel");
             Assert.That(vehicles.VehicleCount, Is.EqualTo(0));
         }
 
         [Test]
         public async Task Test_GetImportedVehicles_WithSetVehiclesPerPage_ReturnsAppropriateVehicles()
         {
-            var vehicles = await vehicleService.GetImportedVehicles(null, 2, 1);
-            Assert.That(vehicles.VehicleCount, Is.EqualTo(1));
+            var vehicles = await vehicleService.GetImportedVehiclesAsync(null, 1, 1);
+            Assert.That(vehicles.VehicleCount, Is.EqualTo(2));
+            Assert.That(vehicles.Vehicles.Count, Is.EqualTo(1));
+            vehicles = await vehicleService.GetImportedVehiclesAsync(null, 1, 2);
+            Assert.That(vehicles.VehicleCount, Is.EqualTo(2));
             Assert.That(vehicles.Vehicles.Count, Is.EqualTo(1));
         }
 
         [Test]
         public async Task Test_GetImportedVehicles_WithVehicleTypes_ReturnsAppropriateVehicles()
         {
-            var vehicles = await vehicleService.GetImportedVehicles(null, 6, 1, "Car");
-            Assert.That(vehicles.VehicleCount, Is.EqualTo(1));
-            vehicles = await vehicleService.GetImportedVehicles(null, 6, 1, "Motorcycle");
+            var vehicles = await vehicleService.GetImportedVehiclesAsync(null, 6, 1, "Car");
+            Assert.That(vehicles.VehicleCount, Is.EqualTo(2));
+            vehicles = await vehicleService.GetImportedVehiclesAsync(null, 6, 1, "Motorcycle");
             Assert.That(vehicles.VehicleCount, Is.EqualTo(0));
         }
 
         [Test]
         public async Task Test_GetImportedVehicles_WithSorting_ReturnsAppropriateSortedVehicles()
         {
-            var vehicles = await vehicleService.GetImportedVehicles(null, 6, 1, "", VehicleSorting.RatingAscending);
-            Assert.That(vehicles.VehicleCount, Is.EqualTo(1));
+            var vehicles = await vehicleService.GetImportedVehiclesAsync(null, 6, 1, "", VehicleSorting.RatingAscending);
+            Assert.That(vehicles.VehicleCount, Is.EqualTo(2));
         }
 
         [Test]
@@ -172,7 +175,7 @@ namespace CarSales.Tests.UnitTests
         }
 
         [Test]
-        public async Task Test_GetSalesanVehicles_WithSearchTerm_ReturnsAppropriateVehicles()
+        public async Task Test_GetSalesmanVehicles_WithSearchTerm_ReturnsAppropriateVehicles()
         {
             var vehicles = await vehicleService.GetSalesmanVehiclesAsync("66ccb670-f0dd-4aa1-a83d-8b2a0003bb50", "BMW");
             Assert.That(vehicles.VehicleCount, Is.EqualTo(1));
@@ -216,14 +219,14 @@ namespace CarSales.Tests.UnitTests
         public async Task Test_GetImporterVehicles_WithNoFilters_ReturnsAllImporterVehicles()
         {
             var vehicles = await vehicleService.GetImporterVehiclesAsync("10933c11-ac2a-410d-b60a-8b1d97324975");
-            Assert.That(vehicles.VehicleCount, Is.EqualTo(1));
+            Assert.That(vehicles.VehicleCount, Is.EqualTo(2));
         }
 
         [Test]
         public async Task Test_GetImporterVehicles_WithSearchTerm_ReturnsAppropriateVehicles()
         {
             var vehicles = await vehicleService.GetImporterVehiclesAsync("10933c11-ac2a-410d-b60a-8b1d97324975", "BMW");
-            Assert.That(vehicles.VehicleCount, Is.EqualTo(1));
+            Assert.That(vehicles.VehicleCount, Is.EqualTo(2));
             vehicles = await vehicleService.GetImporterVehiclesAsync("10933c11-ac2a-410d-b60a-8b1d97324975", "Audi");
             Assert.That(vehicles.VehicleCount, Is.EqualTo(0));
             vehicles = await vehicleService.GetImporterVehiclesAsync("10933c11-ac2a-410d-b60a-8b1d97324975", "Opel");
@@ -233,8 +236,11 @@ namespace CarSales.Tests.UnitTests
         [Test]
         public async Task Test_GetImporterVehicles_WithSetVehiclesPerPage_ReturnsAppropriateVehicles()
         {
-            var vehicles = await vehicleService.GetImporterVehiclesAsync("10933c11-ac2a-410d-b60a-8b1d97324975", null, 2, 1);
-            Assert.That(vehicles.VehicleCount, Is.EqualTo(1));
+            var vehicles = await vehicleService.GetImporterVehiclesAsync("10933c11-ac2a-410d-b60a-8b1d97324975", null, 1, 1);
+            Assert.That(vehicles.VehicleCount, Is.EqualTo(2));
+            Assert.That(vehicles.Vehicles.Count, Is.EqualTo(1));
+            vehicles = await vehicleService.GetImporterVehiclesAsync("10933c11-ac2a-410d-b60a-8b1d97324975", null, 1, 2);
+            Assert.That(vehicles.VehicleCount, Is.EqualTo(2));
             Assert.That(vehicles.Vehicles.Count, Is.EqualTo(1));
         }
 
@@ -242,7 +248,7 @@ namespace CarSales.Tests.UnitTests
         public async Task Test_GetImporterVehicles_WithVehicleTypes_ReturnsAppropriateVehicles()
         {
             var vehicles = await vehicleService.GetImporterVehiclesAsync("10933c11-ac2a-410d-b60a-8b1d97324975", null, 6, 1, "Car");
-            Assert.That(vehicles.VehicleCount, Is.EqualTo(1));
+            Assert.That(vehicles.VehicleCount, Is.EqualTo(2));
             vehicles = await vehicleService.GetImporterVehiclesAsync("10933c11-ac2a-410d-b60a-8b1d97324975", null, 6, 1, "Motorcycle");
             Assert.That(vehicles.VehicleCount, Is.EqualTo(0));
         }
@@ -251,7 +257,7 @@ namespace CarSales.Tests.UnitTests
         public async Task Test_GetImporterVehicles_WithSorting_ReturnsAppropriateSortedVehicles()
         {
             var vehicles = await vehicleService.GetImporterVehiclesAsync("10933c11-ac2a-410d-b60a-8b1d97324975", null, 6, 1, "", VehicleSorting.RatingAscending);
-            Assert.That(vehicles.VehicleCount, Is.EqualTo(1));
+            Assert.That(vehicles.VehicleCount, Is.EqualTo(2));
         }
 
         [Test]
@@ -270,5 +276,34 @@ namespace CarSales.Tests.UnitTests
             Assert.That(vehicle, Is.EqualTo(null));
         }
 
+
+        [Test]
+        public async Task Test_CreateVehicleSellModel_ReturnsCorrectModel_WhenGivenProperId()
+        {
+            var vehicle = await vehicleService.GetVehicleByIdAsync(7);
+            var vehicleSellModel = await vehicleService.CreateVehicleSellModelAsync(7);
+            Assert.That(vehicleSellModel.Id, Is.EqualTo(7));
+            Assert.That(vehicleSellModel.Name, Is.EqualTo(vehicle.Name));
+            Assert.That(vehicleSellModel.Description, Is.EqualTo(vehicle.Description));
+            Assert.That(vehicleSellModel.Price, Is.EqualTo(vehicle.Price));
+            Assert.That(vehicleSellModel.OldPrice, Is.EqualTo(vehicle.Price));
+            Assert.That(vehicleSellModel.OwnerUserId, Is.EqualTo("66ccb670-f0dd-4aa1-a83d-8b2a0003bb50"));
+        }
+
+        [Test]
+        public async Task Test_CreateVehicleSellModel_ReturnsNull_WhenGivenNonExistingId()
+        {
+            var vehicleSellModel = await vehicleService.CreateVehicleSellModelAsync(0);
+            Assert.That(vehicleSellModel, Is.EqualTo(null));
+        }
+
+        [Test]
+        public async Task Test_CreateVehicleImportModel_CreatesProperModel()
+        {
+            var vehicleImportModel = await vehicleService.CreateVehicleImportModelAsync("10933c11-ac2a-410d-b60a-8b1d97324975");
+            Assert.That(vehicleImportModel, Is.Not.EqualTo(null));
+            Assert.That(vehicleImportModel.ImporterId, Is.EqualTo(1));
+            Assert.That(vehicleImportModel.VehicleTypes, Is.EqualTo(Enum.GetValues<VehicleType>().ToHashSet()));
+        }
     }
 }
