@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CarSales.Web.Data.Migrations
 {
     [DbContext(typeof(CarSalesDbContext))]
-    [Migration("20230708113812_Initial")]
+    [Migration("20230831114815_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -491,7 +491,7 @@ namespace CarSales.Web.Data.Migrations
                         {
                             Id = "cbed6d2a-e60a-49df-a6e3-982ccd980393",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "ce955fca-318a-474b-8dcf-5cee15d977f0",
+                            ConcurrencyStamp = "6a04f877-b50b-4e18-acea-0e634c3b9b65",
                             Credits = 50000m,
                             Email = "Admin@gmail.com",
                             EmailConfirmed = false,
@@ -501,9 +501,9 @@ namespace CarSales.Web.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@GMAIL.COM",
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAIAAYagAAAAEPsDrV5XcYOVEH3MvSK6MNsxSPAA5BT4MEiPJwNhOZmMRFv6QJiYMaGfIfNbC9WVUw==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEHG8k1vmD0vecPzbsSBSRmEgDwjH26Xi7J7vgEz8nQpt3owg21ZXjMReXTFldpy7oA==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "c98e7e18-b909-444a-8877-689150f08f68",
+                            SecurityStamp = "3d4a5fe6-3ddc-4dcb-a272-ef33f70534a7",
                             TwoFactorEnabled = false,
                             UserName = "Admin"
                         },
@@ -511,7 +511,7 @@ namespace CarSales.Web.Data.Migrations
                         {
                             Id = "b5fef437-f504-46d2-926d-3158e54e1932",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "37d124e9-9f5c-4ae5-97bd-f2ce982ef682",
+                            ConcurrencyStamp = "223fe760-9aa4-4fce-9fd6-21ba9b7d9154",
                             Credits = 50000m,
                             Email = "Owner@gmail.com",
                             EmailConfirmed = false,
@@ -521,9 +521,9 @@ namespace CarSales.Web.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "OWNER@GMAIL.COM",
                             NormalizedUserName = "OWNER",
-                            PasswordHash = "AQAAAAIAAYagAAAAEG5vCMhpFec4ZgCLtsUPzPPRspk/vbzPAV2DBRJagL5ytGAtVT09PY2xdzzDsG89jw==",
+                            PasswordHash = "AQAAAAIAAYagAAAAELl+jRgAA7lYDH3dt5/DAfLS3xyPpxLoFW/8TX6KrXx933aLrJZpnk6iljIudJlYDA==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "be0f662b-a05f-4a80-b918-265aee92240e",
+                            SecurityStamp = "592738d6-91ac-4666-9120-4f4c728886eb",
                             TwoFactorEnabled = false,
                             UserName = "Owner"
                         },
@@ -531,7 +531,7 @@ namespace CarSales.Web.Data.Migrations
                         {
                             Id = "926bee86-8bbd-43f6-bc1c-9639d43531a4",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "eeaae261-f32a-4da4-909d-f4ba16824a8e",
+                            ConcurrencyStamp = "d407aced-f4e0-4bad-940f-278ea669bdbd",
                             Credits = 50000m,
                             Email = "Owner2@gmail.com",
                             EmailConfirmed = false,
@@ -541,9 +541,9 @@ namespace CarSales.Web.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "OWNER2@GMAIL.COM",
                             NormalizedUserName = "OWNER2",
-                            PasswordHash = "AQAAAAIAAYagAAAAECsAgZ80KcNbOQVKX09BVcP8MgiFZEKaLqGntcfkU9iB1rgng/BKrZSKLMowoB8V3A==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEA8zstLzEEYXufK1MxETwU7CTNLs2AxVkwxLbt33xsAEWNvc790qWWfPBNnabeK71g==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "5a3294c4-49e7-477c-a60c-a0b266f34395",
+                            SecurityStamp = "067f4d32-c60b-4fc2-a54c-4979aa2f4324",
                             TwoFactorEnabled = false,
                             UserName = "Owner2"
                         },
@@ -551,7 +551,7 @@ namespace CarSales.Web.Data.Migrations
                         {
                             Id = "66ccb670-f0dd-4aa1-a83d-8b2a0003bb50",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "e622083d-9ca1-4978-b78d-99caa666ef98",
+                            ConcurrencyStamp = "b8f6aa47-d923-4f16-b8a6-af885cedc0bc",
                             Credits = 50000m,
                             Email = "Salesman@gmail.com",
                             EmailConfirmed = false,
@@ -561,9 +561,9 @@ namespace CarSales.Web.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "SALESMAN@GMAIL.COM",
                             NormalizedUserName = "SALESMAN",
-                            PasswordHash = "AQAAAAIAAYagAAAAEPgGSnh8PW8vK6qxPV9lW6D2AcP2kXqwPQM4nmf1Qvneqdk7lZ2a2WN4f3uOD5KCwQ==",
+                            PasswordHash = "AQAAAAIAAYagAAAAECeIfluK2UyQbg4Bd0aO5b92/AHLu6GVt/VYgxBVFnfcnFsnGIB2Y+M8ATKpzpPbgg==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "6a323951-55b3-43ad-beff-cd36241e8c53",
+                            SecurityStamp = "34de7316-799e-447b-94d7-3f9990712566",
                             TwoFactorEnabled = false,
                             UserName = "Salesman"
                         },
@@ -571,7 +571,7 @@ namespace CarSales.Web.Data.Migrations
                         {
                             Id = "10933c11-ac2a-410d-b60a-8b1d97324975",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "746d6d30-387e-40a8-82bf-eef1f7b8d8b0",
+                            ConcurrencyStamp = "a615a9b7-337f-42fd-b256-3de23b6371dc",
                             Credits = 50000m,
                             Email = "Importer@gmail.com",
                             EmailConfirmed = false,
@@ -581,9 +581,9 @@ namespace CarSales.Web.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "IMPORTER@GMAIL.COM",
                             NormalizedUserName = "IMPORTER",
-                            PasswordHash = "AQAAAAIAAYagAAAAEJzmgRJm+tzXw2aYWvpecXqRDL0VLQTlxb6EGqUIa/OAEefJxxaFhCbaXor90rVX9w==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEDmGvugdB6u/kjCvLIE5L/xMzgbNrwviG7UI19z6Yvc88kT/1fsMi+YGDGbucQw0Cg==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "14294a08-d8b4-49d8-8914-6f7a7df0395a",
+                            SecurityStamp = "cd462bf0-c685-404a-be74-b098917add61",
                             TwoFactorEnabled = false,
                             UserName = "Importer"
                         },
@@ -591,7 +591,7 @@ namespace CarSales.Web.Data.Migrations
                         {
                             Id = "4d693871-c20b-4e9f-8490-1c641b9e3a40",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "47f1b853-3576-49c3-93cb-36e1fcffe5b4",
+                            ConcurrencyStamp = "8aa1c3d7-db6c-4aa8-94f0-dae1da5b3d89",
                             Credits = 50000m,
                             Email = "Reviewer@gmail.com",
                             EmailConfirmed = false,
@@ -601,9 +601,9 @@ namespace CarSales.Web.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "REVIEWER@GMAIL.COM",
                             NormalizedUserName = "REVIEWER",
-                            PasswordHash = "AQAAAAIAAYagAAAAEFWmeO9I00c0EhcQj3RjJV55aTKkBWBH9Yyp8AiJyhurgfDPEUYHcY8kqjhhh5Foiw==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEJUY1YF6z5o/bxkgXFlNrZRa13JrQprtd9o2rZM1e0BPvyJtyG5zWQlS6OVwmagB3Q==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "6f319c8d-3a94-4229-9061-f70067fa623b",
+                            SecurityStamp = "6c4e09a7-5934-499b-885e-9c3b589baf2a",
                             TwoFactorEnabled = false,
                             UserName = "Reviewer"
                         });
@@ -690,7 +690,7 @@ namespace CarSales.Web.Data.Migrations
                             ImageUrl = "https://i.ytimg.com/vi/rvn4lHrr6AQ/maxresdefault.jpg",
                             KilometersDriven = 0.0,
                             Model = "Veyron",
-                            Price = 30000m,
+                            Price = 60000m,
                             SalesmanId = 1,
                             TopSpeed = 350.0,
                             VehicleType = 1,
@@ -728,6 +728,20 @@ namespace CarSales.Web.Data.Migrations
                         {
                             Id = 5,
                             Brand = "BMW",
+                            Description = "Fast new car",
+                            ImageUrl = "https://stimg.cardekho.com/images/carexteriorimages/930x620/BMW/X7/10571/1689673096346/front-left-side-47.jpg",
+                            ImporterId = 1,
+                            KilometersDriven = 0.0,
+                            Model = "X7",
+                            Price = 70000m,
+                            TopSpeed = 300.0,
+                            VehicleType = 1,
+                            YearProduced = 2023
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Brand = "BMW",
                             Description = "Popular car",
                             ImageUrl = "https://media.ed.edmunds-media.com/bmw/x5/2024/oem/2024_bmw_x5_4dr-suv_xdrive50e_fq_oem_1_1600.jpg",
                             KilometersDriven = 2000.0,
@@ -737,6 +751,20 @@ namespace CarSales.Web.Data.Migrations
                             TopSpeed = 243.0,
                             VehicleType = 1,
                             YearProduced = 2020
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Brand = "Ford",
+                            Description = "Old car",
+                            ImageUrl = "https://media.autoexpress.co.uk/image/private/s--X-WVjvBW--/f_auto,t_content-image-full-desktop@1/v1562246965/autoexpress/2018/10/_dsf9821.jpg",
+                            KilometersDriven = 20000.0,
+                            Model = "Escort",
+                            OwnerId = 3,
+                            Price = 8000m,
+                            TopSpeed = 160.0,
+                            VehicleType = 1,
+                            YearProduced = 1968
                         });
                 });
 

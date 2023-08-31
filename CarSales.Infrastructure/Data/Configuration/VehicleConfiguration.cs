@@ -85,6 +85,22 @@ namespace CarSales.Infrastructure.Data.Configuration
                 {
                     Id = 5,
                     Brand = "BMW",
+                    Model = "X7",
+                    Description = "Fast new car",
+                    ImageUrl = "https://stimg.cardekho.com/images/carexteriorimages/930x620/BMW/X7/10571/1689673096346/front-left-side-47.jpg",
+                    TopSpeed = 300,
+                    KilometersDriven = 0,
+                    Price = 70000,
+                    SalesmanId = null,
+                    OwnerId = null,
+                    ImporterId = 1,
+                    VehicleType = VehicleType.Car,
+                    YearProduced = 2023
+                },
+                new Vehicle()
+                {
+                    Id = 6,
+                    Brand = "BMW",
                     Model = "X5",
                     Description = "Popular car",
                     ImageUrl = "https://media.ed.edmunds-media.com/bmw/x5/2024/oem/2024_bmw_x5_4dr-suv_xdrive50e_fq_oem_1_1600.jpg",
@@ -95,6 +111,21 @@ namespace CarSales.Infrastructure.Data.Configuration
                     OwnerId = 1,
                     VehicleType = VehicleType.Car,
                     YearProduced = 2020
+                },
+                new Vehicle()
+                {
+                    Id = 7,
+                    Brand = "Ford",
+                    Model = "Escort",
+                    Description = "Old car",
+                    ImageUrl = "https://media.autoexpress.co.uk/image/private/s--X-WVjvBW--/f_auto,t_content-image-full-desktop@1/v1562246965/autoexpress/2018/10/_dsf9821.jpg",
+                    TopSpeed = 160,
+                    KilometersDriven = 20000,
+                    Price = 8000,
+                    SalesmanId = null,
+                    OwnerId = 3,
+                    VehicleType = VehicleType.Car,
+                    YearProduced = 1968
                 }
             };
             return vehicles;
