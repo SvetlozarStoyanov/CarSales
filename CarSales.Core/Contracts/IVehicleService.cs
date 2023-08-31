@@ -31,7 +31,7 @@ namespace CarSales.Core.Contracts
         /// <param name="selectedVehicleTypes"></param>
         /// <param name="vehicleSorting"></param>
         /// <returns><see cref="VehiclesQueryModel"/></returns>
-        Task<VehiclesQueryModel> GetImportedVehicles(string searchTerm = null,
+        Task<VehiclesQueryModel> GetImportedVehiclesAsync(string searchTerm = null,
             int vehiclesPerPage = 6,
             int currentPage = 1,
             string selectedVehicleTypes = null,
