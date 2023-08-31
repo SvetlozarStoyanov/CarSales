@@ -97,7 +97,7 @@ namespace CarSales.Core.Services
             return queryModel;
         }
 
-        public async Task<VehiclesQueryModel> GetImportedVehicles(string searchTerm = null,
+        public async Task<VehiclesQueryModel> GetImportedVehiclesAsync(string searchTerm = null,
             int vehiclesPerPage = 6,
             int currentPage = 1,
             string selectedVehicleTypes = null,
