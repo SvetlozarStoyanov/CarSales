@@ -34,7 +34,7 @@ namespace CarSales.Web.Areas.Importer.Controllers
 
         public async Task<IActionResult> Imported([FromQuery] VehiclesQueryModel model)
         {
-            var queryResult = await vehicleService.GetImportedVehicles(
+            var queryResult = await vehicleService.GetImportedVehiclesAsync(
                 model.SearchTerm,
                 model.VehiclesPerPage,
                 model.CurrentPage,
