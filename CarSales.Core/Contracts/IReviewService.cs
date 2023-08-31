@@ -41,7 +41,7 @@ namespace CarSales.Core.Contracts
         /// <param name="selectedVehicleTypes"></param>
         /// <param name="reviewSorting"></param>
         /// <returns><see cref="ReviewsQueryModel"/></returns>
-        Task<ReviewsQueryModel> GetAllReviewsAsync(
+        Task<ReviewsQueryModel> GetReviewsAsync(
             string? searchTerm = null,
             string? vehicleName = null,
             int reviewsPerPage = 6,

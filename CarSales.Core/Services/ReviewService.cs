@@ -10,7 +10,6 @@ using CarSales.Infrastructure.Data.Entities;
 using CarSales.Infrastructure.Data.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
-using System.Text.Json;
 
 namespace CarSales.Core.Services
 {
@@ -89,7 +88,7 @@ namespace CarSales.Core.Services
             return randomReview;
         }
 
-        public async Task<ReviewsQueryModel> GetAllReviewsAsync(string? searchTerm = null,
+        public async Task<ReviewsQueryModel> GetReviewsAsync(string? searchTerm = null,
             string? vehicleName = null,
             int reviewsPerPage = 6,
             int currentPage = 1,

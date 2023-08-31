@@ -16,7 +16,7 @@ namespace CarSales.Web.Areas.Reviewer.Controllers
 
         public async Task<IActionResult> Index([FromQuery] ReviewsQueryModel model)
         {
-            var queryResult = await reviewService.GetAllReviewsAsync(model.SearchTerm,
+            var queryResult = await reviewService.GetReviewsAsync(model.SearchTerm,
                 model.VehicleName,
                 model.ReviewsPerPage,
                 model.CurrentPage,
