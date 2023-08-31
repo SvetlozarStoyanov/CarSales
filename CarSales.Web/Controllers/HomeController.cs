@@ -18,8 +18,11 @@ namespace CarSales.Web.Controllers
         public async Task<IActionResult> Index()
         {
             var model = await reviewService.GetLatestReviewsAsync();
-            ViewBag.HighlightedVehicleReview = await reviewService.GetRandomReviewAsync(model);
-            model = model.Where(r => r.Id != ViewBag.HighlightedVehicleReview.Id).ToList();
+            if (model.Count() > 0)
+            {
+                ViewBag.HighlightedVehicleReview = await reviewService.GetRandomReviewAsync(model);
+                model = model.Where(r => r.Id != ViewBag.HighlightedVehicleReview.Id).ToList();
+            }
             return View(model);
         }
 
