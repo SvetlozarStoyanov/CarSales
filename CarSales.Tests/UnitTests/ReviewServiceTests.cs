@@ -3,12 +3,14 @@ using CarSales.Core.Contracts;
 using CarSales.Core.Enums;
 using CarSales.Core.Services;
 using CarSales.Infrastructure.Data;
+using CarSales.Infrastructure.Data.Entities;
 using CarSales.Infrastructure.Data.Enums;
 using DotNet.Testcontainers.Builders;
 using DotNet.Testcontainers.Containers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.StackExchangeRedis;
+using Microsoft.VisualStudio.TestPlatform.Common.Utilities;
 
 namespace CarSales.Tests.UnitTests
 {
@@ -18,6 +20,7 @@ namespace CarSales.Tests.UnitTests
         private IRepository repository;
         private IDistributedCache cache;
         private IReviewService reviewService;
+        private IReviewerService reviewerService;
         private IContainer container;
 
         [OneTimeSetUp]
@@ -53,6 +56,7 @@ namespace CarSales.Tests.UnitTests
             cache = new RedisCache(redisOptions);
 
             reviewService = new ReviewService(repository, cache);
+            reviewerService = new ReviewerService(repository);
         }
 
         [OneTimeTearDown]
@@ -220,6 +224,36 @@ namespace CarSales.Tests.UnitTests
             result = await reviewService.GetReviewerReviewsAsync("4d693871-c20b-4e9f-8490-1c641b9e3a40", null, null, 1, 3, null, null, ReviewStatus.Completed, ReviewSorting.VehiclePriceDescending);
             Assert.That(result.Reviews.First().VehicleName, Is.EqualTo("BMW M5"));
             Assert.That(result.ReviewCount, Is.EqualTo(3));
+        }
+
+        [Test]
+        public async Task Test_GetReviewByIdAsync_ReturnsCorrectReview_IfCompletedReviewWithIdExists()
+        {
+            var result = await reviewService.GetReviewByIdAsync(1);
+            Assert.That(result, Is.Not.EqualTo(null));
+            Assert.That(result.Id, Is.EqualTo(1));
+            Assert.That(result.Title, Is.Not.EqualTo(null));
+        }
+
+        [Test]
+        public async Task Test_GetReviewByIdAsync_ReturnsNull_IfCompletedReviewWithIdDoesNotExist()
+        {
+            var result = await reviewService.GetReviewByIdAsync(1);
+            Assert.That(result, Is.Not.EqualTo(null));
+            Assert.That(result.Id, Is.EqualTo(1));
+            Assert.That(result.Title, Is.Not.EqualTo(null));
+        }
+
+        [Test]
+        public async Task Test_CreateReviewOrderModelAsync_CreatesCorrectReviewOrderModel()
+        {
+            var reviewerReviewTypesAndPrices = await reviewerService.GetReviewTypesAndPricesAsync(2);
+            var result = await reviewService.CreateReviewOrderModelAsync(2, 2, reviewerReviewTypesAndPrices);
+            Assert.That(result.ReviewTypesAndPrices[ReviewType.Short], Is.EqualTo(100));
+            Assert.That(result.ReviewTypesAndPrices[ReviewType.Standart], Is.EqualTo(200));
+            Assert.That(result.ReviewTypesAndPrices[ReviewType.Premium], Is.EqualTo(250));
+            Assert.That(result.ReviewerId, Is.EqualTo(2));
+            Assert.That(result.VehicleId, Is.EqualTo(2));
         }
     }
 }

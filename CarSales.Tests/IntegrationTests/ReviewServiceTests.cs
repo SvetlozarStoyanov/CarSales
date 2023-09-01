@@ -2,6 +2,8 @@
 using CarSales.Core.Contracts;
 using CarSales.Core.Services;
 using CarSales.Infrastructure.Data;
+using CarSales.Infrastructure.Data.Entities;
+using CarSales.Infrastructure.Data.Enums;
 using DotNet.Testcontainers.Builders;
 using DotNet.Testcontainers.Containers;
 using Microsoft.EntityFrameworkCore;
@@ -16,8 +18,10 @@ namespace CarSales.Tests.IntegrationTests
         private IRepository repository;
         private IDistributedCache cache;
         private IReviewService reviewService;
+        private IReviewerService reviewerService;
         private IContainer container;
-        [SetUp]
+
+        [OneTimeSetUp]
         public async Task Setup()
         {
             var contextOptions = new DbContextOptionsBuilder<CarSalesDbContext>()
@@ -49,6 +53,7 @@ namespace CarSales.Tests.IntegrationTests
             cache = new RedisCache(redisOptions);
 
             reviewService = new ReviewService(repository, cache);
+            reviewerService = new ReviewerService(repository);
         }
 
         [OneTimeTearDown]
@@ -66,6 +71,59 @@ namespace CarSales.Tests.IntegrationTests
             var randomReview = await reviewService.GetRandomReviewAsync(latestReviews);
 
             Assert.That(latestReviews.Contains(randomReview), Is.EqualTo(true));
+        }
+
+        [Test]
+        [Order(1)]
+        public async Task Test_CreateOrderedReviewAsync_CreatesOrderedReview()
+        {
+            var reviewerReviewTypesAndPrices = await reviewerService.GetReviewTypesAndPricesAsync(2);
+            var orderModel = await reviewService.CreateReviewOrderModelAsync(2, 2, reviewerReviewTypesAndPrices);
+            orderModel.ReviewTypeIndex = 2;
+            await reviewService.CreateOrderedReviewAsync("66ccb670-f0dd-4aa1-a83d-8b2a0003bb50", orderModel);
+            var result = await repository.AllReadOnly<Review>()
+                .Where(r => r.ReviewerId == 2 && r.VehicleId == 2)
+                .FirstOrDefaultAsync();
+            Assert.That(result, Is.Not.EqualTo(null));
+            Assert.That(result.ReviewStatus, Is.EqualTo(ReviewStatus.Ordered));
+            Assert.That(result.Id, Is.EqualTo(4));
+        }
+        [Test]
+        [Order(2)]
+
+        public async Task Test_CanCreateReviewAsync_ReturnsTrueIfReviewerCanCreateReview()
+        {
+            var result = await reviewService.CanCreateReviewAsync("9b92fe41-3f2e-4eb1-990b-73c2ea2d746d", 4);
+            Assert.That(result, Is.EqualTo(true));
+        }
+
+        [Test]
+        [Order(3)]
+
+        public async Task Test_CreateReviewCreateModelAsync_CreatesCorrectReviewCreateModel()
+        {
+            var result = await reviewService.CreateReviewCreateModelAsync(4);
+            Assert.That(result, Is.Not.EqualTo(null));
+        }
+
+        [Test]
+        [Order(4)]
+
+        public async Task Test_CreateCompletedReviewAsync_CreatesReviewSuccessfully()
+        {
+            var reviews = await reviewService.GetReviewsAsync();
+            var reviewsCountBeforeAddingNewCompletedReview = reviews.ReviewCount;
+            var createModel = await reviewService.CreateReviewCreateModelAsync(4);
+            createModel.Title = "This is a test text";
+            createModel.Overview = "This is a test text";
+            createModel.Performance = "This is a test text";
+            createModel.Interior = "This is a test text";
+            createModel.Longevity = "This is a test text";
+            createModel.Features = "This is a test text";
+            createModel.Id = 4;
+            await reviewService.CreateCompletedReviewAsync(createModel);
+            reviews = await reviewService.GetReviewsAsync();
+            Assert.That(reviews.ReviewCount, Is.EqualTo(reviewsCountBeforeAddingNewCompletedReview + 1));
         }
     }
 }
