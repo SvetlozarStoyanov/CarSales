@@ -33,15 +33,24 @@ namespace CarSales.Web.Areas.Salesman.Controllers
         public async Task<IActionResult> Details(int id)
         {
             var model = await reviewService.GetReviewByIdAsync(id);
+            if (model == null)
+            {
+                TempData["error"] = "Review does not exist!";
+                return RedirectToAction(nameof(Index));
+            }
             return View(model);
         }
 
         [HttpGet]
-        //[ValidateAntiForgeryToken]
         public async Task<IActionResult> Order(int reviewerId, int vehicleId)
         {
+            if (!(await reviewerService.CanBeOrderedToCreateReviewAsync(reviewerId,vehicleId)))
+            {
+                TempData["error"] = "Cannot order!";
+                return RedirectToAction(nameof(Index));
+            }
             var reviewTypesAndPrices = await reviewerService.GetReviewTypesAndPricesAsync(reviewerId);
-            var model = await reviewService.CreateReviewOrderModel(reviewerId, vehicleId, reviewTypesAndPrices);
+            var model = await reviewService.CreateReviewOrderModelAsync(reviewerId, vehicleId, reviewTypesAndPrices);
             return View(model);
         }
 
@@ -52,7 +61,7 @@ namespace CarSales.Web.Areas.Salesman.Controllers
             var reviewTypesAndPrices = await reviewerService.GetReviewTypesAndPricesAsync(model.ReviewerId);
             if (!ModelState.IsValid)
             {
-                model = await reviewService.CreateReviewOrderModel(model.ReviewerId, model.VehicleId, reviewTypesAndPrices);
+                model = await reviewService.CreateReviewOrderModelAsync(model.ReviewerId, model.VehicleId, reviewTypesAndPrices);
                 return View(model);
             }
             model.ReviewTypesAndPrices = reviewTypesAndPrices;
@@ -64,12 +73,12 @@ namespace CarSales.Web.Areas.Salesman.Controllers
             catch (InsufficientCreditsException e)
             {
                 TempData["error"] = e.Message;
-                model = await reviewService.CreateReviewOrderModel(model.ReviewerId, model.VehicleId, reviewTypesAndPrices);
+                model = await reviewService.CreateReviewOrderModelAsync(model.ReviewerId, model.VehicleId, reviewTypesAndPrices);
                 return View(model);
             }
             catch (Exception e)
             {
-                model = await reviewService.CreateReviewOrderModel(model.ReviewerId, model.VehicleId, reviewTypesAndPrices);
+                model = await reviewService.CreateReviewOrderModelAsync(model.ReviewerId, model.VehicleId, reviewTypesAndPrices);
                 return View(model);
             }
 

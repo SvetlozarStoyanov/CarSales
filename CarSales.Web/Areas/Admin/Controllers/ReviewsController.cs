@@ -29,7 +29,11 @@ namespace CarSales.Web.Areas.Admin.Controllers
         public async Task<IActionResult> Details(int id)
         {
             var model = await reviewService.GetReviewByIdAsync(id);
-
+            if (model == null)
+            {
+                TempData["error"] = "Review does not exist!";
+                return RedirectToAction(nameof(Index));
+            }
             return View(model);
         }
     }
