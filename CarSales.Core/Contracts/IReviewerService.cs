@@ -9,6 +9,15 @@ namespace CarSales.Core.Contracts
     public interface IReviewerService
     {
         /// <summary>
+        /// Returns true if <see cref="Reviewer"/> with <paramref name="reviewerId"/> has no <see cref="ReviewStatus.Ordered"/>
+        /// or <see cref="ReviewStatus.Completed"/> reviews on <see cref="Vehicle"/> with <paramref name="vehicleId"/>
+        /// </summary>
+        /// <param name="reviewerId"></param>
+        /// <param name="vehicleId"></param>
+        /// <returns><see cref="bool"/></returns>
+        Task<bool> CanBeOrderedToCreateReviewAsync(int reviewerId, int vehicleId);
+
+        /// <summary>
         /// Creates a new <see cref="Reviewer"/> with given <paramref name="userId"/>,
         /// If <see cref="Reviewer"/> already exists , sets <see cref="Reviewer.IsActive"/> to true and 
         /// sets default <see cref="Reviewer.ShortReviewPrice"/> to 100, <see cref="Reviewer.StandartReviewPrice"/> to 150 and 

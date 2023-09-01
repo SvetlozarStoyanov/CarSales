@@ -17,6 +17,18 @@ namespace CarSales.Core.Services
             this.repository = repository;
         }
 
+        public async Task<bool> CanBeOrderedToCreateReviewAsync(int reviewerId, int vehicleId)
+        {
+            var reviewer = await repository.AllReadOnly<Reviewer>()
+                .Where(r => r.Id == reviewerId && !r.Reviews.Any(rv => rv.VehicleId == vehicleId))
+                .FirstOrDefaultAsync();
+            if (reviewer == null)
+            {
+                return false;
+            }
+            return true;
+        }
+
         public async Task CreateOrRenewReviewerAsync(string userId)
         {
             var reviewer = await repository.All<Reviewer>()
