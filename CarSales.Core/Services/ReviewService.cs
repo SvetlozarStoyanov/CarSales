@@ -164,47 +164,16 @@ namespace CarSales.Core.Services
             return model;
         }
 
-
-        public async Task<ReviewViewModel> GetReviewByIdAsync(int id)
-        {
-            var review = await repository.AllReadOnly<Review>()
-                .Where(r => r.Id == id)
-                .Select(r => new ReviewViewModel()
-                {
-                    Id = r.Id,
-                    Title = r.Title,
-                    Overview = r.Overview,
-                    Performance = r.Performance,
-                    Interior = r.Interior,
-                    Longevity = r.Longevity,
-                    Features = r.Features,
-                    ReviewerId = r.ReviewerId,
-                    ReviewerName = $"{r.Reviewer.User.FirstName} {r.Reviewer.User.LastName}",
-                    Vehicle = new VehicleReviewModel
-                    {
-                        Id = r.VehicleId,
-                        Name = $"{r.Vehicle.Brand} {r.Vehicle.Model}",
-                        Price = r.Vehicle.Price,
-                        ImageUrl = r.Vehicle.ImageUrl ?? $"/img/VehicleTypes/{r.Vehicle.VehicleType}.png",
-                        VehicleType = r.Vehicle.VehicleType,
-                        VehicleRating = r.VehicleRating
-                    }
-                })
-                .FirstOrDefaultAsync();
-
-            return review;
-        }
-
         public async Task<ReviewsQueryModel> GetReviewerReviewsAsync(string userId,
-            string? searchTerm = null,
-            string? vehicleName = null,
-            int reviewsPerPage = 6,
-            int currentPage = 1,
-            string? selectedReviewTypes = null,
-            string? selectedVehicleTypes = null,
-            ReviewStatus? reviewStatus = null,
-            ReviewSorting reviewSorting = ReviewSorting.VehiclePriceDescending
-            )
+           string? searchTerm = null,
+           string? vehicleName = null,
+           int reviewsPerPage = 6,
+           int currentPage = 1,
+           string? selectedReviewTypes = null,
+           string? selectedVehicleTypes = null,
+           ReviewStatus? reviewStatus = null,
+           ReviewSorting reviewSorting = ReviewSorting.VehiclePriceDescending
+           )
         {
             var reviewer = await repository.AllReadOnly<Reviewer>()
                 .FirstOrDefaultAsync(r => r.UserId == userId);
@@ -280,10 +249,51 @@ namespace CarSales.Core.Services
             return model;
         }
 
+        public async Task<ReviewViewModel> GetReviewByIdAsync(int id)
+        {
+            var review = await repository.AllReadOnly<Review>()
+                .Where(r => r.Id == id && r.ReviewStatus == ReviewStatus.Completed)
+                .Select(r => new ReviewViewModel()
+                {
+                    Id = r.Id,
+                    Title = r.Title,
+                    Overview = r.Overview,
+                    Performance = r.Performance,
+                    Interior = r.Interior,
+                    Longevity = r.Longevity,
+                    Features = r.Features,
+                    ReviewerId = r.ReviewerId,
+                    ReviewerName = $"{r.Reviewer.User.FirstName} {r.Reviewer.User.LastName}",
+                    Vehicle = new VehicleReviewModel
+                    {
+                        Id = r.VehicleId,
+                        Name = $"{r.Vehicle.Brand} {r.Vehicle.Model}",
+                        Price = r.Vehicle.Price,
+                        ImageUrl = r.Vehicle.ImageUrl ?? $"/img/VehicleTypes/{r.Vehicle.VehicleType}.png",
+                        VehicleType = r.Vehicle.VehicleType,
+                        VehicleRating = r.VehicleRating
+                    }
+                })
+                .FirstOrDefaultAsync();
+
+            return review;
+        }
+
+        public async Task<ReviewOrderModel> CreateReviewOrderModelAsync(int reviewerId, int vehicleId, IDictionary<ReviewType, decimal> reviewTypesAndPrices)
+        {
+            var model = new ReviewOrderModel()
+            {
+                ReviewerId = reviewerId,
+                VehicleId = vehicleId,
+                ReviewTypesAndPrices = reviewTypesAndPrices
+            };
+            return model;
+        }
+
         public async Task<ReviewCreateModel> CreateReviewCreateModelAsync(int id)
         {
             var model = await repository.AllReadOnly<Review>()
-                .Where(r => r.Id == id)
+                .Where(r => r.Id == id && r.ReviewStatus == ReviewStatus.Ordered)
                 .Select(r => new ReviewCreateModel()
                 {
                     Id = r.Id,
@@ -311,16 +321,7 @@ namespace CarSales.Core.Services
             return model;
         }
 
-        public async Task<ReviewOrderModel> CreateReviewOrderModel(int reviewerId, int vehicleId, IDictionary<ReviewType, decimal> reviewTypesAndPrices)
-        {
-            var model = new ReviewOrderModel()
-            {
-                ReviewerId = reviewerId,
-                VehicleId = vehicleId,
-                ReviewTypesAndPrices = reviewTypesAndPrices
-            };
-            return model;
-        }
+
 
         public async Task CreateOrderedReviewAsync(string userId, ReviewOrderModel model)
         {

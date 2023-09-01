@@ -50,15 +50,6 @@ namespace CarSales.Core.Contracts
             string? selectedVehicleTypes = null,
             ReviewSorting reviewSorting = ReviewSorting.VehiclePriceDescending);
 
-
-        /// <summary>
-        /// Returns <see cref="Review"/> wih given <paramref name="id"/>
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns><see cref="ReviewViewModel"/></returns>
-        Task<ReviewViewModel> GetReviewByIdAsync(int id);
-
-
         /// <summary>
         /// Returns all <see cref="Review"/> which match criteria given in parameters, 
         /// belonging to <see cref="Reviewer"/> with <paramref name="userId"/>
@@ -84,6 +75,15 @@ namespace CarSales.Core.Contracts
             ReviewSorting reviewSorting = ReviewSorting.VehiclePriceDescending
             );
 
+
+        /// <summary>
+        /// Returns <see cref="Review"/> wih given <paramref name="id"/> 
+        /// if it is <see cref="ReviewStatus.Completed"/>
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns><see cref="ReviewViewModel"/></returns>
+        Task<ReviewViewModel> GetReviewByIdAsync(int id);
+
         /// <summary>
         /// Creates a <see cref="ReviewOrderModel"/> which lets <see cref="Salesman"/> choose the <see cref="ReviewType"/>
         /// he wants to order from <see cref="Reviewer"/> with <paramref name="reviewerId"/>
@@ -92,7 +92,7 @@ namespace CarSales.Core.Contracts
         /// <param name="vehicleId"></param>
         /// <param name="reviewTypesAndPrices"></param>
         /// <returns><see cref="ReviewOrderModel"/></returns>
-        Task<ReviewOrderModel> CreateReviewOrderModel(int reviewerId, int vehicleId, IDictionary<ReviewType, decimal> reviewTypesAndPrices);
+        Task<ReviewOrderModel> CreateReviewOrderModelAsync(int reviewerId, int vehicleId, IDictionary<ReviewType, decimal> reviewTypesAndPrices);
 
         /// <summary>
         /// Creates a <see cref="ReviewCreateModel"/> which lets <see cref="Reviewer"/> create a <see cref="Review"/>
