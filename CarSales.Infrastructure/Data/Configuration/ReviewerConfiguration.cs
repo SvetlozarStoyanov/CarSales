@@ -22,6 +22,14 @@ namespace CarSales.Infrastructure.Data.Configuration
                     ShortReviewPrice = 100,
                     StandartReviewPrice = 150,
                     PremiumReviewPrice = 200,
+                },
+                new Reviewer()
+                {
+                    Id = 2,
+                    UserId = "9b92fe41-3f2e-4eb1-990b-73c2ea2d746d",
+                    ShortReviewPrice = 100,
+                    StandartReviewPrice = 200,
+                    PremiumReviewPrice = 250,
                 }
             };
             return reviewers;

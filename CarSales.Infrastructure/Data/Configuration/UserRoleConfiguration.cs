@@ -41,7 +41,7 @@ namespace CarSales.Infrastructure.Data.Configuration
                 {
                     UserId = "10933c11-ac2a-410d-b60a-8b1d97324975",
                     RoleId = "bbea2448-c801-43d1-8b05-e3a2c22338d9"
-                }, 
+                },
                 new IdentityUserRole<string>()
                 {
                     UserId = "4d693871-c20b-4e9f-8490-1c641b9e3a40",
@@ -63,6 +63,11 @@ namespace CarSales.Infrastructure.Data.Configuration
                 new IdentityUserRole<string>()
                 {
                     UserId = "4d693871-c20b-4e9f-8490-1c641b9e3a40",
+                    RoleId = "2d1b88f7-208a-43de-bb14-aca56b43080c"
+                },
+                new IdentityUserRole<string>()
+                {
+                    UserId = "9b92fe41-3f2e-4eb1-990b-73c2ea2d746d",
                     RoleId = "2d1b88f7-208a-43de-bb14-aca56b43080c"
                 }
             };
