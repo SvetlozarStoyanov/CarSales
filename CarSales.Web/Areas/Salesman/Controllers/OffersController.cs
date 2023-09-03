@@ -20,7 +20,7 @@ namespace CarSales.Web.Areas.Salesman.Controllers
                 model.OffersPerPage,
                 model.VehicleName,
                 model.SalesmanName,
-                model.OfferStatus, 
+                model.OfferStatus,
                 model.OfferSorting);
 
             model = queryResult;
@@ -42,7 +42,7 @@ namespace CarSales.Web.Areas.Salesman.Controllers
 
         public async Task<IActionResult> Details(int id)
         {
-            if (!await offerService.CanViewOfferAsync(User.Id(),id))
+            if (!await offerService.CanViewOfferAsync(User.Id(), id))
             {
                 return RedirectToAction(nameof(Outgoing));
             }
@@ -53,15 +53,23 @@ namespace CarSales.Web.Areas.Salesman.Controllers
                 model.OfferEditModel = await offerService.CreateOfferEditModelAsync(id);
             }
             ViewBag.CanRespondToOffer = await offerService.CanRespondToOfferAsync(User.Id(), id);
-            
+
             return View(model);
         }
 
         [HttpGet]
         public async Task<IActionResult> Create(int vehicleId)
         {
-            var model = await offerService.CreateOfferCreateModelAsync(User.Id(), vehicleId);
-            return View(model);
+            try
+            {
+                var model = await offerService.CreateOfferCreateModelAsync(User.Id(), vehicleId);
+                return View(model);
+            }
+            catch (Exception)
+            {
+                TempData["error"] = "Cannot complete operation!";
+                return RedirectToAction("Index", "Vehicles");
+            }
         }
 
         [HttpPost]
@@ -113,14 +121,22 @@ namespace CarSales.Web.Areas.Salesman.Controllers
 
         public async Task<IActionResult> Accept(int id)
         {
+            if (!await offerService.CanViewOfferAsync(User.Id(), id))
+            {
+                return RedirectToAction(nameof(Outgoing));
+            }
             await offerService.AcceptOfferAsync(id);
             TempData["success"] = "Offer accepted!";
             return RedirectToAction(nameof(Incoming));
         }
 
-        
+
         public async Task<IActionResult> Decline(int id)
         {
+            if (!await offerService.CanViewOfferAsync(User.Id(), id))
+            {
+                return RedirectToAction(nameof(Outgoing));
+            }
             await offerService.DeclineOfferAsync(id);
             TempData["success"] = "Offer declined!";
             return RedirectToAction(nameof(Incoming));

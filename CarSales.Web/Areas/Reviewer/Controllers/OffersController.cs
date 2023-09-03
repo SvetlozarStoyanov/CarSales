@@ -45,8 +45,16 @@ namespace CarSales.Web.Areas.Reviewer.Controllers
         [HttpGet]
         public async Task<IActionResult> Create(int vehicleId)
         {
-            var model = await offerService.CreateOfferCreateModelAsync(User.Id(), vehicleId);
-            return View(model);
+            try
+            {
+                var model = await offerService.CreateOfferCreateModelAsync(User.Id(), vehicleId);
+                return View(model);
+            }
+            catch (Exception)
+            {
+                TempData["error"] = "Cannot complete operation!";
+                return RedirectToAction("Index", "Vehicles");
+            }
         }
 
         [HttpPost]
