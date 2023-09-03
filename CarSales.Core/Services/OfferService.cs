@@ -1,6 +1,7 @@
 ﻿using AirsoftMatchMaker.Infrastructure.Data.Common.Repository;
 using CarSales.Core.Contracts;
 using CarSales.Core.Enums;
+using CarSales.Core.Exceptions;
 using CarSales.Core.Models.Offers;
 using CarSales.Core.Models.Vehicles;
 using CarSales.Infrastructure.Data.Entities;
@@ -27,8 +28,9 @@ namespace CarSales.Core.Services
                 .FirstOrDefaultAsync();
             var vehicle = await repository.AllReadOnly<Vehicle>()
                 .Where(v => v.Id == vehicleId)
+                .Include(v => v.Salesman)
                 .FirstOrDefaultAsync();
-            if (vehicle.SalesmanId == null || owner.Offers.Any(of => of.VehicleId == vehicleId))
+            if (vehicle.SalesmanId == null || owner.Offers.Any(of => of.VehicleId == vehicleId) || vehicle.Salesman.UserId == userId)
             {
                 return false;
             }
@@ -79,7 +81,7 @@ namespace CarSales.Core.Services
         public async Task<int> GetOfferIdAsync(string userId, int vehicleId)
         {
             var offerId = await repository.AllReadOnly<Offer>()
-                .Where(o => o.Offeror.UserId == userId && o.VehicleId == vehicleId)
+                .Where(o => o.Offeror.UserId == userId && o.VehicleId == vehicleId && o.Status == OfferStatus.Pending)
                 .Select(o => o.Id)
                 .FirstOrDefaultAsync();
 
@@ -170,7 +172,7 @@ namespace CarSales.Core.Services
                 .FirstOrDefaultAsync(o => o.UserId == userId);
 
             var offers = await repository.AllReadOnly<Offer>()
-                .Where(o =>o.Status == OfferStatus.Pending && o.SalesmanId == salesman.Id)
+                .Where(o => o.Status == OfferStatus.Pending && o.SalesmanId == salesman.Id)
                 .Include(o => o.Vehicle)
                 .Include(o => o.Offeror)
                 .ThenInclude(s => s.User)
@@ -267,7 +269,11 @@ namespace CarSales.Core.Services
             var vehicle = await repository.GetByIdAsync<Vehicle>(vehicleId);
             if (vehicle.SalesmanId == null)
             {
-                throw new InvalidOperationException("Vehicle is not for sale!");
+                throw new NotForSaleException("Vehicle is not for sale!");
+            }
+            if (vehicle == null)
+            {
+                throw new NullReferenceException();
             }
             var offeror = await repository.AllReadOnly<Owner>()
                 .Where(o => o.UserId == userId)
