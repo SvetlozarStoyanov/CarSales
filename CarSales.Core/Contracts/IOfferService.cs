@@ -14,7 +14,6 @@ namespace CarSales.Core.Contracts
         /// <param name="userId"></param>
         /// <param name="vehicleId"></param>
         /// <returns><see cref="bool"/></returns>
-        
         Task<bool> CanCreateOfferAsync(string userId, int vehicleId);
 
         /// <summary>

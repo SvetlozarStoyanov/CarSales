@@ -44,7 +44,12 @@ namespace CarSales.Core.Contracts
         /// <returns><see cref="decimal"/></returns>
         Task<decimal> GetUserAvailableCreditsAsync(string userId, int offerId);
 
-
+        /// <summary>
+        /// Creates a <see cref="UserNavbarModel"/> for <see cref="User"/> with
+        /// given <paramref name="id"/>
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         Task<UserNavbarModel> GetUserNavbarModelAsync(string id);
 
         /// <summary>

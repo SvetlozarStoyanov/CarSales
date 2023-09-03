@@ -64,6 +64,15 @@ namespace CarSales.Core.Contracts
             ReviewerSorting sorting = ReviewerSorting.Alphabetically
             );
 
+        /// <summary>
+        /// Returns <see cref="ReviewerViewModel"/> for <see cref="Review"/> with
+        /// given <paramref name="reviewerId"/> and marks <see cref="ReviewerViewModel.CanCreateReview"/> to true
+        /// if the <see cref="Reviewer"/> has not already created a <see cref="Review"/> for <see cref="Vehicle"/> with given
+        /// <paramref name="vehicleId"/>
+        /// </summary>
+        /// <param name="reviewerId"></param>
+        /// <param name="vehicleId"></param>
+        /// <returns></returns>
         Task<ReviewerViewModel> GetReviewerByIdAsync(int reviewerId, int vehicleId);
 
         /// <summary>
