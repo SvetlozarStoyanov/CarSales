@@ -112,13 +112,13 @@ namespace CarSales.Web.Controllers
             {
                 return Redirect("/Reviewer/Home/Index");
             }
-            else if (await userManager.IsInRoleAsync(user, "Owner"))
-            {
-                return Redirect("/Owner/Home/Index");
-            }
             else if (await userManager.IsInRoleAsync(user, "Administrator"))
             {
                 return Redirect("/Admin/Home/Index");
+            }
+            else if (await userManager.IsInRoleAsync(user, "Owner"))
+            {
+                return Redirect("/Owner/Home/Index");
             }
             return RedirectToAction("Index", "Home");
         }
