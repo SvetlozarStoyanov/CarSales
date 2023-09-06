@@ -1,5 +1,6 @@
 ﻿using AirsoftMatchMaker.Infrastructure.Data.Common.Repository;
 using CarSales.Core.Contracts;
+using CarSales.Core.Extensions;
 using CarSales.Core.Services;
 using CarSales.Infrastructure.Data;
 using CarSales.Infrastructure.Data.Entities;
@@ -12,6 +13,7 @@ using Microsoft.Extensions.Caching.StackExchangeRedis;
 
 namespace CarSales.Tests.IntegrationTests
 {
+    [TestFixture]
     public class ReviewServiceTests
     {
         private CarSalesDbContext context;
@@ -19,7 +21,6 @@ namespace CarSales.Tests.IntegrationTests
         private IDistributedCache cache;
         private IReviewService reviewService;
         private IReviewerService reviewerService;
-        private IContainer container;
 
         [OneTimeSetUp]
         public async Task Setup()
@@ -35,17 +36,6 @@ namespace CarSales.Tests.IntegrationTests
 
             repository = new Repository(context);
 
-            container = new ContainerBuilder()
-              // Set the image for the container
-              .WithImage("redis:latest")
-            // Bind port 6379 of the container to a port 6379 on the host.
-              .WithPortBinding(6379, 6379)
-              // Wait until the HTTP endpoint of the container is available.
-              .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(6379))
-              // Build the container configuration.
-              .Build();
-
-            await container.StartAsync();
             var redisOptions = new RedisCacheOptions();
             redisOptions.InstanceName = "CarSales_";
 
@@ -59,7 +49,7 @@ namespace CarSales.Tests.IntegrationTests
         [OneTimeTearDown]
         public async Task TearDown()
         {
-            await container.StopAsync();
+            await cache.ClearCacheAsync();
         }
 
 

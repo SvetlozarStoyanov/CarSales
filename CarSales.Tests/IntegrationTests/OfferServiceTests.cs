@@ -1,6 +1,5 @@
 ﻿using AirsoftMatchMaker.Infrastructure.Data.Common.Repository;
 using CarSales.Core.Contracts;
-using CarSales.Core.Exceptions;
 using CarSales.Core.Services;
 using CarSales.Infrastructure.Data;
 using CarSales.Infrastructure.Data.Enums;
@@ -8,12 +7,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CarSales.Tests.IntegrationTests
 {
+    [TestFixture]
     public class OfferServiceTests
     {
         private CarSalesDbContext context;
         private IRepository repository;
         private IOfferService offerService;
-        private IVehicleService vehicleService;
         private IUserService userService;
 
         [OneTimeSetUp]
@@ -31,7 +30,6 @@ namespace CarSales.Tests.IntegrationTests
             repository = new Repository(context);
 
             offerService = new OfferService(repository);
-            vehicleService = new VehicleService(repository);
             userService = new UserService(repository, null);
         }
 

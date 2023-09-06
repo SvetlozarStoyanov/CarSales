@@ -1,19 +1,19 @@
 ﻿using AirsoftMatchMaker.Infrastructure.Data.Common.Repository;
 using CarSales.Core.Contracts;
 using CarSales.Core.Enums;
+using CarSales.Core.Extensions;
 using CarSales.Core.Services;
 using CarSales.Infrastructure.Data;
-using CarSales.Infrastructure.Data.Entities;
 using CarSales.Infrastructure.Data.Enums;
 using DotNet.Testcontainers.Builders;
 using DotNet.Testcontainers.Containers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.StackExchangeRedis;
-using Microsoft.VisualStudio.TestPlatform.Common.Utilities;
 
 namespace CarSales.Tests.UnitTests
 {
+    [TestFixture]
     public class ReviewServiceTests
     {
         private CarSalesDbContext context;
@@ -21,7 +21,6 @@ namespace CarSales.Tests.UnitTests
         private IDistributedCache cache;
         private IReviewService reviewService;
         private IReviewerService reviewerService;
-        private IContainer container;
 
         [OneTimeSetUp]
         public async Task Setup()
@@ -37,17 +36,6 @@ namespace CarSales.Tests.UnitTests
 
             repository = new Repository(context);
 
-            container = new ContainerBuilder()
-              // Set the image for the container
-              .WithImage("redis:latest")
-              // Bind port 6379 of the container to a port 6379 on the host.
-              .WithPortBinding(6379, 6379)
-              // Wait until the HTTP endpoint of the container is available.
-              .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(6379))
-              // Build the container configuration.
-              .Build();
-
-            await container.StartAsync();
             var redisOptions = new RedisCacheOptions();
 
             redisOptions.InstanceName = "CarSales_";
@@ -62,7 +50,7 @@ namespace CarSales.Tests.UnitTests
         [OneTimeTearDown]
         public async Task TearDown()
         {
-            await container.StopAsync();
+            await cache.ClearCacheAsync();
         }
 
         [Test]

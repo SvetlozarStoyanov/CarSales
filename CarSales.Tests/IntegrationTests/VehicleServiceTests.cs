@@ -10,6 +10,7 @@ using Microsoft.Extensions.Caching.Distributed;
 
 namespace CarSales.Tests.IntegrationTests
 {
+    [TestFixture]
     public class VehicleServiceTests
     {
         private CarSalesDbContext context;

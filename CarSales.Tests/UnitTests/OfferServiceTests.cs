@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CarSales.Tests.UnitTests
 {
+    [TestFixture]
     public class OfferServiceTests
     {
         private CarSalesDbContext context;

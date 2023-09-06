@@ -5,15 +5,14 @@ using CarSales.Core.Services;
 using CarSales.Infrastructure.Data;
 using CarSales.Infrastructure.Data.Enums;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Caching.Distributed;
 
 namespace CarSales.Tests.UnitTests
 {
+    [TestFixture]
     public class VehicleServiceTests
     {
         private CarSalesDbContext context;
         private IRepository repository;
-        private IDistributedCache cache;
         private IVehicleService vehicleService;
 
         [SetUp]
