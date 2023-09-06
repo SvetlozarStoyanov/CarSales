@@ -1,8 +1,6 @@
 ﻿@model UserViewModel
 @{
     ViewData["Title"] = $"{Model.UserName}";
-    string defaultImage = $"/img/Profile/{Model.Gender}Profile.png";
-    string profilePicture = Model.ImageUrl != null ? Model.ImageUrl : defaultImage;
 }
 
 <section class="text-white d-flex justify-content-center">
@@ -12,7 +10,7 @@
             <div class="align-self-center text-center mx-3 h-100">
                 <img class="border border-primary border-5 rounded-4 basic-transition" id="profilePicture"
                      style="height:250px;width:250px;object-fit:cover"
-                     src="@profilePicture" alt="profilePicture" />
+                     src="@Model.ProfilePicture" alt="profilePicture" />
                 @if (ViewBag.CanEditProfile)
                 {
                     <div class="m-3 text-center">
