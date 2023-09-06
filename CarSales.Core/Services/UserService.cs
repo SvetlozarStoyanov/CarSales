@@ -117,7 +117,7 @@ namespace CarSales.Core.Services
                     UserName = u.UserName,
                     Email = u.Email,
                     PhoneNumber = u.PhoneNumber,
-                    ImageUrl = u.ImageUrl,
+                    ProfilePicture = u.ImageUrl != null ? u.ImageUrl : $"/img/Profile/{u.Gender}Profile.png",
                     Gender = u.Gender,
                     Credits = u.Credits
                 })
@@ -174,7 +174,7 @@ namespace CarSales.Core.Services
                 Email = viewModel.Email,
                 PhoneNumber = viewModel.PhoneNumber,
                 Gender = viewModel.Gender,
-                ImageUrl = viewModel.ImageUrl
+                ImageUrl = viewModel.ProfilePicture
             };
 
             return editModel;
