@@ -45,7 +45,7 @@ namespace CarSales.Infrastructure.Data.Configuration
                     LastName = "Test",
                     UserName = name,
                     NormalizedUserName = name.ToUpper(),
-                    Email = $"{name}@gmail.com",
+                    Email = $"{name.ToLower()}@gmail.com",
                     Gender = Gender.Male,
                     Credits = 50000m,
                     NormalizedEmail = $"{name.ToUpper()}@GMAIL.COM",

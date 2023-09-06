@@ -39,6 +39,16 @@ namespace CarSales.Infrastructure.Data.Configuration
                 {
                     Id = 5,
                     UserId = "4d693871-c20b-4e9f-8490-1c641b9e3a40"
+                },
+                new Owner()
+                {
+                    Id = 6,
+                    UserId = "9b92fe41-3f2e-4eb1-990b-73c2ea2d746d"
+                },
+                new Owner()
+                {
+                    Id = 7,
+                    UserId = "cbed6d2a-e60a-49df-a6e3-982ccd980393"
                 }
             };
 
