@@ -5,6 +5,13 @@ namespace CarSales.Core.Extensions
 {
     public static class DistributedCacheExtension
     {
+        private static HashSet<string> keys = new HashSet<string>();
+
+        public static HashSet<string> Keys
+        {
+            get { return keys; }
+        }
+
         public static async Task SetRecordAsync<T>(this IDistributedCache cache,
             string recordId,
             T data,
@@ -17,7 +24,7 @@ namespace CarSales.Core.Extensions
             options.SlidingExpiration = unusedExpireTime;
 
             var jsonData = JsonSerializer.Serialize(data);
-
+            keys.Add(recordId);
             await cache.SetStringAsync(recordId, jsonData, options);
         }
 
@@ -32,6 +39,14 @@ namespace CarSales.Core.Extensions
             var data = JsonSerializer.Deserialize<T>(jsonData);
 
             return data;
+        }
+
+        public static async Task ClearCacheAsync(this IDistributedCache cache)
+        {
+            foreach (var key in keys)
+            {
+                await cache.RemoveAsync(key);
+            }
         }
     }
 }
