@@ -1,15 +1,14 @@
 ﻿using CarSales.Core.Models.Users;
 using CarSales.Infrastructure.Data.Entities;
 using CarSales.Infrastructure.Data.Enums;
-using StackExchange.Redis;
 
 namespace CarSales.Core.Contracts
 {
     public interface IUserService
     {
         /// <summary>
-        /// Returns true if <see cref="User"/> with different <see cref="User"/>.Id <paramref name="userName"/> exists,
-        /// returns false otherwise
+        /// Returns true if <see cref="User"/> with different <see cref="User"/>.Id than given <paramref name="id"/>
+        /// has the same username, returns false otherwise
         /// </summary>
         /// <param name="id"></param>
         /// <param name="userName"></param>
