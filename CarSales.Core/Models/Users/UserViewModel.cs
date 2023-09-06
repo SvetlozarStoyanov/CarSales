@@ -10,7 +10,7 @@ namespace CarSales.Core.Models.Users
         public string UserName { get; set; } = null!;
         public string? Email { get; set; }
         public string? PhoneNumber { get; set; }
-        public string? ImageUrl { get; set; }
+        public string? ProfilePicture { get; set; }
         public Gender Gender { get; set; }
         public decimal Credits { get; set; }
     }
