@@ -40,127 +40,127 @@ namespace CarSales.Tests.IntegrationTests
         [Test]
         public async Task Test_BuyVehicleFromSalesman_CorrectlyBuysVehicleAndTransfersCredits_IfBuyerHasEnoughCredits()
         {
-            var vehicle = await vehicleService.GetVehicleByIdAsync(1);
+            var result = await vehicleService.GetVehicleByIdAsync(1);
             var buyerCredits = await userService.GetUserAvailableCreditsAsync("b5fef437-f504-46d2-926d-3158e54e1932");
-            var vehicleSalesmanCredits = await userService.GetUserAvailableCreditsAsync(vehicle.SalesmanUserId);
-            Assert.That(vehicle.SalesmanId, Is.EqualTo(1));
-            Assert.That(vehicle.OwnerId, Is.EqualTo(null));
+            var vehicleSalesmanCredits = await userService.GetUserAvailableCreditsAsync(result.SalesmanUserId);
+            Assert.That(result.SalesmanId, Is.EqualTo(1));
+            Assert.That(result.OwnerId, Is.EqualTo(null));
             Assert.That(buyerCredits, Is.EqualTo(50000));
             Assert.That(vehicleSalesmanCredits, Is.EqualTo(50000));
 
-            await vehicleService.BuyVehicleFromSalesmanAsync(vehicle.Id, "b5fef437-f504-46d2-926d-3158e54e1932");
+            await vehicleService.BuyVehicleFromSalesmanAsync(result.Id, "b5fef437-f504-46d2-926d-3158e54e1932");
             buyerCredits = await userService.GetUserAvailableCreditsAsync("b5fef437-f504-46d2-926d-3158e54e1932");
-            vehicleSalesmanCredits = await userService.GetUserAvailableCreditsAsync(vehicle.SalesmanUserId);
-            vehicle = await vehicleService.GetVehicleByIdAsync(1);
+            vehicleSalesmanCredits = await userService.GetUserAvailableCreditsAsync(result.SalesmanUserId);
+            result = await vehicleService.GetVehicleByIdAsync(1);
 
-            Assert.That(buyerCredits, Is.EqualTo(50000 - vehicle.Price));
-            Assert.That(vehicleSalesmanCredits, Is.EqualTo(50000 + vehicle.Price));
-            Assert.That(vehicle.SalesmanId, Is.EqualTo(null));
-            Assert.That(vehicle.OwnerId, Is.EqualTo(1));
+            Assert.That(buyerCredits, Is.EqualTo(50000 - result.Price));
+            Assert.That(vehicleSalesmanCredits, Is.EqualTo(50000 + result.Price));
+            Assert.That(result.SalesmanId, Is.EqualTo(null));
+            Assert.That(result.OwnerId, Is.EqualTo(1));
             var sale = await repository.AllReadOnly<Sale>()
                 .Where(s => s.SalesmanId == 1
                     && s.OwnerId == 1
-                    && s.VehicleId == vehicle.Id)
+                    && s.VehicleId == result.Id)
                 .FirstOrDefaultAsync();
 
             Assert.That(sale, Is.Not.EqualTo(null));
-            Assert.That(sale.SalePrice, Is.EqualTo(vehicle.Price));
+            Assert.That(sale.SalePrice, Is.EqualTo(result.Price));
         }
 
         [Test]
         public async Task Test_BuyVehicleFromSalesman_ThrowsException_IfBuyerDoesNotHaveEnoughCredits()
         {
-            var vehicle = await vehicleService.GetVehicleByIdAsync(2);
+            var result = await vehicleService.GetVehicleByIdAsync(2);
 
-            Assert.That(async () => await vehicleService.BuyVehicleFromSalesmanAsync(vehicle.Id, "b5fef437-f504-46d2-926d-3158e54e1932"), Throws.Exception.TypeOf<InsufficientCreditsException>());
-            var exception = Assert.ThrowsAsync<InsufficientCreditsException>(async () => await vehicleService.BuyVehicleFromSalesmanAsync(vehicle.Id, "b5fef437-f504-46d2-926d-3158e54e1932"));
+            Assert.That(async () => await vehicleService.BuyVehicleFromSalesmanAsync(result.Id, "b5fef437-f504-46d2-926d-3158e54e1932"), Throws.Exception.TypeOf<InsufficientCreditsException>());
+            var exception = Assert.ThrowsAsync<InsufficientCreditsException>(async () => await vehicleService.BuyVehicleFromSalesmanAsync(result.Id, "b5fef437-f504-46d2-926d-3158e54e1932"));
             Assert.That(exception.Message, Is.EqualTo("You do not have enough credits to purchase this item!"));
         }
 
         [Test]
         public async Task Test_BuyFromSalesman_ThrowsException_IfVehicleIsNotForSale()
         {
-            var vehicle = await vehicleService.GetVehicleByIdAsync(6);
+            var result = await vehicleService.GetVehicleByIdAsync(6);
 
-            Assert.That(async () => await vehicleService.BuyVehicleFromSalesmanAsync(vehicle.Id, "b5fef437-f504-46d2-926d-3158e54e1932"), Throws.Exception.TypeOf<NotForSaleException>());
-            var exception = Assert.ThrowsAsync<NotForSaleException>(async () => await vehicleService.BuyVehicleFromSalesmanAsync(vehicle.Id, "b5fef437-f504-46d2-926d-3158e54e1932"));
+            Assert.That(async () => await vehicleService.BuyVehicleFromSalesmanAsync(result.Id, "b5fef437-f504-46d2-926d-3158e54e1932"), Throws.Exception.TypeOf<NotForSaleException>());
+            var exception = Assert.ThrowsAsync<NotForSaleException>(async () => await vehicleService.BuyVehicleFromSalesmanAsync(result.Id, "b5fef437-f504-46d2-926d-3158e54e1932"));
             Assert.That(exception.Message, Is.EqualTo("Item is not for sale!"));
         }
 
         [Test]
         public async Task Test_BuyVehicleFromImporter_CorrectlyBuysVehicleAndTransfersCredits_IfBuyerHasEnoughCredits()
         {
-            var vehicle = await vehicleService.GetVehicleByIdAsync(4);
+            var result = await vehicleService.GetVehicleByIdAsync(4);
             var buyerCredits = await userService.GetUserAvailableCreditsAsync("66ccb670-f0dd-4aa1-a83d-8b2a0003bb50");
-            var vehicleImporterCredits = await userService.GetUserAvailableCreditsAsync(vehicle.ImporterUserId);
-            Assert.That(vehicle.ImporterId, Is.EqualTo(1));
-            Assert.That(vehicle.OwnerId, Is.EqualTo(null));
+            var vehicleImporterCredits = await userService.GetUserAvailableCreditsAsync(result.ImporterUserId);
+            Assert.That(result.ImporterId, Is.EqualTo(1));
+            Assert.That(result.OwnerId, Is.EqualTo(null));
             Assert.That(buyerCredits, Is.EqualTo(50000));
             Assert.That(vehicleImporterCredits, Is.EqualTo(50000));
 
-            await vehicleService.BuyVehicleFromImporterAsync(vehicle.Id, "66ccb670-f0dd-4aa1-a83d-8b2a0003bb50");
+            await vehicleService.BuyVehicleFromImporterAsync(result.Id, "66ccb670-f0dd-4aa1-a83d-8b2a0003bb50");
             buyerCredits = await userService.GetUserAvailableCreditsAsync("66ccb670-f0dd-4aa1-a83d-8b2a0003bb50");
-            vehicleImporterCredits = await userService.GetUserAvailableCreditsAsync(vehicle.ImporterUserId);
-            vehicle = await vehicleService.GetVehicleByIdAsync(4);
+            vehicleImporterCredits = await userService.GetUserAvailableCreditsAsync(result.ImporterUserId);
+            result = await vehicleService.GetVehicleByIdAsync(4);
 
-            Assert.That(buyerCredits, Is.EqualTo(50000 - vehicle.Price));
-            Assert.That(vehicleImporterCredits, Is.EqualTo(50000 + vehicle.Price));
-            Assert.That(vehicle.ImporterId, Is.EqualTo(null));
-            Assert.That(vehicle.OwnerId, Is.EqualTo(3));
+            Assert.That(buyerCredits, Is.EqualTo(50000 - result.Price));
+            Assert.That(vehicleImporterCredits, Is.EqualTo(50000 + result.Price));
+            Assert.That(result.ImporterId, Is.EqualTo(null));
+            Assert.That(result.OwnerId, Is.EqualTo(3));
             var sale = await repository.AllReadOnly<Sale>()
                 .Where(s => s.ImporterId == 1
                     && s.OwnerId == 3
-                    && s.VehicleId == vehicle.Id)
+                    && s.VehicleId == result.Id)
                 .FirstOrDefaultAsync();
 
             Assert.That(sale, Is.Not.EqualTo(null));
-            Assert.That(sale.SalePrice, Is.EqualTo(vehicle.Price));
+            Assert.That(sale.SalePrice, Is.EqualTo(result.Price));
         }
 
         [Test]
         public async Task Test_BuyVehicleFromImporter_ThrowsException_IfBuyerDoesNotHaveEnoughCredits()
         {
-            var vehicle = await vehicleService.GetVehicleByIdAsync(5);
+            var result = await vehicleService.GetVehicleByIdAsync(5);
 
-            Assert.That(async () => await vehicleService.BuyVehicleFromImporterAsync(vehicle.Id, "66ccb670-f0dd-4aa1-a83d-8b2a0003bb50"), Throws.Exception.TypeOf<InsufficientCreditsException>());
-            var exception = Assert.ThrowsAsync<InsufficientCreditsException>(async () => await vehicleService.BuyVehicleFromImporterAsync(vehicle.Id, "66ccb670-f0dd-4aa1-a83d-8b2a0003bb50"));
+            Assert.That(async () => await vehicleService.BuyVehicleFromImporterAsync(result.Id, "66ccb670-f0dd-4aa1-a83d-8b2a0003bb50"), Throws.Exception.TypeOf<InsufficientCreditsException>());
+            var exception = Assert.ThrowsAsync<InsufficientCreditsException>(async () => await vehicleService.BuyVehicleFromImporterAsync(result.Id, "66ccb670-f0dd-4aa1-a83d-8b2a0003bb50"));
             Assert.That(exception.Message, Is.EqualTo("You do not have enough credits to purchase this item!"));
         }
 
         [Test]
         public async Task Test_BuyVehicleFromImporter_ThrowsException_IfVehicleIsNotForSale()
         {
-            var vehicle = await vehicleService.GetVehicleByIdAsync(1);
+            var result = await vehicleService.GetVehicleByIdAsync(1);
 
-            Assert.That(async () => await vehicleService.BuyVehicleFromImporterAsync(vehicle.Id, "66ccb670-f0dd-4aa1-a83d-8b2a0003bb50"), Throws.Exception.TypeOf<NotForSaleException>());
-            var exception = Assert.ThrowsAsync<NotForSaleException>(async () => await vehicleService.BuyVehicleFromImporterAsync(vehicle.Id, "66ccb670-f0dd-4aa1-a83d-8b2a0003bb50"));
+            Assert.That(async () => await vehicleService.BuyVehicleFromImporterAsync(result.Id, "66ccb670-f0dd-4aa1-a83d-8b2a0003bb50"), Throws.Exception.TypeOf<NotForSaleException>());
+            var exception = Assert.ThrowsAsync<NotForSaleException>(async () => await vehicleService.BuyVehicleFromImporterAsync(result.Id, "66ccb670-f0dd-4aa1-a83d-8b2a0003bb50"));
             Assert.That(exception.Message, Is.EqualTo("Item is not for sale!"));
         }
 
         [Test]
         public async Task Test_PutVehicleForSale_PutsVehicleOnSale()
         {
-            var vehicle = await vehicleService.GetVehicleByIdAsync(7);
-            Assert.That(vehicle.SalesmanId, Is.EqualTo(null));
-            Assert.That(vehicle.OwnerId, Is.Not.EqualTo(null));
-            await vehicleService.PutVehicleForSaleAsync(vehicle.VehicleSellModel);
-            vehicle = await vehicleService.GetVehicleByIdAsync(7);
-            Assert.That(vehicle.SalesmanId, Is.Not.EqualTo(null));
-            Assert.That(vehicle.OwnerId, Is.EqualTo(null));
+            var result = await vehicleService.GetVehicleByIdAsync(7);
+            Assert.That(result.SalesmanId, Is.EqualTo(null));
+            Assert.That(result.OwnerId, Is.Not.EqualTo(null));
+            await vehicleService.PutVehicleForSaleAsync(result.VehicleSellModel);
+            result = await vehicleService.GetVehicleByIdAsync(7);
+            Assert.That(result.SalesmanId, Is.Not.EqualTo(null));
+            Assert.That(result.OwnerId, Is.EqualTo(null));
         }
 
         [Test]
         public async Task Test_EditVehicle_EditsVehicle()
         {
-            var vehicle = await vehicleService.GetVehicleByIdAsync(4);
-            vehicle.VehicleEditModel.Price = vehicle.Price - 1;
-            var newPrice = vehicle.VehicleEditModel.Price;
-            vehicle.VehicleEditModel.Description = vehicle.Description + " edited!";
-            var newDescription = vehicle.VehicleEditModel.Description;
-            await vehicleService.EditVehicleAsync(vehicle.VehicleEditModel);
-            vehicle = await vehicleService.GetVehicleByIdAsync(4);
-            Assert.That(vehicle.Price, Is.EqualTo(newPrice));
-            Assert.That(vehicle.Description, Is.EqualTo(newDescription));
+            var result = await vehicleService.GetVehicleByIdAsync(4);
+            result.VehicleEditModel.Price = result.Price - 1;
+            var newPrice = result.VehicleEditModel.Price;
+            result.VehicleEditModel.Description = result.Description + " edited!";
+            var newDescription = result.VehicleEditModel.Description;
+            await vehicleService.EditVehicleAsync(result.VehicleEditModel);
+            result = await vehicleService.GetVehicleByIdAsync(4);
+            Assert.That(result.Price, Is.EqualTo(newPrice));
+            Assert.That(result.Description, Is.EqualTo(newDescription));
         }
 
         [Test]
