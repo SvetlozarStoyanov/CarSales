@@ -28,7 +28,7 @@ namespace CarSales.Web.Areas.Owner.Controllers
                 var user = await userManager.GetUserAsync(User);
                 var userRoleNames = await userManager.GetRolesAsync(user);
                 ViewBag.UserRoles = await roleService.GetUserRolesAsync(userRoleNames);
-                var requestedRoles = await roleRequestService.GetRequestedRolesByUserIdAsync(User.Id());
+                var requestedRoles = await roleRequestService.GetRoleRequestsByUserIdAsync(User.Id());
                 if (requestedRoles.Any())
                 {
                     ViewBag.RequestedRoles = await roleService.GetRoleByIdsAsync(requestedRoles.Select(rrq => rrq.RoleId));

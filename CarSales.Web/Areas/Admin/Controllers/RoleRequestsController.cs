@@ -23,7 +23,7 @@ namespace CarSales.Web.Areas.Admin.Controllers
 
         public async Task<IActionResult> Index([FromQuery] RoleRequestsQueryModel model)
         {
-            var queryResult = await roleRequestService.GetAllRoleRequestsAsync(model.SearchTerm,
+            var queryResult = await roleRequestService.GetRoleRequestsAsync(model.SearchTerm,
                 model.CurrentPage,
                 model.RoleRequestsPerPage,
                 model.SelectedUserName,
