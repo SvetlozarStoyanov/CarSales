@@ -1,5 +1,6 @@
 ﻿using CarSales.Core.Enums;
 using CarSales.Core.Models.RoleRequests;
+using CarSales.Infrastructure.Data.Entities;
 
 namespace CarSales.Core.Contracts
 {
@@ -16,7 +17,7 @@ namespace CarSales.Core.Contracts
         /// <param name="selectedRoleNames"></param>
         /// <param name="sorting"></param>
         /// <returns></returns>
-        Task<RoleRequestsQueryModel> GetAllRoleRequestsAsync(string searchTerm = null,
+        Task<RoleRequestsQueryModel> GetRoleRequestsAsync(string searchTerm = null,
             int currentPage = 1,
             int roleRequestsPerPage = 12,
             string selectedUserName = null,
@@ -24,38 +25,44 @@ namespace CarSales.Core.Contracts
             RoleRequestSorting sorting = RoleRequestSorting.Newest);
 
         /// <summary>
-        /// Returns role request with given Id
+        /// Returns roles requested by user with given Id
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        Task<IEnumerable<RoleRequestListModel>> GetRoleRequestsByUserIdAsync(string userId);
+
+        /// <summary>
+        /// Returns role request with given <paramref name="id"/>
         /// </summary>
         /// <param name="id"></param>
         /// <returns><see cref="RoleRequestViewModel"/></returns>
         Task<RoleRequestViewModel> GetRoleRequestByIdAsync(int id);
 
         /// <summary>
-        /// Creates a role request which an admin must approve or disapprove
+        /// Creates a role request with <see cref="Role"/> with <paramref name="roleId"/>
+        /// from <see cref="User"/> with <paramref name="userId"/>
         /// </summary>
+        /// <param name="roleId"></param>
         /// <param name="userId"></param>
         /// <returns></returns>
         Task CreateRoleRequestAsync(string roleId, string userId);
 
         /// <summary>
-        /// Deletes a role request with given roleId and userId
+        /// !DEPRECATED!
+        /// Deletes a role request with given <paramref name="roleId"/>
+        /// and <paramref name="userId"/>
         /// </summary>
         /// <param name="userId"></param>
         /// <returns></returns>
         Task DeleteRoleRequestAsync(string roleId, string userId);
 
         /// <summary>
-        /// Deletes RoleRequest with given id
+        /// Deletes RoleRequest with given <paramref name="id"/>
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
         Task DeleteRoleRequestAsync(int id);
 
-        /// <summary>
-        /// Returns roles requested by user with given Id
-        /// </summary>
-        /// <param name="userId"></param>
-        /// <returns></returns>
-        Task<IEnumerable<RoleRequestListModel>> GetRequestedRolesByUserIdAsync(string userId);
+
     }
 }
