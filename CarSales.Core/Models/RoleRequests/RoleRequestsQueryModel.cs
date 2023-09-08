@@ -17,6 +17,7 @@ namespace CarSales.Core.Models.RoleRequests
         public int RoleRequestsPerPage { get; set; } = 12;
         public int FirstPage { get; set; } = 1;
         public int MaxPage { get; set; }
+        public int RoleRequestCount { get; set; }
         public string? SelectedUserName { get; set; }
         public string? SelectedRoleNames { get; set; }
         public RoleRequestSorting Sorting { get; set; }
