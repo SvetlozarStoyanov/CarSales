@@ -42,7 +42,7 @@ namespace CarSales.Core.Contracts
         /// </summary>
         /// <param name="searchTerm"></param>
         /// <returns><see cref="ReviewersQueryModel"/></returns>
-        Task<ReviewersQueryModel> GetAllReviewersAsync(string searchTerm = null
+        Task<ReviewersQueryModel> GetReviewersAsync(string searchTerm = null
             );
 
         /// <summary>
