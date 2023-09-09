@@ -44,7 +44,7 @@ namespace CarSales.Web.Areas.Salesman.Controllers
         [HttpGet]
         public async Task<IActionResult> Order(int reviewerId, int vehicleId)
         {
-            if (!(await reviewerService.CanBeOrderedToCreateReviewAsync(reviewerId,vehicleId)))
+            if (!(await reviewerService.CanBeOrderedToCreateReviewAsync(reviewerId, vehicleId)))
             {
                 TempData["error"] = "Cannot order!";
                 return RedirectToAction(nameof(Index));
