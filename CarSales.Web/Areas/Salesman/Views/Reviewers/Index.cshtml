@@ -7,7 +7,7 @@
         previousPage = 1;
     }
 
-    var maxPage = Math.Ceiling((double)Model.ReviewsCount /
+    var maxPage = Math.Ceiling((double)Model.ReviewerCount /
     Model.ReviewersPerPage);
     var shouldButtonBeDisabled = Model.CurrentPage >= maxPage;
 }
