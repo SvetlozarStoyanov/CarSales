@@ -63,9 +63,28 @@ namespace CarSales.Core.Services
                 await repository.SaveChangesAsync();
             }
         }
+        public async Task<IDictionary<ReviewType, decimal>> GetReviewTypesAndPricesAsync(int reviewerId)
+        {
+            var reviewTypesAndPrices = new Dictionary<ReviewType, decimal>();
+            var reviewTypes = Enum.GetValues<ReviewType>().ToList();
+            var reviewer = await repository.AllReadOnly<Reviewer>()
+                .FirstOrDefaultAsync(r => r.Id == reviewerId);
+            if (reviewer == null)
+            {
+                return null;
+            }
+            var prices = new List<decimal>() {
+                reviewer.ShortReviewPrice, reviewer.StandartReviewPrice, reviewer.PremiumReviewPrice
+            };
+            for (int i = 0; i < reviewTypes.Count; i++)
+            {
+                reviewTypesAndPrices.Add(reviewTypes[i], prices[i]);
+            }
 
+            return reviewTypesAndPrices;
+        }
 
-        public async Task<ReviewersQueryModel> GetAllReviewersAsync(string? searchTerm = null)
+        public async Task<ReviewersQueryModel> GetReviewersAsync(string? searchTerm = null)
         {
             var reviewers = await repository.AllReadOnly<Reviewer>()
                 .Where(r => r.IsActive)
@@ -78,7 +97,8 @@ namespace CarSales.Core.Services
                 reviewers = reviewers.Where(r => r.User.UserName.ToLower().Contains(searchTerm.ToLower()) || $"{r.User.FirstName} {r.User.LastName}".Contains(searchTerm.ToLower()))
                     .ToList();
             }
-            var queryModel = CreateReviewersQueryModel(searchTerm, reviewers);
+            var reviewerCount = reviewers.Count();
+            var queryModel = CreateReviewersQueryModel(searchTerm, reviewerCount, reviewers);
             return queryModel;
         }
 
@@ -190,23 +210,6 @@ namespace CarSales.Core.Services
             await repository.SaveChangesAsync();
         }
 
-        public async Task<IDictionary<ReviewType, decimal>> GetReviewTypesAndPricesAsync(int reviewerId)
-        {
-            var reviewTypesAndPrices = new Dictionary<ReviewType, decimal>();
-            var reviewTypes = Enum.GetValues<ReviewType>().ToList();
-            var reviewer = await repository.AllReadOnly<Reviewer>()
-                .FirstOrDefaultAsync(r => r.Id == reviewerId);
-            var prices = new List<decimal>() {
-                reviewer.ShortReviewPrice, reviewer.StandartReviewPrice, reviewer.PremiumReviewPrice
-            };
-            for (int i = 0; i < reviewTypes.Count; i++)
-            {
-                reviewTypesAndPrices.Add(reviewTypes[i], prices[i]);
-            }
-
-            return reviewTypesAndPrices;
-        }
-
         private ReviewersQueryModel CreateReviewersQueryModel(string? searchTerm,
             int currentPage,
             int reviewersPerPage,
@@ -221,7 +224,7 @@ namespace CarSales.Core.Services
                 MaxPage = (int)(reviewersCount / reviewersPerPage),
                 ReviewersPerPage = reviewersPerPage,
                 ReviewerSorting = sorting,
-                ReviewsCount = reviewersCount,
+                ReviewerCount = reviewersCount,
                 Reviewers = reviewers
                 .Select(r => new ReviewerListModel()
                 {
@@ -266,11 +269,12 @@ namespace CarSales.Core.Services
         }
 
 
-        private ReviewersQueryModel CreateReviewersQueryModel(string? searchTerm, List<Reviewer> reviewers)
+        private ReviewersQueryModel CreateReviewersQueryModel(string? searchTerm, int reviewerCount, List<Reviewer> reviewers)
         {
             var model = new ReviewersQueryModel()
             {
                 SearchTerm = searchTerm,
+                ReviewerCount = reviewerCount,
                 Reviewers = reviewers
                 .Select(r => new ReviewerListModel()
                 {
@@ -279,15 +283,10 @@ namespace CarSales.Core.Services
                     ShortReviewPrice = r.ShortReviewPrice,
                     StandartReviewPrice = r.StandartReviewPrice,
                     PremiumReviewPrice = r.PremiumReviewPrice,
-
                 }).ToList()
             };
 
-
-
             return model;
         }
-
-
     }
 }
