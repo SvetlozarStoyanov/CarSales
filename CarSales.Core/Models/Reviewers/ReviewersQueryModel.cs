@@ -15,7 +15,7 @@ namespace CarSales.Core.Models.Reviewers
         public int CurrentPage { get; set; } = 1;
         public int FirstPage { get; set; } = 1;
         public int MaxPage { get; set; }
-        public int ReviewsCount { get; set; }
+        public int ReviewerCount { get; set; }
         public int? VehicleId { get; set; }
         public ReviewerSorting ReviewerSorting { get; set; }
         public ICollection<ReviewerSorting> SortingOptions { get; set; }
