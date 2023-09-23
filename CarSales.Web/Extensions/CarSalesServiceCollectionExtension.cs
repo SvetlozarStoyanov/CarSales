@@ -9,6 +9,7 @@ namespace CarSales.Web.Extensions
         public static IServiceCollection AddApplicationServices(this IServiceCollection services)
         {
             services.AddScoped<IRepository, Repository>();
+            services.AddScoped<IHtmlSanitizingService, HtmlSanitizingService>();
             services.AddScoped<IVehicleService, VehicleService>();
             services.AddScoped<IOwnerService, OwnerService>();
             services.AddScoped<IUserService, UserService>();
