@@ -8,14 +8,18 @@ namespace CarSales.Web.Areas.Reviewer.Controllers
     public class ReviewsController : BaseController
     {
         private readonly IReviewService reviewService;
+        private readonly IHtmlSanitizingService htmlSanitizingService;
 
-        public ReviewsController(IReviewService reviewService)
+        public ReviewsController(IReviewService reviewService, IHtmlSanitizingService htmlSanitizingService)
         {
             this.reviewService = reviewService;
+            this.htmlSanitizingService = htmlSanitizingService;
+
         }
 
         public async Task<IActionResult> Index([FromQuery] ReviewsQueryModel model)
         {
+            model = htmlSanitizingService.SanitizeObject(model);
             var queryResult = await reviewService.GetReviewsAsync(model.SearchTerm,
                 model.VehicleName,
                 model.ReviewsPerPage,
@@ -30,6 +34,7 @@ namespace CarSales.Web.Areas.Reviewer.Controllers
 
         public async Task<IActionResult> Mine([FromQuery] ReviewsQueryModel model)
         {
+            model = htmlSanitizingService.SanitizeObject(model);
             var queryResult = await reviewService.GetReviewerReviewsAsync(User.Id(),
                 model.SearchTerm,
                 model.VehicleName,
@@ -70,6 +75,7 @@ namespace CarSales.Web.Areas.Reviewer.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(ReviewCreateModel model)
         {
+            model = htmlSanitizingService.SanitizeObject(model);
             if (!ModelState.IsValid)
             {
                 model = await reviewService.CreateReviewCreateModelAsync(model.Id);
@@ -83,6 +89,7 @@ namespace CarSales.Web.Areas.Reviewer.Controllers
         [HttpPost]
         public async Task<IActionResult> CreatePreviewModel(ReviewCreateModel model)
         {
+            model = htmlSanitizingService.SanitizeObject(model);
             var previewModel = await reviewService.CreateReviewPreviewModelAsync(model);
             return Json(previewModel);
         }

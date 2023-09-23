@@ -9,13 +9,17 @@ namespace CarSales.Web.Areas.Importer.Controllers
     public class OffersController : BaseController
     {
         private readonly IOfferService offerService;
-        public OffersController(IOfferService offerService)
+        private readonly IHtmlSanitizingService htmlSanitizingService;
+
+        public OffersController(IOfferService offerService, IHtmlSanitizingService htmlSanitizingService)
         {
             this.offerService = offerService;
+            this.htmlSanitizingService = htmlSanitizingService;
         }
 
         public async Task<IActionResult> Outgoing([FromQuery] OffersQueryModel model)
         {
+            model = htmlSanitizingService.SanitizeObject(model);
             var queryResult = await offerService.GetOwnerOffersAsync(User.Id(),
                 model.CurrentPage,
                 model.OffersPerPage,
@@ -60,6 +64,7 @@ namespace CarSales.Web.Areas.Importer.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(OfferCreateModel model)
         {
+            model = htmlSanitizingService.SanitizeObject(model);
             if (!ModelState.IsValid)
             {
                 return View(model);
@@ -85,6 +90,7 @@ namespace CarSales.Web.Areas.Importer.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit(OfferEditModel model)
         {
+            model = htmlSanitizingService.SanitizeObject(model);
             if (!ModelState.IsValid)
             {
                 return View(model);

@@ -10,16 +10,39 @@ namespace CarSales.Web.Areas.Owner.Controllers
         private readonly IVehicleService vehicleService;
         private readonly IOfferService offerService;
         private readonly IUserService userService;
+        private readonly IHtmlSanitizingService htmlSanitizingService;
 
-        public VehiclesController(IVehicleService vehicleService, IOfferService offerService, IUserService userService)
+        public VehiclesController(IVehicleService vehicleService,
+            IOfferService offerService,
+            IUserService userService,
+            IHtmlSanitizingService htmlSanitizingService)
         {
             this.vehicleService = vehicleService;
             this.offerService = offerService;
             this.userService = userService;
+            this.htmlSanitizingService = htmlSanitizingService;
         }
+
         public async Task<IActionResult> Index([FromQuery] VehiclesQueryModel model)
         {
+            model = htmlSanitizingService.SanitizeObject(model);
             var queryResult = await vehicleService.GetVehiclesForSaleAsync(
+                model.SearchTerm,
+                model.VehiclesPerPage,
+                model.CurrentPage,
+                model.SelectedVehicleTypes,
+                model.VehicleSorting);
+
+            model = queryResult;
+
+            return View(model);
+        }
+
+        public async Task<IActionResult> Mine([FromQuery] VehiclesQueryModel model)
+        {
+            model = htmlSanitizingService.SanitizeObject(model);
+            var queryResult = await vehicleService.GetOwnerVehiclesAsync(
+                User.Id(),
                 model.SearchTerm,
                 model.VehiclesPerPage,
                 model.CurrentPage,
@@ -43,7 +66,7 @@ namespace CarSales.Web.Areas.Owner.Controllers
             if (!ViewBag.CanCreateOffer)
             {
                 var offerId = await offerService.GetOfferIdAsync(User.Id(), id);
-                if (await offerService.CanEditOfferAsync(User.Id(),id))
+                if (await offerService.CanEditOfferAsync(User.Id(), id))
                 {
                     model.OfferEditModel = await offerService.CreateOfferEditModelAsync(offerId);
                 }
@@ -54,21 +77,6 @@ namespace CarSales.Web.Areas.Owner.Controllers
                 model.OfferCreateModel = await offerService.CreateOfferCreateModelAsync(User.Id(), id);
                 ViewBag.AvailableCredits = await userService.GetUserAvailableCreditsAsync(User.Id());
             }
-            return View(model);
-        }
-
-        public async Task<IActionResult> Mine([FromQuery] VehiclesQueryModel model)
-        {
-            var queryResult = await vehicleService.GetOwnerVehiclesAsync(
-                User.Id(),
-                model.SearchTerm,
-                model.VehiclesPerPage,
-                model.CurrentPage,
-                model.SelectedVehicleTypes,
-                model.VehicleSorting);
-
-            model = queryResult;
-
             return View(model);
         }
 

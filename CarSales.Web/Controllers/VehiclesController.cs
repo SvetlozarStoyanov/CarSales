@@ -7,14 +7,17 @@ namespace CarSales.Web.Controllers
     public class VehiclesController : Controller
     {
         private readonly IVehicleService vehicleService;
+        private readonly IHtmlSanitizingService htmlSanitizingService;
 
-        public VehiclesController(IVehicleService vehicleService)
+        public VehiclesController(IVehicleService vehicleService, IHtmlSanitizingService htmlSanitizingService)
         {
             this.vehicleService = vehicleService;
+            this.htmlSanitizingService = htmlSanitizingService;
         }
 
         public async Task<IActionResult> Index([FromQuery] VehiclesQueryModel model)
         {
+            model = htmlSanitizingService.SanitizeObject(model);
             var queryResult = await vehicleService.GetVehiclesForSaleAsync(
                 model.SearchTerm,
                 model.VehiclesPerPage,

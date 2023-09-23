@@ -10,16 +10,22 @@ namespace CarSales.Web.Areas.Importer.Controllers
         private readonly IVehicleService vehicleService;
         private readonly IOfferService offerService;
         private readonly IUserService userService;
+        private readonly IHtmlSanitizingService htmlSanitizingService;
 
-        public VehiclesController(IVehicleService vehicleService, IOfferService offerService, IUserService userService)
+        public VehiclesController(IVehicleService vehicleService,
+            IOfferService offerService,
+            IUserService userService,
+            IHtmlSanitizingService htmlSanitizingService)
         {
             this.vehicleService = vehicleService;
             this.offerService = offerService;
             this.userService = userService;
+            this.htmlSanitizingService = htmlSanitizingService;
         }
 
         public async Task<IActionResult> Index([FromQuery] VehiclesQueryModel model)
         {
+            model = htmlSanitizingService.SanitizeObject(model);
             var queryResult = await vehicleService.GetVehiclesForSaleAsync(
                 model.SearchTerm,
                 model.VehiclesPerPage,
@@ -34,12 +40,45 @@ namespace CarSales.Web.Areas.Importer.Controllers
 
         public async Task<IActionResult> Imported([FromQuery] VehiclesQueryModel model)
         {
+            model = htmlSanitizingService.SanitizeObject(model);
             var queryResult = await vehicleService.GetImportedVehiclesAsync(
                 model.SearchTerm,
                 model.VehiclesPerPage,
                 model.CurrentPage,
                 model.SelectedVehicleTypes,
                 model.VehicleSorting);
+
+            model = queryResult;
+
+            return View(model);
+        }
+
+        public async Task<IActionResult> Mine([FromQuery] VehiclesQueryModel model)
+        {
+            model = htmlSanitizingService.SanitizeObject(model);
+            var queryResult = await vehicleService.GetOwnerVehiclesAsync(
+                 User.Id(),
+                 model.SearchTerm,
+                 model.VehiclesPerPage,
+                 model.CurrentPage,
+                 model.SelectedVehicleTypes,
+                 model.VehicleSorting);
+
+            model = queryResult;
+
+            return View(model);
+        }
+
+        public async Task<IActionResult> MyImportedVehicles([FromQuery] VehiclesQueryModel model)
+        {
+            model = htmlSanitizingService.SanitizeObject(model);
+            var queryResult = await vehicleService.GetImporterVehiclesAsync(
+            User.Id(),
+            model.SearchTerm,
+            model.VehiclesPerPage,
+            model.CurrentPage,
+            model.SelectedVehicleTypes,
+            model.VehicleSorting);
 
             model = queryResult;
 
@@ -72,38 +111,6 @@ namespace CarSales.Web.Areas.Importer.Controllers
 
             return View(model);
         }
-
-        public async Task<IActionResult> Mine([FromQuery] VehiclesQueryModel model)
-        {
-            var queryResult = await vehicleService.GetOwnerVehiclesAsync(
-                 User.Id(),
-                 model.SearchTerm,
-                 model.VehiclesPerPage,
-                 model.CurrentPage,
-                 model.SelectedVehicleTypes,
-                 model.VehicleSorting);
-
-            model = queryResult;
-
-            return View(model);
-        }
-
-        public async Task<IActionResult> MyImportedVehicles([FromQuery] VehiclesQueryModel model)
-        {
-            var queryResult = await vehicleService.GetImporterVehiclesAsync(
-            User.Id(),
-            model.SearchTerm,
-            model.VehiclesPerPage,
-            model.CurrentPage,
-            model.SelectedVehicleTypes,
-            model.VehicleSorting);
-
-            model = queryResult;
-
-            return View(model);
-        }
-
-
         public async Task<IActionResult> Buy(int id)
         {
             try

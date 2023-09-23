@@ -12,17 +12,25 @@ namespace CarSales.Web.Areas.Admin.Controllers
         private readonly SignInManager<User> signInManager;
         private readonly RoleManager<Role> roleManager;
         private readonly IRoleRequestService roleRequestService;
+        private readonly IHtmlSanitizingService htmlSanitizingService;
 
-        public RoleRequestsController(UserManager<User> userManager, SignInManager<User> signInManager, RoleManager<Role> roleManager, IRoleRequestService roleRequestService)
+        public RoleRequestsController(UserManager<User> userManager,
+            SignInManager<User> signInManager,
+            RoleManager<Role> roleManager,
+            IRoleRequestService roleRequestService,
+            IHtmlSanitizingService htmlSanitizingService
+            )
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
             this.roleManager = roleManager;
             this.roleRequestService = roleRequestService;
+            this.htmlSanitizingService = htmlSanitizingService;
         }
 
         public async Task<IActionResult> Index([FromQuery] RoleRequestsQueryModel model)
         {
+            model = htmlSanitizingService.SanitizeObject(model);
             var queryResult = await roleRequestService.GetRoleRequestsAsync(model.SearchTerm,
                 model.CurrentPage,
                 model.RoleRequestsPerPage,

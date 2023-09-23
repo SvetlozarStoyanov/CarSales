@@ -10,14 +10,20 @@ namespace CarSales.Web.Areas.Salesman.Controllers
     {
         private readonly IReviewService reviewService;
         private readonly IReviewerService reviewerService;
-        public ReviewsController(IReviewService reviewService, IReviewerService reviewerService)
+        private readonly IHtmlSanitizingService htmlSanitizingService;
+
+        public ReviewsController(IReviewService reviewService,
+            IReviewerService reviewerService,
+            IHtmlSanitizingService htmlSanitizingService)
         {
             this.reviewService = reviewService;
             this.reviewerService = reviewerService;
+            this.htmlSanitizingService = htmlSanitizingService;
         }
 
         public async Task<IActionResult> Index([FromQuery] ReviewsQueryModel model)
         {
+            model = htmlSanitizingService.SanitizeObject(model);
             var queryResult = await reviewService.GetReviewsAsync(model.SearchTerm,
                 model.VehicleName,
                 model.ReviewsPerPage,
@@ -58,6 +64,7 @@ namespace CarSales.Web.Areas.Salesman.Controllers
         //[ValidateAntiForgeryToken]
         public async Task<IActionResult> Order(ReviewOrderModel model)
         {
+            model = htmlSanitizingService.SanitizeObject(model);
             var reviewTypesAndPrices = await reviewerService.GetReviewTypesAndPricesAsync(model.ReviewerId);
             if (!ModelState.IsValid)
             {

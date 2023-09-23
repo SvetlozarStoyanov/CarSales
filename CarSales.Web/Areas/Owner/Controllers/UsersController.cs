@@ -8,9 +8,12 @@ namespace CarSales.Web.Areas.Owner.Controllers
     public class UsersController : BaseController
     {
         private readonly IUserService userService;
-        public UsersController(IUserService userService)
+        private readonly IHtmlSanitizingService htmlSanitizingService;
+
+        public UsersController(IUserService userService, IHtmlSanitizingService htmlSanitizingService)
         {
             this.userService = userService;
+            this.htmlSanitizingService = htmlSanitizingService;
         }
 
         public async Task<IActionResult> Details(string id)
@@ -36,6 +39,7 @@ namespace CarSales.Web.Areas.Owner.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit(UserEditModel model)
         {
+            model = htmlSanitizingService.SanitizeObject(model);
             if (!ModelState.IsValid)
             {
                 return View(model);

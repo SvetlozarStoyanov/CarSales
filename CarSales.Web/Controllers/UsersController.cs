@@ -15,17 +15,21 @@ namespace CarSales.Web.Controllers
         private readonly RoleManager<Role> roleManager;
         private readonly IOwnerService ownerService;
         private readonly IUserService userService;
+        private readonly IHtmlSanitizingService htmlSanitizingService;
+
         public UsersController(UserManager<User> userManager,
             SignInManager<User> signInManager,
             RoleManager<Role> roleManager,
             IOwnerService ownerService,
-            IUserService userService)
+            IUserService userService,
+            IHtmlSanitizingService htmlSanitizingService)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
             this.roleManager = roleManager;
             this.ownerService = ownerService;
             this.userService = userService;
+            this.htmlSanitizingService = htmlSanitizingService;
         }
 
 
@@ -39,6 +43,7 @@ namespace CarSales.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> Register(UserRegisterModel model)
         {
+            model = htmlSanitizingService.SanitizeObject(model);
             if (!ModelState.IsValid)
             {
                 return View(model);
@@ -84,6 +89,7 @@ namespace CarSales.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(UserLoginModel model)
         {
+            model = htmlSanitizingService.SanitizeObject(model);
             if (!ModelState.IsValid)
             {
                 return View(model);

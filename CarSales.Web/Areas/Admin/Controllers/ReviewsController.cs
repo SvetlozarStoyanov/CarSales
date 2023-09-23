@@ -7,13 +7,16 @@ namespace CarSales.Web.Areas.Admin.Controllers
     public class ReviewsController : BaseController
     {
         private readonly IReviewService reviewService;
-        public ReviewsController(IReviewService reviewService)
+        private readonly IHtmlSanitizingService htmlSanitizingService;
+        public ReviewsController(IReviewService reviewService, IHtmlSanitizingService htmlSanitizingService)
         {
             this.reviewService = reviewService;
+            this.htmlSanitizingService = htmlSanitizingService;
         }
 
         public async Task<IActionResult> Index([FromQuery] ReviewsQueryModel model)
         {
+            model = htmlSanitizingService.SanitizeObject(model);
             var queryResult = await reviewService.GetReviewsAsync(model.SearchTerm,
                 model.VehicleName,
                 model.ReviewsPerPage,
