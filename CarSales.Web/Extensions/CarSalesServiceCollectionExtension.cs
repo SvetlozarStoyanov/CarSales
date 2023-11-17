@@ -20,6 +20,7 @@ namespace CarSales.Web.Extensions
             services.AddScoped<IReviewerService, ReviewerService>();
             services.AddScoped<IReviewService, ReviewService>();
             services.AddScoped<IOfferService, OfferService>();
+            services.AddScoped<INotificationService, NotificationService>();
 
             return services;
         }
