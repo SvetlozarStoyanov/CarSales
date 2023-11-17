@@ -1,6 +1,5 @@
 ﻿using CarSales.Core.Contracts;
 using CarSales.Core.Models.Offers;
-using CarSales.Infrastructure.Data.Entities;
 using CarSales.Infrastructure.Data.Enums;
 using CarSales.Web.Extensions;
 using Microsoft.AspNetCore.Mvc;
@@ -10,11 +9,18 @@ namespace CarSales.Web.Areas.Owner.Controllers
     public class OffersController : BaseController
     {
         private readonly IOfferService offerService;
+        private readonly INotificationService notificationService;
+        private readonly ISalesmanService salesmanService;
         private readonly IHtmlSanitizingService htmlSanitizingService;
 
-        public OffersController(IOfferService offerService, IHtmlSanitizingService htmlSanitizingService)
+        public OffersController(IOfferService offerService,
+            INotificationService notificationService,
+            ISalesmanService salesmanService,
+            IHtmlSanitizingService htmlSanitizingService)
         {
             this.offerService = offerService;
+            this.notificationService = notificationService;
+            this.salesmanService = salesmanService;
             this.htmlSanitizingService = htmlSanitizingService;
         }
 
@@ -53,6 +59,7 @@ namespace CarSales.Web.Areas.Owner.Controllers
             try
             {
                 var model = await offerService.CreateOfferCreateModelAsync(User.Id(), vehicleId);
+
                 return View(model);
             }
             catch (Exception)
@@ -72,6 +79,11 @@ namespace CarSales.Web.Areas.Owner.Controllers
             }
 
             await offerService.CreateOfferAsync(model);
+            var salesmanUserId = await salesmanService.GetSalesmanUserIdAsync(model.SalesmanId);
+            var newOfferId = await offerService.GetOfferIdAsync(User.Id(),model.VehicleId);
+            await notificationService.CreateNotificationAsync(salesmanUserId,
+                "New offer received!",
+                $"Offers/Details/{newOfferId}");
             TempData["success"] = "Succesfully created offer!";
             if (model.ReturnUrl != null)
             {
