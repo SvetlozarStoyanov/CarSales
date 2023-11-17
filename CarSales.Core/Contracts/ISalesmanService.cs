@@ -17,5 +17,13 @@ namespace CarSales.Core.Contracts
         /// <param name="userId"></param>
         /// <returns></returns>
         Task RetireSalesmanAsync(string userId);
+
+        /// <summary>
+        /// Returns <see cref="User.Id"/> of <see cref="Salesman"/>
+        /// with <paramref name="id"/>
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns><see cref="string"/></returns>
+        Task<string> GetSalesmanUserIdAsync(int id);
     }
 }

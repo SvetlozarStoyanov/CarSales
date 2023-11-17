@@ -44,5 +44,11 @@ namespace CarSales.Core.Services
                 await repository.SaveChangesAsync();
             }
         }
+
+        public async Task<string> GetSalesmanUserIdAsync(int id)
+        {
+            var salesman = await repository.GetByIdAsync<Salesman>(id);
+            return salesman.UserId;
+        }
     }
 }
