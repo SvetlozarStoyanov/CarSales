@@ -10,7 +10,7 @@ namespace CarSales.Infrastructure.Data
         public CarSalesDbContext(DbContextOptions<CarSalesDbContext> options)
             : base(options)
         {
-            this.Database.Migrate();
+            //this.Database.Migrate();
         }
         public CarSalesDbContext(DbContextOptions<CarSalesDbContext> options, bool applyMigrations) 
             : base(options)
@@ -27,6 +27,7 @@ namespace CarSales.Infrastructure.Data
         public DbSet<RoleRequest> RoleRequests { get; set; } = null!;
         public DbSet<Offer> Offers { get; set; } = null!;
         public DbSet<Review> Reviews { get; set; }
+        public DbSet<Notification> Notifications { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
