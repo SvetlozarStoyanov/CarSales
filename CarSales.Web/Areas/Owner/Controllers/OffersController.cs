@@ -3,6 +3,7 @@ using CarSales.Core.Models.Offers;
 using CarSales.Infrastructure.Data.Enums;
 using CarSales.Web.Extensions;
 using Microsoft.AspNetCore.Mvc;
+using System.Text;
 
 namespace CarSales.Web.Areas.Owner.Controllers
 {
@@ -41,6 +42,12 @@ namespace CarSales.Web.Areas.Owner.Controllers
 
         public async Task<IActionResult> Details(int id)
         {
+            var offerExists = await offerService.OfferExistsAsync(id);
+            if (!offerExists)
+            {
+                TempData["error"] = "Offer not found!";
+                return RedirectToAction(nameof(Outgoing));
+            }
             if (!await offerService.CanViewOfferAsync(User.Id(), id))
             {
                 return RedirectToAction(nameof(Outgoing));
@@ -59,7 +66,6 @@ namespace CarSales.Web.Areas.Owner.Controllers
             try
             {
                 var model = await offerService.CreateOfferCreateModelAsync(User.Id(), vehicleId);
-
                 return View(model);
             }
             catch (Exception)

@@ -9,11 +9,21 @@ namespace CarSales.Web.Areas.Salesman.Controllers
     public class OffersController : BaseController
     {
         private readonly IOfferService offerService;
+        private readonly ISalesmanService salesmanService;
+        private readonly IOwnerService ownerService;
+        private readonly INotificationService notificationService;
         private readonly IHtmlSanitizingService htmlSanitizingService;
 
-        public OffersController(IOfferService offerService, IHtmlSanitizingService htmlSanitizingService)
+        public OffersController(IOfferService offerService,
+            ISalesmanService salesmanService,
+            IOwnerService ownerService,
+            INotificationService notificationService,
+            IHtmlSanitizingService htmlSanitizingService)
         {
             this.offerService = offerService;
+            this.salesmanService = salesmanService;
+            this.ownerService = ownerService;
+            this.notificationService = notificationService;
             this.htmlSanitizingService = htmlSanitizingService;
         }
         public async Task<IActionResult> Outgoing([FromQuery] OffersQueryModel model)
@@ -47,6 +57,12 @@ namespace CarSales.Web.Areas.Salesman.Controllers
 
         public async Task<IActionResult> Details(int id)
         {
+            var offerExists = await offerService.OfferExistsAsync(id);
+            if (!offerExists)
+            {
+                TempData["error"] = "Offer not found!";
+                return RedirectToAction(nameof(Incoming));
+            }
             if (!await offerService.CanViewOfferAsync(User.Id(), id))
             {
                 return RedirectToAction(nameof(Outgoing));
@@ -86,6 +102,13 @@ namespace CarSales.Web.Areas.Salesman.Controllers
                 return View(model);
             }
             await offerService.CreateOfferAsync(model);
+
+            var salesmanUserId = await salesmanService.GetSalesmanUserIdAsync(model.SalesmanId);
+            var newOfferId = await offerService.GetOfferIdAsync(User.Id(), model.VehicleId);
+            await notificationService.CreateNotificationAsync(salesmanUserId,
+                "New offer received!",
+                $"Offers/Details/{newOfferId}");
+
             TempData["success"] = "Succesfully created offer!";
             if (model.ReturnUrl != null)
             {
@@ -132,7 +155,12 @@ namespace CarSales.Web.Areas.Salesman.Controllers
             {
                 return RedirectToAction(nameof(Outgoing));
             }
+            var offer = await offerService.GetOfferByIdAsync(id);
+            var ownerUserId = await ownerService.GetOwnerUserIdAsync(offer.OfferorId);
             await offerService.AcceptOfferAsync(id);
+            await notificationService.CreateNotificationAsync(ownerUserId,
+                "Offer accepted!",
+                $"Offers/Details/{id}");
             TempData["success"] = "Offer accepted!";
             return RedirectToAction(nameof(Incoming));
         }
@@ -144,7 +172,13 @@ namespace CarSales.Web.Areas.Salesman.Controllers
             {
                 return RedirectToAction(nameof(Outgoing));
             }
+
+            var offer = await offerService.GetOfferByIdAsync(id);
+            var ownerUserId = await ownerService.GetOwnerUserIdAsync(offer.OfferorId);
             await offerService.DeclineOfferAsync(id);
+            await notificationService.CreateNotificationAsync(ownerUserId,
+               "Offer declined!",
+               $"Offers/Details/{id}");
             TempData["success"] = "Offer declined!";
             return RedirectToAction(nameof(Incoming));
         }

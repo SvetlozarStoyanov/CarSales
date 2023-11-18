@@ -3,17 +3,25 @@ using CarSales.Core.Models.Offers;
 using CarSales.Infrastructure.Data.Enums;
 using CarSales.Web.Extensions;
 using Microsoft.AspNetCore.Mvc;
+using System.Text;
 
 namespace CarSales.Web.Areas.Importer.Controllers
 {
     public class OffersController : BaseController
     {
         private readonly IOfferService offerService;
+        private readonly ISalesmanService salesmanService;
+        private readonly INotificationService notificationService;
         private readonly IHtmlSanitizingService htmlSanitizingService;
 
-        public OffersController(IOfferService offerService, IHtmlSanitizingService htmlSanitizingService)
+        public OffersController(IOfferService offerService,
+            ISalesmanService salesmanService,
+            INotificationService notificationService,
+            IHtmlSanitizingService htmlSanitizingService)
         {
             this.offerService = offerService;
+            this.salesmanService = salesmanService;
+            this.notificationService = notificationService;
             this.htmlSanitizingService = htmlSanitizingService;
         }
 
@@ -34,6 +42,12 @@ namespace CarSales.Web.Areas.Importer.Controllers
 
         public async Task<IActionResult> Details(int id)
         {
+            var offerExists = await offerService.OfferExistsAsync(id);
+            if (!offerExists)
+            {
+                TempData["error"] = "Offer not found!";
+                return RedirectToAction(nameof(Outgoing));
+            }
             if (!await offerService.CanViewOfferAsync(User.Id(), id))
             {
                 return RedirectToAction(nameof(Outgoing));
@@ -71,6 +85,12 @@ namespace CarSales.Web.Areas.Importer.Controllers
             }
 
             await offerService.CreateOfferAsync(model);
+            var salesmanUserId = await salesmanService.GetSalesmanUserIdAsync(model.SalesmanId);
+            var newOfferId = await offerService.GetOfferIdAsync(User.Id(), model.VehicleId);
+            await notificationService.CreateNotificationAsync(salesmanUserId,
+                "New offer received!",
+                $"Offers/Details/{newOfferId}");
+
             TempData["success"] = "Succesfully created offer!";
             if (model.ReturnUrl != null)
             {
