@@ -10,16 +10,25 @@ namespace CarSales.Web.Areas.Salesman.Controllers
         private readonly IVehicleService vehicleService;
         private readonly IOfferService offerService;
         private readonly IUserService userService;
+        private readonly ISalesmanService salesmanService;
+        private readonly IImporterService importerService;
+        private readonly INotificationService notificationService;
         private readonly IHtmlSanitizingService htmlSanitizingService;
 
         public VehiclesController(IVehicleService vehicleService,
             IOfferService offerService,
             IUserService userService,
+            ISalesmanService salesmanService,
+            IImporterService importerService,
+            INotificationService notificationService,
             IHtmlSanitizingService htmlSanitizingService)
         {
             this.vehicleService = vehicleService;
             this.offerService = offerService;
             this.userService = userService;
+            this.salesmanService = salesmanService;
+            this.importerService = importerService;
+            this.notificationService = notificationService;
             this.htmlSanitizingService = htmlSanitizingService;
         }
 
@@ -115,7 +124,13 @@ namespace CarSales.Web.Areas.Salesman.Controllers
         {
             try
             {
+                var vehicle = await vehicleService.GetVehicleByIdAsync(id);
+                var currUser = await userService.GetUserByIdAsync(User.Id());
+                var salesmanUserId = await salesmanService.GetSalesmanUserIdAsync((int)vehicle.SalesmanId!);
                 await vehicleService.BuyVehicleFromSalesmanAsync(id, User.Id());
+                await notificationService.CreateNotificationAsync(salesmanUserId,
+                    $"Your have sold {vehicle.Name} to {currUser.FirstName} {currUser.LastName} for {vehicle.Price}!",
+                    $"Vehicles/Details/{id}");
             }
             catch (Exception e)
             {
@@ -129,7 +144,14 @@ namespace CarSales.Web.Areas.Salesman.Controllers
         {
             try
             {
+                var vehicle = await vehicleService.GetVehicleByIdAsync(id);
+                var currUser = await userService.GetUserByIdAsync(User.Id());
+                var importerUserId = await importerService.GetImporterUserIdAsync((int)vehicle.ImporterId!);
+
                 await vehicleService.BuyVehicleFromImporterAsync(id, User.Id());
+                await notificationService.CreateNotificationAsync(importerUserId,
+                $"Your have sold {vehicle.Name} to {currUser.FirstName} {currUser.LastName} for {vehicle.Price}!",
+                $"Vehicles/Details/{id}");
             }
             catch (Exception e)
             {
@@ -169,7 +191,7 @@ namespace CarSales.Web.Areas.Salesman.Controllers
             {
                 if (model.OldPrice < model.Price)
                 {
-                    return View(model);
+                    return RedirectToAction(nameof(Details), new { id = model.Id });
                 }
                 await vehicleService.EditVehicleAsync(model);
             }

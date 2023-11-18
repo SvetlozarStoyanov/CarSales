@@ -10,16 +10,22 @@ namespace CarSales.Web.Areas.Importer.Controllers
         private readonly IVehicleService vehicleService;
         private readonly IOfferService offerService;
         private readonly IUserService userService;
+        private readonly ISalesmanService salesmanService;
+        private readonly INotificationService notificationService;
         private readonly IHtmlSanitizingService htmlSanitizingService;
 
         public VehiclesController(IVehicleService vehicleService,
             IOfferService offerService,
             IUserService userService,
+            ISalesmanService salesmanService,
+            INotificationService notificationService,
             IHtmlSanitizingService htmlSanitizingService)
         {
             this.vehicleService = vehicleService;
             this.offerService = offerService;
             this.userService = userService;
+            this.salesmanService = salesmanService;
+            this.notificationService = notificationService;
             this.htmlSanitizingService = htmlSanitizingService;
         }
 
@@ -115,7 +121,13 @@ namespace CarSales.Web.Areas.Importer.Controllers
         {
             try
             {
+                var vehicle = await vehicleService.GetVehicleByIdAsync(id);
+                var currUser = await userService.GetUserByIdAsync(User.Id());
+                var salesmanUserId = await salesmanService.GetSalesmanUserIdAsync((int)vehicle.SalesmanId!);
                 await vehicleService.BuyVehicleFromSalesmanAsync(id, User.Id());
+                await notificationService.CreateNotificationAsync(salesmanUserId,
+                    $"Your have sold {vehicle.Name} to {currUser.FirstName} {currUser.LastName} for {vehicle.Price}!",
+                    $"Vehicles/Details/{id}");
             }
             catch (Exception e)
             {
@@ -129,6 +141,7 @@ namespace CarSales.Web.Areas.Importer.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit(VehicleEditModel model)
         {
+            model = htmlSanitizingService.SanitizeObject(model);
             try
             {
                 if (model.OldPrice < model.Price)
