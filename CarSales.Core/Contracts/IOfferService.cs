@@ -8,6 +8,14 @@ namespace CarSales.Core.Contracts
     public interface IOfferService
     {
         /// <summary>
+        /// Returns <see cref="true"/> if <see cref="Offer"/> with <paramref name="id"/> exists
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns><see cref="bool"/></returns>
+        Task<bool> OfferExistsAsync(int id);
+
+
+        /// <summary>
         /// Returns true if <see cref="User"/> with <paramref name="userId"/> has not already created an offer
         /// for <see cref="Vehicle"/> with given <paramref name="vehicleId"/>, returns false otherwise.
         /// </summary>

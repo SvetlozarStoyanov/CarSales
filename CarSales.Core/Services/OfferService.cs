@@ -19,6 +19,11 @@ namespace CarSales.Core.Services
             this.repository = repository;
         }
 
+        public async Task<bool> OfferExistsAsync(int id)
+        {
+            var offer = await repository.GetByIdAsync<Offer>(id);
+            return offer != null;
+        }
 
         public async Task<bool> CanCreateOfferAsync(string userId, int vehicleId)
         {
@@ -71,7 +76,7 @@ namespace CarSales.Core.Services
                 .Where(o => o.Id == offerId)
                 .Include(o => o.Salesman)
                 .FirstOrDefaultAsync();
-            if (offer.Salesman.UserId != userId)
+            if (offer == null || offer!.Salesman.UserId != userId || offer.Status != OfferStatus.Pending)
             {
                 return false;
             }
@@ -471,6 +476,7 @@ namespace CarSales.Core.Services
             }
             await repository.SaveChangesAsync();
         }
+
 
     }
 }
