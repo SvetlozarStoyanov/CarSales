@@ -63,6 +63,13 @@ namespace CarSales.Core.Services
                 await repository.SaveChangesAsync();
             }
         }
+
+        public async Task<string> GetReviewerUserId(int id)
+        {
+            var reviewer = await repository.GetByIdAsync<Reviewer>(id);
+            return reviewer.UserId;
+        }
+
         public async Task<IDictionary<ReviewType, decimal>> GetReviewTypesAndPricesAsync(int reviewerId)
         {
             var reviewTypesAndPrices = new Dictionary<ReviewType, decimal>();

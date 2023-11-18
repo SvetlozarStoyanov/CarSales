@@ -3,11 +3,6 @@ using CarSales.Core.Contracts;
 using CarSales.Infrastructure.Data.Entities;
 using CarSales.Infrastructure.Data.Enums;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CarSales.Core.Services
 {
@@ -48,6 +43,12 @@ namespace CarSales.Core.Services
                 .FirstOrDefaultAsync();
             importer.IsActive = false;
             await repository.SaveChangesAsync();
+        }
+
+        public async Task<string> GetImporterUserIdAsync(int id)
+        {
+            var importer = await repository.GetByIdAsync<Importer>(id);
+            return importer.UserId;
         }
     }
 }

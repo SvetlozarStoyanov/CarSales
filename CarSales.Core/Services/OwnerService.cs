@@ -21,5 +21,12 @@ namespace CarSales.Core.Services
             await repository.AddAsync<Owner>(owner);
             await repository.SaveChangesAsync();
         }
+
+        public async Task<string> GetOwnerUserIdAsync(int id)
+        {
+            var owner = await repository.GetByIdAsync<Owner>(id);
+
+            return owner.UserId;
+        }
     }
 }

@@ -10,6 +10,9 @@ namespace CarSales.Core.Contracts
         /// <param name="userId"></param>
         /// <returns></returns>
         Task CreateOwnerAsync(string userId);
+
+
+        Task<string> GetOwnerUserIdAsync(int id);
         
     }
 }

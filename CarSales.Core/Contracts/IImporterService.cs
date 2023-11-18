@@ -17,12 +17,18 @@ namespace CarSales.Core.Contracts
         /// <returns></returns>
         Task CreateOrRenewImporterAsync(string userId);
 
-
         /// <summary>
         /// Sets <see cref="Importer.IsActive"/> to false
         /// </summary>
         /// <param name="userId"></param>
         /// <returns></returns>
         Task RetireImporterAsync(string userId);
+
+        /// <summary>
+        /// Returns the <see cref="User.Id"/> of <see cref="Importer"/> with <paramref name="id"/>
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns><see cref="string"/></returns>
+        Task<string> GetImporterUserIdAsync(int id);
     }
 }

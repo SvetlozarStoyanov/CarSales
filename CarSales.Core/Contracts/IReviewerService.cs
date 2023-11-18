@@ -34,7 +34,19 @@ namespace CarSales.Core.Contracts
         /// <returns></returns>
         Task RetireReviewerAsync(string userId);
 
+        /// <summary>
+        /// Returns <see cref="User.Id"/> of <see cref="Reviewer"/> with <paramref name="id"/>
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns><see cref="string"/></returns>
+        Task<string> GetReviewerUserId(int id);
 
+        /// <summary>
+        /// Returns the review types and their respective prices of <see cref="Reviewer"/>
+        /// with <paramref name="reviewerId"/>
+        /// </summary>
+        /// <param name="reviewerId"></param>
+        /// <returns><see cref="IDictionary{TKey, TValue}"/></returns>
         Task<IDictionary<ReviewType, decimal>> GetReviewTypesAndPricesAsync(int reviewerId);
 
         /// <summary>
