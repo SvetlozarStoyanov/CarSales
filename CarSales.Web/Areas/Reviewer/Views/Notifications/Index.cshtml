@@ -1,0 +1,61 @@
+﻿@model IEnumerable<NotificationListModel>
+
+@if (Model.Any())
+{
+
+    <h2 class="text-center text-white mt-3 mb-3">Requested Roles</h2>
+    <div class="table-responsive">
+        <table class="table table-dark table-hover table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>
+                        Name
+                    </th>
+                    <th>
+                        Read
+                    </th>
+                    <th>
+
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var notification in Model)
+                {
+                    var linkSplit = notification.Link.Split('/');
+                    var controller = linkSplit[0];
+                    var action = linkSplit[1];
+                    var itemId = string.Empty;
+                    if (linkSplit.Length > 2)
+                    {
+                         itemId = linkSplit[2];
+
+                    }
+
+                    <tr class="@(!notification.IsRead ? "table-primary" : "table-dark")">
+                        <td>
+                            @notification.Title
+                        </td>
+                        <td>
+                            @notification.IsRead
+                        </td>
+                        <td>
+                            <div class="d-flex justify-content-center w-100">
+
+                                <a class="btn btn-info mx-2" asp-area="Reviewer" asp-controller="@controller" asp-action="@action" asp-route-id="@(itemId != string.Empty ? itemId : null)" >
+                                    <i class="bi bi-info"></i>
+                                    <span class="d-lg-inline d-none">Details</span>
+                                </a>
+
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+else
+{
+    <h2 class="text-center text-white mt-3 mb-3">You have no notifications!</h2>
+}
