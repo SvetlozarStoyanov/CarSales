@@ -60,21 +60,21 @@ cancelBtn.addEventListener('click', function (e) {
     e.preventDefault();
 });
 
-form.addEventListener('submit', async function (e) {
+form.addEventListener('submit', function (e) {
     e.preventDefault();
-    if (imageUrlInput.value.length > 0) {
-        const imageUrlInput = document.querySelector('#imageUrl');
+    if (imageUrlInput.value.length > 0 && imageUrlInput.value.match(urlRegex)) {
+        /*const imageUrlInput = document.querySelector('#imageUrl');*/
         let request = new XMLHttpRequest();
-        await request.open('GET', imageUrlInput.value, true);
-        request.onreadystatechange = async function () {
+        request.open('GET', imageUrlInput.value, true);
+        request.onreadystatechange =  function () {
             if (request.readyState === 4) {
                 if (request.status !== 200) {
                     imageUrlInput.value = null;
                 }
-                await form.submit();
+                 form.submit();
             }
         };
-        await request.send();
+         request.send();
     } else {
         e.currentTarget.submit();
     }
