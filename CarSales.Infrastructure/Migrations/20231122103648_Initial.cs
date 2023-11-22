@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
@@ -70,7 +71,7 @@ namespace CarSales.Web.Data.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ImporterRating = table.Column<int>(type: "int", nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -79,8 +80,7 @@ namespace CarSales.Web.Data.Migrations
                         name: "FK_Importers_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -105,7 +105,7 @@ namespace CarSales.Web.Data.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -114,8 +114,7 @@ namespace CarSales.Web.Data.Migrations
                         name: "FK_Owners_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -125,7 +124,7 @@ namespace CarSales.Web.Data.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     ShortReviewPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     StandartReviewPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     PremiumReviewPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
@@ -137,8 +136,7 @@ namespace CarSales.Web.Data.Migrations
                         name: "FK_Reviewers_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -147,8 +145,8 @@ namespace CarSales.Web.Data.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    RoleId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    RoleId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -157,14 +155,12 @@ namespace CarSales.Web.Data.Migrations
                         name: "FK_RoleRequests_AspNetRoles_RoleId",
                         column: x => x.RoleId,
                         principalTable: "AspNetRoles",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_RoleRequests_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -174,7 +170,7 @@ namespace CarSales.Web.Data.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     SalesmanRating = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -184,8 +180,7 @@ namespace CarSales.Web.Data.Migrations
                         name: "FK_Salesmen_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -272,9 +267,9 @@ namespace CarSales.Web.Data.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Title = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: false),
-                    Overview = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Performance = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true),
+                    Overview = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Performance = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true),
                     Interior = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true),
                     Longevity = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true),
                     Features = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true),
@@ -308,10 +303,12 @@ namespace CarSales.Web.Data.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    SalePrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    VehiclePrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     SalesmanId = table.Column<int>(type: "int", nullable: true),
                     OwnerId = table.Column<int>(type: "int", nullable: true),
                     VehicleId = table.Column<int>(type: "int", nullable: false),
-                    SalePrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     ImporterId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
@@ -359,13 +356,13 @@ namespace CarSales.Web.Data.Migrations
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Credits", "Email", "EmailConfirmed", "FirstName", "Gender", "ImageUrl", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
                 values: new object[,]
                 {
-                    { "10933c11-ac2a-410d-b60a-8b1d97324975", 0, "92cc1cc5-071d-4fea-b9bf-f933b982ac05", 50000m, "importer@gmail.com", false, "Importer", 1, null, "Test", false, null, "IMPORTER@GMAIL.COM", "IMPORTER", "AQAAAAIAAYagAAAAEEXlNed7BA2mFbN0sff0zHJAc/rAm8httzrIRIdy4uHC7IPB1zSRu0Qb7DqbZTe9fg==", null, false, "3401ae6a-30e1-42c4-9ded-d2bfff5f1c3c", false, "Importer" },
-                    { "4d693871-c20b-4e9f-8490-1c641b9e3a40", 0, "e8650fcf-9024-4c2d-a3ec-4591b238ca3c", 50000m, "reviewer@gmail.com", false, "Reviewer", 1, null, "Test", false, null, "REVIEWER@GMAIL.COM", "REVIEWER", "AQAAAAIAAYagAAAAEPSg72a14TxzYUXd2YA7MYu2YPV9w0p7VltGxE/W6UBQ2wVYBKW5I6G2vuHmh0C1QQ==", null, false, "54b8a5f8-3990-4894-8a5a-3a3174e288e2", false, "Reviewer" },
-                    { "66ccb670-f0dd-4aa1-a83d-8b2a0003bb50", 0, "2baba5d6-0ddc-494f-8904-ec627c3ef3f2", 50000m, "salesman@gmail.com", false, "Salesman", 1, null, "Test", false, null, "SALESMAN@GMAIL.COM", "SALESMAN", "AQAAAAIAAYagAAAAEAjNvbGIlq6N8OLMqwGKhXctP3CzwHLNJAAbyxsFEanQYImRShiofLFNzDJvv3ZJlw==", null, false, "b3405223-83fa-4b20-b2cf-88b312505608", false, "Salesman" },
-                    { "926bee86-8bbd-43f6-bc1c-9639d43531a4", 0, "79a7a428-7d07-4b9e-aed7-e722bdaa82cb", 50000m, "owner2@gmail.com", false, "Owner2", 1, null, "Test", false, null, "OWNER2@GMAIL.COM", "OWNER2", "AQAAAAIAAYagAAAAEMQXADzBsINYiMsXD0SByCQPBkgCv+QV1C77sw95tZOoKrdjrAZngkl3DdzUFACVNg==", null, false, "fbdc66d1-f99b-4a3d-983f-41150e72aaf9", false, "Owner2" },
-                    { "9b92fe41-3f2e-4eb1-990b-73c2ea2d746d", 0, "0646e97a-71b4-4b93-a826-d8068db7545f", 50000m, "reviewer2@gmail.com", false, "Reviewer2", 1, null, "Test", false, null, "REVIEWER2@GMAIL.COM", "REVIEWER2", "AQAAAAIAAYagAAAAEGRXK574GTqztqH+W9DjIepUt0cKjZTv/EFCIUhk1N+bkEKhezfkzqjZAbUuRjTYuA==", null, false, "1c66aeaa-c70c-4c3b-9a8b-c89d2fd70ca2", false, "Reviewer2" },
-                    { "b5fef437-f504-46d2-926d-3158e54e1932", 0, "9ff20393-1e98-438a-b9e5-7618a6bca269", 50000m, "owner@gmail.com", false, "Owner", 1, null, "Test", false, null, "OWNER@GMAIL.COM", "OWNER", "AQAAAAIAAYagAAAAEDsDCAINppWvT4qAT7+xbbzZj68v54jiPgWjhz9NO3Lh5//8C7ZJLSjmXqTOe/Hb/A==", null, false, "a5cda77b-6b8b-4d2e-809d-1f329fc34253", false, "Owner" },
-                    { "cbed6d2a-e60a-49df-a6e3-982ccd980393", 0, "c2bf81a9-e618-420a-a85f-5d0e7d9157c0", 50000m, "admin@gmail.com", false, "Admin", 1, null, "Test", false, null, "ADMIN@GMAIL.COM", "ADMIN", "AQAAAAIAAYagAAAAEN3pkjY1+BJluXD4Bmpm9GBrhZIaazoyeUDHvv50RIUBxteGUURPrHobz1eegL8QUQ==", null, false, "203dfd05-2820-4aa0-98d7-f061b44d74a1", false, "Admin" }
+                    { "10933c11-ac2a-410d-b60a-8b1d97324975", 0, "d25d7163-542d-43a3-864d-a1ac3762b0a8", 50000m, "importer@gmail.com", false, "Importer", 1, null, "Test", false, null, "IMPORTER@GMAIL.COM", "IMPORTER", "AQAAAAIAAYagAAAAELv8x3uGx7uD0LUb5fNDBtw6DVSEIX/nrIdP+803c26F5K1GBYDIAizRJN80IZlABA==", null, false, "c322ead5-80ae-4f03-9fe4-85fa5e5ba602", false, "Importer" },
+                    { "4d693871-c20b-4e9f-8490-1c641b9e3a40", 0, "55457c68-2018-4026-be62-9806627ee236", 50000m, "reviewer@gmail.com", false, "Reviewer", 1, null, "Test", false, null, "REVIEWER@GMAIL.COM", "REVIEWER", "AQAAAAIAAYagAAAAEFzXWB+RxXmIfrkUzlS8CbchQGtI/rCDi2yURLSVdXI0icWkX/BWtiHchXd7VKCkFw==", null, false, "26885ff7-a0d4-4347-951b-c8fbe5fd8e50", false, "Reviewer" },
+                    { "66ccb670-f0dd-4aa1-a83d-8b2a0003bb50", 0, "720b7875-8565-4173-b419-7d33708939c2", 50000m, "salesman@gmail.com", false, "Salesman", 1, null, "Test", false, null, "SALESMAN@GMAIL.COM", "SALESMAN", "AQAAAAIAAYagAAAAELs4rn66IOlbs2ewhOD4G/PQ/0h7jDpe3nn3Gvdy4KHel4X6H6urava2UrKoqhKopg==", null, false, "11a1bc09-ed1f-4055-907e-3b5e55f6b344", false, "Salesman" },
+                    { "926bee86-8bbd-43f6-bc1c-9639d43531a4", 0, "4409d31c-5724-40ad-861e-fe7ebfcd76f3", 50000m, "owner2@gmail.com", false, "Owner2", 1, null, "Test", false, null, "OWNER2@GMAIL.COM", "OWNER2", "AQAAAAIAAYagAAAAEJGWgqU6qUL+WqOHoyGd0e/u6JrWVhSyA4tDoOE89UKISRanDaffZEYtmbYs9p2zNg==", null, false, "b52c268f-424e-49cb-a5b1-c87a8b72a5b5", false, "Owner2" },
+                    { "9b92fe41-3f2e-4eb1-990b-73c2ea2d746d", 0, "8ffb9c20-68ef-4f7b-b125-6719cd6524e7", 50000m, "reviewer2@gmail.com", false, "Reviewer2", 1, null, "Test", false, null, "REVIEWER2@GMAIL.COM", "REVIEWER2", "AQAAAAIAAYagAAAAEM08/AJ1RZmHLvyYGxq3E9rWFY37UOQFcqBcSfvjHHSLbMXC7L/a5ZF7oyPZr4r7uQ==", null, false, "3a4052bb-b6b8-428d-a39b-8f93c55a4c7d", false, "Reviewer2" },
+                    { "b5fef437-f504-46d2-926d-3158e54e1932", 0, "03223bf1-5f65-4d91-8059-0bd8095917b3", 50000m, "owner@gmail.com", false, "Owner", 1, null, "Test", false, null, "OWNER@GMAIL.COM", "OWNER", "AQAAAAIAAYagAAAAEHimnkQ3/OcB/tzPBP8guGlK7/ZzbQQNedgZ2TrKXDaixDvZThFP5bWvZwH+RxTBKw==", null, false, "a2b6c729-8b13-4098-99b3-b93751b9aba1", false, "Owner" },
+                    { "cbed6d2a-e60a-49df-a6e3-982ccd980393", 0, "9c7c0235-d9b3-4b94-ba0b-86bed94177be", 50000m, "admin@gmail.com", false, "Admin", 1, null, "Test", false, null, "ADMIN@GMAIL.COM", "ADMIN", "AQAAAAIAAYagAAAAEAU1L51EOP8VQvW0HWM6Xf2T+H+9YxDySJeqv3CQFXyILMP7BNaJ7nIXklY46GRpxQ==", null, false, "143d6784-2132-4919-9b2d-4b41bfd1c0ae", false, "Admin" }
                 });
 
             migrationBuilder.InsertData(
@@ -446,11 +443,18 @@ namespace CarSales.Web.Data.Migrations
 
             migrationBuilder.InsertData(
                 table: "Sales",
-                columns: new[] { "Id", "ImporterId", "OwnerId", "SalePrice", "SalesmanId", "VehicleId" },
+                columns: new[] { "Id", "Date", "ImporterId", "OwnerId", "SalePrice", "SalesmanId", "VehicleId", "VehiclePrice" },
                 values: new object[,]
                 {
-                    { 1, 1, null, 10000m, 1, 1 },
-                    { 2, null, 1, 20000m, 1, 3 }
+                    { 1, new DateTime(2023, 11, 22, 12, 36, 48, 685, DateTimeKind.Local).AddTicks(8368), 1, 3, 10000m, null, 1, 10000m },
+                    { 2, new DateTime(2023, 11, 22, 12, 36, 48, 685, DateTimeKind.Local).AddTicks(8435), null, 3, 0m, 1, 1, 10000m },
+                    { 3, new DateTime(2023, 11, 22, 12, 36, 48, 685, DateTimeKind.Local).AddTicks(8440), 1, 3, 60000m, null, 2, 60000m },
+                    { 4, new DateTime(2023, 11, 22, 12, 36, 48, 685, DateTimeKind.Local).AddTicks(8444), null, 3, 0m, 1, 2, 60000m },
+                    { 5, new DateTime(2023, 11, 22, 12, 36, 48, 685, DateTimeKind.Local).AddTicks(8448), 1, 3, 20000m, null, 3, 20000m },
+                    { 6, new DateTime(2023, 11, 22, 12, 36, 48, 685, DateTimeKind.Local).AddTicks(8453), null, 3, 0m, 1, 3, 20000m },
+                    { 7, new DateTime(2023, 11, 22, 12, 36, 48, 685, DateTimeKind.Local).AddTicks(8503), 1, 3, 18000m, null, 6, 18000m },
+                    { 8, new DateTime(2023, 11, 22, 12, 36, 48, 685, DateTimeKind.Local).AddTicks(8508), null, 3, 0m, 1, 6, 18000m },
+                    { 9, new DateTime(2023, 11, 22, 12, 36, 48, 685, DateTimeKind.Local).AddTicks(8517), 1, 3, 8000m, null, 7, 8000m }
                 });
 
             migrationBuilder.CreateIndex(

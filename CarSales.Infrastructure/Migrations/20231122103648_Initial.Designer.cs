@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CarSales.Web.Data.Migrations
 {
     [DbContext(typeof(CarSalesDbContext))]
-    [Migration("20231117131109_Initial")]
+    [Migration("20231122103648_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -40,7 +40,6 @@ namespace CarSales.Web.Data.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("UserId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
@@ -133,7 +132,6 @@ namespace CarSales.Web.Data.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("UserId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
@@ -201,11 +199,9 @@ namespace CarSales.Web.Data.Migrations
                         .HasColumnType("nvarchar(1000)");
 
                     b.Property<string>("Overview")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Performance")
-                        .IsRequired()
                         .HasMaxLength(1000)
                         .HasColumnType("nvarchar(1000)");
 
@@ -222,7 +218,6 @@ namespace CarSales.Web.Data.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Title")
-                        .IsRequired()
                         .HasMaxLength(1000)
                         .HasColumnType("nvarchar(1000)");
 
@@ -307,7 +302,6 @@ namespace CarSales.Web.Data.Migrations
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("UserId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
@@ -346,11 +340,9 @@ namespace CarSales.Web.Data.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("RoleId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("UserId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
@@ -370,6 +362,9 @@ namespace CarSales.Web.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
                     b.Property<int?>("ImporterId")
                         .HasColumnType("int");
 
@@ -384,6 +379,9 @@ namespace CarSales.Web.Data.Migrations
 
                     b.Property<int>("VehicleId")
                         .HasColumnType("int");
+
+                    b.Property<decimal>("VehiclePrice")
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 
@@ -401,18 +399,92 @@ namespace CarSales.Web.Data.Migrations
                         new
                         {
                             Id = 1,
+                            Date = new DateTime(2023, 11, 22, 12, 36, 48, 685, DateTimeKind.Local).AddTicks(8368),
                             ImporterId = 1,
+                            OwnerId = 3,
                             SalePrice = 10000m,
-                            SalesmanId = 1,
-                            VehicleId = 1
+                            VehicleId = 1,
+                            VehiclePrice = 10000m
                         },
                         new
                         {
                             Id = 2,
-                            OwnerId = 1,
-                            SalePrice = 20000m,
+                            Date = new DateTime(2023, 11, 22, 12, 36, 48, 685, DateTimeKind.Local).AddTicks(8435),
+                            OwnerId = 3,
+                            SalePrice = 0m,
                             SalesmanId = 1,
-                            VehicleId = 3
+                            VehicleId = 1,
+                            VehiclePrice = 10000m
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Date = new DateTime(2023, 11, 22, 12, 36, 48, 685, DateTimeKind.Local).AddTicks(8440),
+                            ImporterId = 1,
+                            OwnerId = 3,
+                            SalePrice = 60000m,
+                            VehicleId = 2,
+                            VehiclePrice = 60000m
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Date = new DateTime(2023, 11, 22, 12, 36, 48, 685, DateTimeKind.Local).AddTicks(8444),
+                            OwnerId = 3,
+                            SalePrice = 0m,
+                            SalesmanId = 1,
+                            VehicleId = 2,
+                            VehiclePrice = 60000m
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Date = new DateTime(2023, 11, 22, 12, 36, 48, 685, DateTimeKind.Local).AddTicks(8448),
+                            ImporterId = 1,
+                            OwnerId = 3,
+                            SalePrice = 20000m,
+                            VehicleId = 3,
+                            VehiclePrice = 20000m
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Date = new DateTime(2023, 11, 22, 12, 36, 48, 685, DateTimeKind.Local).AddTicks(8453),
+                            OwnerId = 3,
+                            SalePrice = 0m,
+                            SalesmanId = 1,
+                            VehicleId = 3,
+                            VehiclePrice = 20000m
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Date = new DateTime(2023, 11, 22, 12, 36, 48, 685, DateTimeKind.Local).AddTicks(8503),
+                            ImporterId = 1,
+                            OwnerId = 3,
+                            SalePrice = 18000m,
+                            VehicleId = 6,
+                            VehiclePrice = 18000m
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Date = new DateTime(2023, 11, 22, 12, 36, 48, 685, DateTimeKind.Local).AddTicks(8508),
+                            OwnerId = 3,
+                            SalePrice = 0m,
+                            SalesmanId = 1,
+                            VehicleId = 6,
+                            VehiclePrice = 18000m
+                        },
+                        new
+                        {
+                            Id = 9,
+                            Date = new DateTime(2023, 11, 22, 12, 36, 48, 685, DateTimeKind.Local).AddTicks(8517),
+                            ImporterId = 1,
+                            OwnerId = 3,
+                            SalePrice = 8000m,
+                            VehicleId = 7,
+                            VehiclePrice = 8000m
                         });
                 });
 
@@ -431,7 +503,6 @@ namespace CarSales.Web.Data.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("UserId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
@@ -538,7 +609,7 @@ namespace CarSales.Web.Data.Migrations
                         {
                             Id = "cbed6d2a-e60a-49df-a6e3-982ccd980393",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "c2bf81a9-e618-420a-a85f-5d0e7d9157c0",
+                            ConcurrencyStamp = "9c7c0235-d9b3-4b94-ba0b-86bed94177be",
                             Credits = 50000m,
                             Email = "admin@gmail.com",
                             EmailConfirmed = false,
@@ -548,9 +619,9 @@ namespace CarSales.Web.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@GMAIL.COM",
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAIAAYagAAAAEN3pkjY1+BJluXD4Bmpm9GBrhZIaazoyeUDHvv50RIUBxteGUURPrHobz1eegL8QUQ==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEAU1L51EOP8VQvW0HWM6Xf2T+H+9YxDySJeqv3CQFXyILMP7BNaJ7nIXklY46GRpxQ==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "203dfd05-2820-4aa0-98d7-f061b44d74a1",
+                            SecurityStamp = "143d6784-2132-4919-9b2d-4b41bfd1c0ae",
                             TwoFactorEnabled = false,
                             UserName = "Admin"
                         },
@@ -558,7 +629,7 @@ namespace CarSales.Web.Data.Migrations
                         {
                             Id = "b5fef437-f504-46d2-926d-3158e54e1932",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "9ff20393-1e98-438a-b9e5-7618a6bca269",
+                            ConcurrencyStamp = "03223bf1-5f65-4d91-8059-0bd8095917b3",
                             Credits = 50000m,
                             Email = "owner@gmail.com",
                             EmailConfirmed = false,
@@ -568,9 +639,9 @@ namespace CarSales.Web.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "OWNER@GMAIL.COM",
                             NormalizedUserName = "OWNER",
-                            PasswordHash = "AQAAAAIAAYagAAAAEDsDCAINppWvT4qAT7+xbbzZj68v54jiPgWjhz9NO3Lh5//8C7ZJLSjmXqTOe/Hb/A==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEHimnkQ3/OcB/tzPBP8guGlK7/ZzbQQNedgZ2TrKXDaixDvZThFP5bWvZwH+RxTBKw==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "a5cda77b-6b8b-4d2e-809d-1f329fc34253",
+                            SecurityStamp = "a2b6c729-8b13-4098-99b3-b93751b9aba1",
                             TwoFactorEnabled = false,
                             UserName = "Owner"
                         },
@@ -578,7 +649,7 @@ namespace CarSales.Web.Data.Migrations
                         {
                             Id = "926bee86-8bbd-43f6-bc1c-9639d43531a4",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "79a7a428-7d07-4b9e-aed7-e722bdaa82cb",
+                            ConcurrencyStamp = "4409d31c-5724-40ad-861e-fe7ebfcd76f3",
                             Credits = 50000m,
                             Email = "owner2@gmail.com",
                             EmailConfirmed = false,
@@ -588,9 +659,9 @@ namespace CarSales.Web.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "OWNER2@GMAIL.COM",
                             NormalizedUserName = "OWNER2",
-                            PasswordHash = "AQAAAAIAAYagAAAAEMQXADzBsINYiMsXD0SByCQPBkgCv+QV1C77sw95tZOoKrdjrAZngkl3DdzUFACVNg==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEJGWgqU6qUL+WqOHoyGd0e/u6JrWVhSyA4tDoOE89UKISRanDaffZEYtmbYs9p2zNg==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "fbdc66d1-f99b-4a3d-983f-41150e72aaf9",
+                            SecurityStamp = "b52c268f-424e-49cb-a5b1-c87a8b72a5b5",
                             TwoFactorEnabled = false,
                             UserName = "Owner2"
                         },
@@ -598,7 +669,7 @@ namespace CarSales.Web.Data.Migrations
                         {
                             Id = "66ccb670-f0dd-4aa1-a83d-8b2a0003bb50",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "2baba5d6-0ddc-494f-8904-ec627c3ef3f2",
+                            ConcurrencyStamp = "720b7875-8565-4173-b419-7d33708939c2",
                             Credits = 50000m,
                             Email = "salesman@gmail.com",
                             EmailConfirmed = false,
@@ -608,9 +679,9 @@ namespace CarSales.Web.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "SALESMAN@GMAIL.COM",
                             NormalizedUserName = "SALESMAN",
-                            PasswordHash = "AQAAAAIAAYagAAAAEAjNvbGIlq6N8OLMqwGKhXctP3CzwHLNJAAbyxsFEanQYImRShiofLFNzDJvv3ZJlw==",
+                            PasswordHash = "AQAAAAIAAYagAAAAELs4rn66IOlbs2ewhOD4G/PQ/0h7jDpe3nn3Gvdy4KHel4X6H6urava2UrKoqhKopg==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "b3405223-83fa-4b20-b2cf-88b312505608",
+                            SecurityStamp = "11a1bc09-ed1f-4055-907e-3b5e55f6b344",
                             TwoFactorEnabled = false,
                             UserName = "Salesman"
                         },
@@ -618,7 +689,7 @@ namespace CarSales.Web.Data.Migrations
                         {
                             Id = "10933c11-ac2a-410d-b60a-8b1d97324975",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "92cc1cc5-071d-4fea-b9bf-f933b982ac05",
+                            ConcurrencyStamp = "d25d7163-542d-43a3-864d-a1ac3762b0a8",
                             Credits = 50000m,
                             Email = "importer@gmail.com",
                             EmailConfirmed = false,
@@ -628,9 +699,9 @@ namespace CarSales.Web.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "IMPORTER@GMAIL.COM",
                             NormalizedUserName = "IMPORTER",
-                            PasswordHash = "AQAAAAIAAYagAAAAEEXlNed7BA2mFbN0sff0zHJAc/rAm8httzrIRIdy4uHC7IPB1zSRu0Qb7DqbZTe9fg==",
+                            PasswordHash = "AQAAAAIAAYagAAAAELv8x3uGx7uD0LUb5fNDBtw6DVSEIX/nrIdP+803c26F5K1GBYDIAizRJN80IZlABA==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "3401ae6a-30e1-42c4-9ded-d2bfff5f1c3c",
+                            SecurityStamp = "c322ead5-80ae-4f03-9fe4-85fa5e5ba602",
                             TwoFactorEnabled = false,
                             UserName = "Importer"
                         },
@@ -638,7 +709,7 @@ namespace CarSales.Web.Data.Migrations
                         {
                             Id = "4d693871-c20b-4e9f-8490-1c641b9e3a40",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "e8650fcf-9024-4c2d-a3ec-4591b238ca3c",
+                            ConcurrencyStamp = "55457c68-2018-4026-be62-9806627ee236",
                             Credits = 50000m,
                             Email = "reviewer@gmail.com",
                             EmailConfirmed = false,
@@ -648,9 +719,9 @@ namespace CarSales.Web.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "REVIEWER@GMAIL.COM",
                             NormalizedUserName = "REVIEWER",
-                            PasswordHash = "AQAAAAIAAYagAAAAEPSg72a14TxzYUXd2YA7MYu2YPV9w0p7VltGxE/W6UBQ2wVYBKW5I6G2vuHmh0C1QQ==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEFzXWB+RxXmIfrkUzlS8CbchQGtI/rCDi2yURLSVdXI0icWkX/BWtiHchXd7VKCkFw==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "54b8a5f8-3990-4894-8a5a-3a3174e288e2",
+                            SecurityStamp = "26885ff7-a0d4-4347-951b-c8fbe5fd8e50",
                             TwoFactorEnabled = false,
                             UserName = "Reviewer"
                         },
@@ -658,7 +729,7 @@ namespace CarSales.Web.Data.Migrations
                         {
                             Id = "9b92fe41-3f2e-4eb1-990b-73c2ea2d746d",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "0646e97a-71b4-4b93-a826-d8068db7545f",
+                            ConcurrencyStamp = "8ffb9c20-68ef-4f7b-b125-6719cd6524e7",
                             Credits = 50000m,
                             Email = "reviewer2@gmail.com",
                             EmailConfirmed = false,
@@ -668,9 +739,9 @@ namespace CarSales.Web.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "REVIEWER2@GMAIL.COM",
                             NormalizedUserName = "REVIEWER2",
-                            PasswordHash = "AQAAAAIAAYagAAAAEGRXK574GTqztqH+W9DjIepUt0cKjZTv/EFCIUhk1N+bkEKhezfkzqjZAbUuRjTYuA==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEM08/AJ1RZmHLvyYGxq3E9rWFY37UOQFcqBcSfvjHHSLbMXC7L/a5ZF7oyPZr4r7uQ==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "1c66aeaa-c70c-4c3b-9a8b-c89d2fd70ca2",
+                            SecurityStamp = "3a4052bb-b6b8-428d-a39b-8f93c55a4c7d",
                             TwoFactorEnabled = false,
                             UserName = "Reviewer2"
                         });
@@ -1100,9 +1171,7 @@ namespace CarSales.Web.Data.Migrations
                 {
                     b.HasOne("CarSales.Infrastructure.Data.Entities.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserId");
 
                     b.Navigation("User");
                 });
@@ -1138,9 +1207,7 @@ namespace CarSales.Web.Data.Migrations
                 {
                     b.HasOne("CarSales.Infrastructure.Data.Entities.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserId");
 
                     b.Navigation("User");
                 });
@@ -1168,9 +1235,7 @@ namespace CarSales.Web.Data.Migrations
                 {
                     b.HasOne("CarSales.Infrastructure.Data.Entities.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserId");
 
                     b.Navigation("User");
                 });
@@ -1179,15 +1244,11 @@ namespace CarSales.Web.Data.Migrations
                 {
                     b.HasOne("CarSales.Infrastructure.Data.Entities.Role", "Role")
                         .WithMany()
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("RoleId");
 
                     b.HasOne("CarSales.Infrastructure.Data.Entities.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserId");
 
                     b.Navigation("Role");
 
@@ -1229,9 +1290,7 @@ namespace CarSales.Web.Data.Migrations
                 {
                     b.HasOne("CarSales.Infrastructure.Data.Entities.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserId");
 
                     b.Navigation("User");
                 });
