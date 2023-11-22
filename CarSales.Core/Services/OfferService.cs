@@ -35,7 +35,9 @@ namespace CarSales.Core.Services
                 .Where(v => v.Id == vehicleId)
                 .Include(v => v.Salesman)
                 .FirstOrDefaultAsync();
-            if (vehicle.SalesmanId == null || owner.Offers.Any(of => of.VehicleId == vehicleId) || vehicle.Salesman.UserId == userId)
+            if (vehicle!.SalesmanId == null 
+                || owner!.Offers.Any(of => of.VehicleId == vehicleId) 
+                || vehicle.Salesman!.UserId == userId)
             {
                 return false;
             }
@@ -63,7 +65,7 @@ namespace CarSales.Core.Services
                 .Include(o => o.Offeror)
                 .Include(o => o.Salesman)
                 .FirstOrDefaultAsync();
-            if (offer.Offeror.UserId != userId && offer.Salesman.UserId != userId)
+            if (offer!.Offeror.UserId != userId && offer.Salesman.UserId != userId)
             {
                 return false;
             }
@@ -93,8 +95,6 @@ namespace CarSales.Core.Services
             return offerId;
         }
 
-
-
         public async Task<OffersQueryModel> GetOwnerOffersAsync(string userId,
             int currentPage = 1,
             int offersPerPage = 6,
@@ -107,7 +107,7 @@ namespace CarSales.Core.Services
                 .FirstOrDefaultAsync(o => o.UserId == userId);
 
             var offers = await repository.AllReadOnly<Offer>()
-                .Where(o => o.OfferorId == owner.Id)
+                .Where(o => o.OfferorId == owner!.Id)
                 .Include(o => o.Vehicle)
                 .Include(o => o.Salesman)
                 .ThenInclude(s => s.User)
@@ -161,7 +161,12 @@ namespace CarSales.Core.Services
                 .ToList();
 
 
-            var queryModel = CreateOffersQueryModel(currentPage, offersPerPage, vehicleName, salesmanName, null, offerStatus, offerSorting, offerCount, vehicleNames, salesmenNames, null, sortedOffers);
+            var queryModel = CreateOffersQueryModel(currentPage, offersPerPage,
+                vehicleName, salesmanName,
+                null, offerStatus,
+                offerSorting, offerCount,
+                vehicleNames, salesmenNames,
+                null!, sortedOffers);
 
             return queryModel;
         }
@@ -177,7 +182,7 @@ namespace CarSales.Core.Services
                 .FirstOrDefaultAsync(o => o.UserId == userId);
 
             var offers = await repository.AllReadOnly<Offer>()
-                .Where(o => o.Status == OfferStatus.Pending && o.SalesmanId == salesman.Id)
+                .Where(o => o.Status == OfferStatus.Pending && o.SalesmanId == salesman!.Id)
                 .Include(o => o.Vehicle)
                 .Include(o => o.Offeror)
                 .ThenInclude(s => s.User)
@@ -191,6 +196,7 @@ namespace CarSales.Core.Services
                     .Where(o => $"{o.Vehicle.Brand} {o.Vehicle.Model}".ToLower() == vehicleName.ToLower())
                     .ToList();
             }
+
             if (!string.IsNullOrWhiteSpace(offerorName))
             {
                 offers = offers
@@ -230,7 +236,12 @@ namespace CarSales.Core.Services
                 .ToList();
 
 
-            var queryModel = CreateOffersQueryModel(currentPage, offersPerPage, vehicleName, null, offerorName, OfferStatus.Pending, offerSorting, offerCount, vehicleNames, null, offerorNames, sortedOffers);
+            var queryModel = CreateOffersQueryModel(currentPage, offersPerPage,
+                vehicleName, null,
+                offerorName, OfferStatus.Pending,
+                offerSorting, offerCount,
+                vehicleNames, null, 
+                offerorNames, sortedOffers);
 
             return queryModel;
 
@@ -254,9 +265,11 @@ namespace CarSales.Core.Services
                         ImageUrl = o.Vehicle.ImageUrl ?? $"/img/VehicleTypes/{o.Vehicle.VehicleType}.png",
                         Price = o.Vehicle.Price,
                         SalesmanId = o.Vehicle.SalesmanId,
-                        SalesmanName = $"{o.Vehicle.Salesman.User.FirstName} {o.Vehicle.Salesman.User.LastName}",
+                        SalesmanName = $"{o.Vehicle.Salesman!.User.FirstName} {o.Vehicle.Salesman.User.LastName}",
                         VehicleType = o.Vehicle.VehicleType,
-                        VehicleRating = o.Vehicle.Reviews.Count() > 0 ? (VehicleRating)o.Vehicle.Reviews.Where(r => r.ReviewStatus == ReviewStatus.Completed).Average(r => (int)r.VehicleRating)
+                        VehicleRating = o.Vehicle.Reviews.Count() > 0 
+                        ? (VehicleRating)o.Vehicle.Reviews.Where(r => r.ReviewStatus == ReviewStatus.Completed)
+                        .Average(r => (int)r.VehicleRating)
                         : VehicleRating.NotRated,
                     },
                     OfferorId = o.OfferorId,
@@ -266,7 +279,7 @@ namespace CarSales.Core.Services
                 })
                 .FirstOrDefaultAsync();
 
-            return offer;
+            return offer!;
         }
 
         public async Task<OfferCreateModel> CreateOfferCreateModelAsync(string userId, int vehicleId)
@@ -286,7 +299,7 @@ namespace CarSales.Core.Services
                 .Include(o => o.Offers)
                 .FirstOrDefaultAsync();
 
-            var availableCredits = offeror.User.Credits - offeror.Offers
+            var availableCredits = offeror!.User.Credits - offeror.Offers
                 .Where(o => o.Status == OfferStatus.Pending)
                 .Sum(o => o.Price);
 
@@ -321,29 +334,23 @@ namespace CarSales.Core.Services
         {
             var offer = await repository.AllReadOnly<Offer>()
                 .Where(o => o.Id == id)
-                //.Select(o => new OfferEditModel()
-                //{
-                //    Id = o.Id,
-                //    Description = o.Description,
-                //    Price = o.Price,
-                //    OldPrice = o.Price
-                //})
                 .Include(o => o.Offeror)
                 .ThenInclude(o => o.User)
                 .FirstOrDefaultAsync();
+
             var offeror = await repository.AllReadOnly<Owner>()
-                .Where(o => o.Id == offer.OfferorId)
+                .Where(o => o.Id == offer!.OfferorId)
                 .Include(o => o.User)
                 .Include(o => o.Offers)
                 .FirstOrDefaultAsync();
 
-            var offerSum = offeror.Offers
+            var offerSum = offeror!.Offers
                 .Where(o => o.Status == OfferStatus.Pending && o.Id != id)
                 .Sum(o => o.Price);
             var availableCredits = offeror.User.Credits - offerSum;
             var model = new OfferEditModel()
             {
-                Id = offer.Id,
+                Id = offer!.Id,
                 Description = offer.Description,
                 Price = offer.Price,
                 OldPrice = offer.Price,
@@ -373,7 +380,8 @@ namespace CarSales.Core.Services
                 .ThenInclude(s => s.User)
                 .Include(o => o.Vehicle)
                 .FirstOrDefaultAsync();
-            offer.Status = OfferStatus.Accepted;
+            
+            offer!.Status = OfferStatus.Accepted;
             offer.Offeror.User.Credits -= offer.Price;
             offer.Salesman.User.Credits += offer.Price;
             offer.Vehicle.OwnerId = offer.OfferorId;
@@ -382,6 +390,7 @@ namespace CarSales.Core.Services
             var sale = new Sale()
             {
                 SalePrice = offer.Price,
+                VehiclePrice = offer.Vehicle.Price,
                 VehicleId = offer.VehicleId,
                 SalesmanId = offer.SalesmanId,
                 OwnerId = offer.OfferorId,
@@ -476,7 +485,6 @@ namespace CarSales.Core.Services
             }
             await repository.SaveChangesAsync();
         }
-
 
     }
 }
