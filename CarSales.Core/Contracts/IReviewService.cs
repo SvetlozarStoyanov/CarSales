@@ -19,6 +19,14 @@ namespace CarSales.Core.Contracts
         Task<bool> CanCreateReviewAsync(string userId, int reviewId);
 
         /// <summary>
+        /// Returns id of ordered <see cref="Review"/> with <paramref name="vehicleId"/> and <paramref name="reviewerId"/>
+        /// </summary>
+        /// <param name="reviewerId"></param>
+        /// <param name="vehicleId"></param>
+        /// <returns><see cref="int"/></returns>
+        Task<int> GetOrderedReviewIdByReviewerIdAndVehicleIdAsync(int reviewerId, int vehicleId);
+
+        /// <summary>
         /// Returns latest <see cref="Review"/>s 
         /// </summary>
         /// <returns><see cref="IEnumerable{T}"/> of <see cref="ReviewListModel"/></returns>

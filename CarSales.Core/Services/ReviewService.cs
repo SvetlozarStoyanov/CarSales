@@ -43,6 +43,15 @@ namespace CarSales.Core.Services
             return true;
         }
 
+        public async Task<int> GetOrderedReviewIdByReviewerIdAndVehicleIdAsync(int reviewerId, int vehicleId)
+        {
+            var review = await repository.AllReadOnly<Review>()
+                .Where(r => r.ReviewStatus == ReviewStatus.Ordered
+                 && r.ReviewerId == reviewerId && r.VehicleId == vehicleId)
+                .FirstOrDefaultAsync();
+            return review.Id;
+        }
+
         public async Task<IEnumerable<ReviewListModel>> GetLatestReviewsAsync()
         {
             var recordId = $"{DateTime.Now.ToString(RedisConstants.KeyStringFormat)}_GetLatestReviewsAsync";
@@ -127,8 +136,6 @@ namespace CarSales.Core.Services
 
                 reviews = reviews.Where(r => selectedVehicleTypesSplit.Any(svt => svt.ToLower() == r.Vehicle.VehicleType.ToString().ToLower())).ToList();
             }
-
-
 
             switch (reviewSorting)
             {
@@ -279,7 +286,9 @@ namespace CarSales.Core.Services
             return review;
         }
 
-        public async Task<ReviewOrderModel> CreateReviewOrderModelAsync(int reviewerId, int vehicleId, IDictionary<ReviewType, decimal> reviewTypesAndPrices)
+        public async Task<ReviewOrderModel> CreateReviewOrderModelAsync(int reviewerId,
+            int vehicleId,
+            IDictionary<ReviewType, decimal> reviewTypesAndPrices)
         {
             var model = new ReviewOrderModel()
             {
@@ -297,6 +306,7 @@ namespace CarSales.Core.Services
                 .Select(r => new ReviewCreateModel()
                 {
                     Id = r.Id,
+                    SalesmanId = (int)r.Vehicle.SalesmanId,
                     VehicleName = $"{r.Vehicle.Brand} {r.Vehicle.Model}",
                     ReviewType = r.ReviewType,
                     ReviewPreviewModel = new ReviewPreviewModel()
@@ -316,7 +326,6 @@ namespace CarSales.Core.Services
                     }
                 })
                 .FirstOrDefaultAsync();
-
 
             return model;
         }
@@ -472,7 +481,6 @@ namespace CarSales.Core.Services
 
             return model;
         }
-
 
     }
 }
