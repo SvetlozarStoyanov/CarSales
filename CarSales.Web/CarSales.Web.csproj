@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
-    <Nullable>enable</Nullable>
+    <Nullable>disable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>aspnet-CarSales.Web-06abb07b-8ca2-4d5c-a942-e9854584671b</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
