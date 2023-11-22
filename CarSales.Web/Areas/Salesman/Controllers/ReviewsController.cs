@@ -10,14 +10,20 @@ namespace CarSales.Web.Areas.Salesman.Controllers
     {
         private readonly IReviewService reviewService;
         private readonly IReviewerService reviewerService;
+        private readonly IUserService userService;
+        private readonly INotificationService notificationService;
         private readonly IHtmlSanitizingService htmlSanitizingService;
 
         public ReviewsController(IReviewService reviewService,
             IReviewerService reviewerService,
+            IUserService userService,
+            INotificationService notificationService,
             IHtmlSanitizingService htmlSanitizingService)
         {
             this.reviewService = reviewService;
             this.reviewerService = reviewerService;
+            this.notificationService = notificationService;
+            this.userService = userService;
             this.htmlSanitizingService = htmlSanitizingService;
         }
 
@@ -76,6 +82,12 @@ namespace CarSales.Web.Areas.Salesman.Controllers
             try
             {
                 await reviewService.CreateOrderedReviewAsync(User.Id(), model);
+                var orderedReviewId = await reviewService.GetOrderedReviewIdByReviewerIdAndVehicleIdAsync(model.ReviewerId, model.VehicleId);
+                var reviewerUserId = await reviewerService.GetReviewerUserId(model.ReviewerId);
+                var currUser = await userService.GetUserByIdAsync(User.Id());
+                await notificationService.CreateNotificationAsync(reviewerUserId,
+                    $"{model.ReviewType.ToString()} review ordered by {currUser.FirstName} {currUser.LastName}!",
+                    $"Reviews/Create/{orderedReviewId}");
             }
             catch (InsufficientCreditsException e)
             {

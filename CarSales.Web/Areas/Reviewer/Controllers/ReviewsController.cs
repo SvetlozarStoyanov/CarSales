@@ -8,11 +8,18 @@ namespace CarSales.Web.Areas.Reviewer.Controllers
     public class ReviewsController : BaseController
     {
         private readonly IReviewService reviewService;
+        private readonly ISalesmanService salesmanService;
+        private readonly INotificationService notificationService;
         private readonly IHtmlSanitizingService htmlSanitizingService;
 
-        public ReviewsController(IReviewService reviewService, IHtmlSanitizingService htmlSanitizingService)
+        public ReviewsController(IReviewService reviewService,
+            ISalesmanService salesmanService,
+            INotificationService notificationService,
+            IHtmlSanitizingService htmlSanitizingService)
         {
             this.reviewService = reviewService;
+            this.salesmanService = salesmanService;
+            this.notificationService = notificationService;
             this.htmlSanitizingService = htmlSanitizingService;
 
         }
@@ -82,6 +89,10 @@ namespace CarSales.Web.Areas.Reviewer.Controllers
                 return View(model);
             }
             await reviewService.CreateCompletedReviewAsync(model);
+            var salesmanUserId = await salesmanService.GetSalesmanUserIdAsync(model.SalesmanId);
+            await notificationService.CreateNotificationAsync(salesmanUserId,
+                "Review completed!",
+                $"Reviews/Details/{model.Id}");
             TempData["success"] = "Successfully created review!";
             return RedirectToAction("Index", "Home");
         }
