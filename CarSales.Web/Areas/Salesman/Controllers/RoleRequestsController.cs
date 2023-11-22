@@ -12,9 +12,11 @@ namespace CarSales.Web.Areas.Salesman.Controllers
         private readonly UserManager<User> userManager;
         private readonly IRoleService roleService;
         private readonly IRoleRequestService roleRequestService;
-        private readonly ISalesmanService salesmanService;
 
-        public RoleRequestsController(UserManager<User> userManager, RoleManager<Role> roleManager, IRoleService roleService, IRoleRequestService roleRequestService)
+        public RoleRequestsController(UserManager<User> userManager,
+            RoleManager<Role> roleManager,
+            IRoleService roleService,
+            IRoleRequestService roleRequestService)
         {
             this.userManager = userManager;
             this.roleManager = roleManager;
