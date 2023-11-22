@@ -23,13 +23,17 @@
                 @foreach (var notification in Model)
                 {
                     var linkSplit = notification.Link.Split('/');
+                    var area = "Importer";
                     var controller = linkSplit[0];
                     var action = linkSplit[1];
                     var itemId = string.Empty;
                     if (linkSplit.Length > 2)
                     {
-                         itemId = linkSplit[2];
-
+                        itemId = linkSplit[2];
+                    }
+                    if (action.Contains("Logout"))
+                    {
+                        area = string.Empty;
                     }
 
                     <tr class="@(!notification.IsRead ? "table-primary" : "table-dark")">
@@ -42,7 +46,7 @@
                         <td>
                             <div class="d-flex justify-content-center w-100">
 
-                                <a class="btn btn-info mx-2" asp-area="Importer" asp-controller="@controller" asp-action="@action" asp-route-id="@(itemId != string.Empty ? itemId : null)" >
+                                <a class="btn btn-info mx-2" asp-area="@area" asp-controller="@controller" asp-action="@action" asp-route-id="@(itemId != string.Empty ? itemId : null)" >
                                     <i class="bi bi-info"></i>
                                     <span class="d-lg-inline d-none">Details</span>
                                 </a>
