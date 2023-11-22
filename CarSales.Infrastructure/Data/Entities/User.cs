@@ -8,11 +8,11 @@ namespace CarSales.Infrastructure.Data.Entities
     {
         [Required]
         [MinLength(3), MaxLength(30)]
-        public string FirstName { get; set; }
+        public string FirstName { get; set; } = null!;
 
         [Required]
         [MinLength(3), MaxLength(30)]
-        public string LastName { get; set; }
+        public string LastName { get; set; } = null!;
 
         public Gender Gender { get; set; }
 
