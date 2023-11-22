@@ -462,7 +462,7 @@ namespace CarSales.Core.Services
                 .ThenInclude(sm => sm.User)
                 .Include(v => v.Reviews)
                 .FirstOrDefaultAsync();
-            var salesman = vehicle.Salesman;
+            var salesman = vehicle!.Salesman;
             var buyer = await repository.All<Owner>()
                 .Where(b => b.UserId == buyerUserId)
                 .Include(o => o.User)
@@ -484,10 +484,11 @@ namespace CarSales.Core.Services
             salesman.User.Credits += vehicle.Price;
             var sale = new Sale()
             {
+                SalePrice = vehicle.Price,
+                VehiclePrice = vehicle.Price,
                 OwnerId = buyer.Id,
                 SalesmanId = salesman.Id,
                 VehicleId = vehicle.Id,
-                SalePrice = vehicle.Price,
             };
 
             await DeclineAllOffersForVehicleAsync(id);
@@ -500,15 +501,17 @@ namespace CarSales.Core.Services
             var vehicle = await repository.All<Vehicle>()
                 .Where(v => v.Id == id)
                 .Include(v => v.Importer)
-                .ThenInclude(i => i.User)
+                .ThenInclude(i => i!.User)
                 .FirstOrDefaultAsync();
-            var importer = vehicle.Importer;
+            var importer = vehicle!.Importer;
             var buyer = await repository.All<Owner>()
                 .Where(b => b.UserId == buyerUserId)
                 .Include(o => o.User)
                 .Include(o => o.Offers)
                 .FirstOrDefaultAsync();
-            var buyerAvailableCredits = buyer.User.Credits - buyer.Offers.Where(o => o.Status == OfferStatus.Pending).Sum(o => o.Price);
+            var buyerAvailableCredits = buyer!.User.Credits - buyer.Offers
+                .Where(o => o.Status == OfferStatus.Pending)
+                .Sum(o => o.Price);
             if (buyerAvailableCredits < vehicle.Price)
             {
                 throw new InsufficientCreditsException("You do not have enough credits to purchase this item!");
@@ -524,10 +527,11 @@ namespace CarSales.Core.Services
             importer.User.Credits += vehicle.Price;
             var sale = new Sale()
             {
+                SalePrice = vehicle.Price,
+                VehiclePrice = vehicle.Price,
                 OwnerId = buyer.Id,
                 ImporterId = importer.Id,
                 VehicleId = vehicle.Id,
-                SalePrice = vehicle.Price,
             };
             await repository.AddAsync<Sale>(sale);
             await repository.SaveChangesAsync();
@@ -563,9 +567,17 @@ namespace CarSales.Core.Services
 
             vehicle.Description = model.Description;
             vehicle.Price = model.Price;
+            var sale = new Sale()
+            {
+                SalePrice = 0,
+                VehiclePrice = vehicle.Price,
+                VehicleId = vehicle.Id,
+                SalesmanId = salesman.Id,
+                OwnerId = vehicle.Owner.Id,
+            };
             vehicle.OwnerId = null;
             vehicle.SalesmanId = salesman.Id;
-
+            await repository.AddAsync<Sale>(sale);
             await repository.SaveChangesAsync();
         }
 
