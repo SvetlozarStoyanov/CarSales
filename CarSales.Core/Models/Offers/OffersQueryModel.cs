@@ -24,11 +24,11 @@ namespace CarSales.Core.Models.Offers
         public OfferSorting OfferSorting { get; set; }
         public ICollection<string> VehicleNames { get; set; }
         public ICollection<string> SalesmenNames { get; set; }
-        public ICollection<string> OfferorNames { get; set; }
-        public IEnumerable<int> PreviousPages { get; set; }
-        public IEnumerable<int> NextPages { get; set; }
-        public ICollection<OfferStatus> OfferStatuses { get; set; }
-        public ICollection<OfferSorting> SortingOptions { get; set; }
-        public IEnumerable<OfferListModel> Offers { get; set; }
+        public ICollection<string> OfferorNames { get; set; } = null!;
+        public IEnumerable<int> PreviousPages { get; set; } = null!;
+        public IEnumerable<int> NextPages { get; set; } = null!;
+        public ICollection<OfferStatus> OfferStatuses { get; set; } = null!;
+        public ICollection<OfferSorting> SortingOptions { get; set; } = null!;
+        public IEnumerable<OfferListModel> Offers { get; set; } = null!;
     }
 }

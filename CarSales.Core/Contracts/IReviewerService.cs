@@ -1,5 +1,4 @@
-﻿
-using CarSales.Core.Enums;
+﻿using CarSales.Core.Enums;
 using CarSales.Core.Models.Reviewers;
 using CarSales.Infrastructure.Data.Entities;
 using CarSales.Infrastructure.Data.Enums;
