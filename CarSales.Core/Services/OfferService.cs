@@ -267,7 +267,7 @@ namespace CarSales.Core.Services
                         SalesmanId = o.Vehicle.SalesmanId,
                         SalesmanName = $"{o.Vehicle.Salesman!.User.FirstName} {o.Vehicle.Salesman.User.LastName}",
                         VehicleType = o.Vehicle.VehicleType,
-                        VehicleRating = o.Vehicle.Reviews.Count() > 0 
+                        VehicleRating = o.Vehicle.Reviews.Count(r => r.ReviewStatus == ReviewStatus.Completed) > 0 
                         ? (VehicleRating)o.Vehicle.Reviews.Where(r => r.ReviewStatus == ReviewStatus.Completed)
                         .Average(r => (int)r.VehicleRating)
                         : VehicleRating.NotRated,
