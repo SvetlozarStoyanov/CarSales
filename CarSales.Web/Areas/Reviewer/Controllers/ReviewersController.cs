@@ -1,5 +1,6 @@
 ﻿using CarSales.Core.Contracts;
 using CarSales.Core.Models.Reviewers;
+using CarSales.Core.Services;
 using CarSales.Web.Extensions;
 using Microsoft.AspNetCore.Mvc;
 
@@ -30,6 +31,12 @@ namespace CarSales.Web.Areas.Reviewer.Controllers
             }
             await reviewerService.EditReviewPricesAsync(model);
             return RedirectToAction("Index", "Home");
+        }
+
+        public async Task<IActionResult> LeaveReviewerRole()
+        {
+            await reviewerService.RetireReviewerAsync(User.Id());
+            return RedirectToAction("LogoutAndLogin", "Users", new { area = "" });
         }
     }
 }

@@ -7,65 +7,65 @@ using Microsoft.AspNetCore.Mvc;
 namespace CarSales.Web.Areas.Reviewer.Controllers
 {
     public class RoleRequestsController : BaseController
+    {
+        private readonly RoleManager<Role> roleManager;
+        private readonly UserManager<User> userManager;
+        private readonly IRoleService roleService;
+        private readonly IRoleRequestService roleRequestService;
+
+        public RoleRequestsController(UserManager<User> userManager, RoleManager<Role> roleManager, IRoleService roleService, IRoleRequestService roleRequestService)
         {
-            private readonly RoleManager<Role> roleManager;
-            private readonly UserManager<User> userManager;
-            private readonly IRoleService roleService;
-            private readonly IRoleRequestService roleRequestService;
+            this.userManager = userManager;
+            this.roleManager = roleManager;
+            this.roleService = roleService;
+            this.roleRequestService = roleRequestService;
+        }
 
-            public RoleRequestsController(UserManager<User> userManager, RoleManager<Role> roleManager, IRoleService roleService, IRoleRequestService roleRequestService)
+        public async Task<IActionResult> Index()
+        {
+            var user = await userManager.GetUserAsync(User);
+            var userRoleNames = await userManager.GetRolesAsync(user);
+            ViewBag.UserRoles = await roleService.GetUserRolesAsync(userRoleNames);
+            var requestedRoles = await roleRequestService.GetRoleRequestsByUserIdAsync(User.Id());
+            if (requestedRoles.Any())
             {
-                this.userManager = userManager;
-                this.roleManager = roleManager;
-                this.roleService = roleService;
-                this.roleRequestService = roleRequestService;
+                ViewBag.RequestedRoles = await roleService.GetRoleByIdsAsync(requestedRoles.Select(rrq => rrq.RoleId));
+                ViewBag.RequestedRoleIds = requestedRoles.Select(rrq => rrq.Id).ToArray();
+                return View(null);
             }
+            var model = await roleService.GetRequestableRolesAsync(userRoleNames);
+            return View(model);
+        }
 
-            public async Task<IActionResult> Index()
+        public async Task<IActionResult> RequestRole(string roleName)
+        {
+            if (!roleManager.Roles.Any(r => r.Name == roleName))
             {
-                var user = await userManager.GetUserAsync(User);
-                var userRoleNames = await userManager.GetRolesAsync(user);
-                ViewBag.UserRoles = await roleService.GetUserRolesAsync(userRoleNames);
-                var requestedRoles = await roleRequestService.GetRoleRequestsByUserIdAsync(User.Id());
-                if (requestedRoles.Any())
-                {
-                    ViewBag.RequestedRoles = await roleService.GetRoleByIdsAsync(requestedRoles.Select(rrq => rrq.RoleId));
-                    ViewBag.RequestedRoleIds = requestedRoles.Select(rrq => rrq.Id).ToArray();
-                    return View(null);
-                }
-                var model = await roleService.GetRequestableRolesAsync(userRoleNames);
-                return View(model);
-            }
-
-            public async Task<IActionResult> RequestRole(string roleName)
-            {
-                if (!roleManager.Roles.Any(r => r.Name == roleName))
-                {
-                    TempData.Add("error", $"No role with {roleName}!");
-                    return RedirectToAction(nameof(Index));
-                }
-                var roleId = roleManager.Roles.FirstOrDefault(r => r.Name == roleName).Id;
-                await roleRequestService.CreateRoleRequestAsync(roleId, User.Id());
-                TempData.Add("success", $"Successfully requested role {roleName}!");
+                TempData.Add("error", $"No role with {roleName}!");
                 return RedirectToAction(nameof(Index));
             }
+            var roleId = roleManager.Roles.FirstOrDefault(r => r.Name == roleName).Id;
+            await roleRequestService.CreateRoleRequestAsync(roleId, User.Id());
+            TempData.Add("success", $"Successfully requested role {roleName}!");
+            return RedirectToAction(nameof(Index));
+        }
 
-            public async Task<IActionResult> LeaveRole(string roleName)
-            {
-                var user = await userManager.GetUserAsync(User);
-                await userManager.RemoveFromRoleAsync(user, roleName);
-                TempData.Add("success", $"You are no longer a {roleName}!");
+        public async Task<IActionResult> LeaveRole(string roleName)
+        {
+            var user = await userManager.GetUserAsync(User);
+            await userManager.RemoveFromRoleAsync(user, roleName);
+            TempData.Add("success", $"You are no longer a {roleName}!");
 
-                return RedirectToAction("LogoutAndLogin", "Users");
-            }
+            return RedirectToAction("LeaveReviewerRole", "Reviewers");
+        }
 
-            public async Task<IActionResult> DeleteRoleRequest(int id)
-            {
-                await roleRequestService.DeleteRoleRequestAsync(id);
-                TempData.Add("success", $"Successfully cancelled role request!");
+        public async Task<IActionResult> DeleteRoleRequest(int id)
+        {
+            await roleRequestService.DeleteRoleRequestAsync(id);
+            TempData.Add("success", $"Successfully cancelled role request!");
 
-                return RedirectToAction(nameof(Index));
-            }
+            return RedirectToAction(nameof(Index));
         }
     }
+}
 
