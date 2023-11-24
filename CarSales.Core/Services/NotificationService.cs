@@ -15,6 +15,13 @@ namespace CarSales.Core.Services
             this.repository = repository;
         }
 
+        public async Task MarkNotificationAsReadAsync(int id)
+        {
+            var notification = await repository.GetByIdAsync<Notification>(id);
+            notification.IsRead = true;
+            await repository.SaveChangesAsync();
+        }
+
         public async Task CreateNotificationAsync(string userId, string title, string link)
         {
             var notification = new Notification()
@@ -29,7 +36,7 @@ namespace CarSales.Core.Services
             await repository.SaveChangesAsync();
         }
 
-        public async Task<List<NotificationListModel>> GetAllNotificationsAsync(string userId)
+        public async Task<IEnumerable<NotificationListModel>> GetAllNotificationsAsync(string userId)
         {
             var notifications = await repository.AllReadOnly<Notification>()
                 .Where(n => n.UserId == userId)
@@ -65,6 +72,23 @@ namespace CarSales.Core.Services
             }
 
             return null!;
+        }
+
+        public async Task<IEnumerable<NotificationListModel>> GetLatestNotificationsAsync(string userId)
+        {
+            var notifications = await repository.AllReadOnly<Notification>()
+                .Where(n => n.UserId == userId)
+                .OrderByDescending(n => n.Id)
+                .Select(n => new NotificationListModel()
+                {
+                    Id = n.Id,
+                    Title = n.Title,
+                    Link = n.Link,
+                    IsRead = n.IsRead
+                })
+                .Take(3)
+                .ToListAsync();
+            return notifications;
         }
     }
 }
