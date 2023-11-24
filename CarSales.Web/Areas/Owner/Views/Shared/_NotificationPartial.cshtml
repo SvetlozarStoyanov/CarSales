@@ -1,0 +1,12 @@
+﻿@model NotificationListModel
+
+<div class="dropdown-item w-100 @(Model.IsRead ? "" : "active")">
+    <div class="d-flex justify-content-center w-100">
+        <a class="btn w-100" asp-area="Owner" asp-controller="Notifications" asp-action="Details"
+           asp-route-notificationId="@Model.Id" asp-route-link="@Model.Link" asp-route-isRead="@Model.IsRead">
+            <h6 class="text-wrap text-center @(Model.IsRead ? "" : "text-white") w-100">
+                @Model.Title
+            </h6>
+        </a>
+    </div>
+</div>
