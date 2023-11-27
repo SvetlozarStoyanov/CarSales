@@ -32,6 +32,7 @@
     <Folder Include="Areas\Owner\Models\" />
     <Folder Include="Areas\Reviewer\Data\" />
     <Folder Include="Areas\Reviewer\Models\" />
+    <Folder Include="Areas\Reviewer\Views\Reviewers\" />
     <Folder Include="Areas\Salesman\Data\" />
     <Folder Include="Areas\Salesman\Models\" />
   </ItemGroup>
