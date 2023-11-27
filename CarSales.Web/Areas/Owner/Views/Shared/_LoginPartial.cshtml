@@ -3,8 +3,10 @@
 @inject SignInManager<User> SignInManager
 @inject UserManager<User> UserManager
 @inject IUserService userService
+@inject INotificationService notificationService
 @{
     var userNavbarModel = await userService.GetUserNavbarModelAsync(User.Id());
+    var hasUnreadNotifications = await notificationService.DoesUserHaveUnreadNotificationsAsync(User.Id());
 }
 <input id="areaInput" value="Owner" hidden readonly/>
 <ul class="navbar-nav me-5 d-flex align-items-lg-center">
@@ -17,7 +19,7 @@
             <div class="dropdown" id="notificationsDiv">
                 <button class="btn nav-link text-dark" href="#" role="button" id="dropdownMenuLink"
                         data-bs-toggle="dropdown" aria-expanded="false">
-                    Notifications
+                    <i class="bi @(hasUnreadNotifications ? "bi-bell-fill" : "bi-bell") w-100 h-100 fs-1"></i>
                 </button>
                 <ul id="notificationsList" class="dropdown-menu mt-3 mb-3" aria-labelledby="dropdownMenuLink">
                 </ul>
