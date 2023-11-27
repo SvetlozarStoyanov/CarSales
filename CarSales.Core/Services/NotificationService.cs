@@ -15,6 +15,14 @@ namespace CarSales.Core.Services
             this.repository = repository;
         }
 
+
+        public async Task<bool> DoesUserHaveUnreadNotificationsAsync(string userId)
+        {
+            var hasUnreadNotifications = await repository.AllReadOnly<Notification>().AnyAsync(n => n.UserId == userId && !n.IsRead);
+
+            return hasUnreadNotifications;
+        }
+
         public async Task MarkNotificationAsReadAsync(int id)
         {
             var notification = await repository.GetByIdAsync<Notification>(id);
