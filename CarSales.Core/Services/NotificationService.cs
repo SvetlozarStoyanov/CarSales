@@ -48,6 +48,7 @@ namespace CarSales.Core.Services
         {
             var notifications = await repository.AllReadOnly<Notification>()
                 .Where(n => n.UserId == userId)
+                .OrderByDescending(n => n.Id)
                 .Select(n => new NotificationListModel()
                 {
                     Id = n.Id,
