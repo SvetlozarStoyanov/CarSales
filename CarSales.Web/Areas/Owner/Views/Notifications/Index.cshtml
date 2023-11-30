@@ -1,48 +1,25 @@
 ﻿@model IEnumerable<NotificationListModel>
-
+@{
+    ViewData["Title"] = "Notifications";
+}
 @if (Model.Any())
 {
+    <section class="container d-flex flex-column justify-content-center gap-5">
+        <h2 class="text-center text-white mt-3 mb-3">Notifications</h2>
 
-    <h2 class="text-center text-white mt-3 mb-3">Requested Roles</h2>
-    <div class="table-responsive">
-        <table class="table table-dark table-hover table-bordered table-striped">
-            <thead>
-                <tr>
-                    <th>
-                        Name
-                    </th>
-                    <th>
-                        Description
-                    </th>
-                    <th>
+        @foreach (var notification in Model)
+        {
+            <article class="d-flex flex-column justify-content-center align-items-center  @(notification.IsRead ? "bg-secondary bg-opacity-10" : "bg-info bg-opacity-50") border border-3 border-white rounded-4">
+                <a class="text-decoration-none w-100 h-100" asp-area="Owner" asp-controller="Notifications" asp-action="Details"
+                   asp-route-notificationId="@notification.Id" asp-route-link="@notification.Link" asp-route-isRead="@notification.IsRead">
+                    <h3 class="text-center text-wrap  text-white justify-self-center p-3">
+                        @notification.Title
+                    </h3>
+                </a>
+            </article>
+        }
 
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var notification in Model)
-                {
-                    <tr>
-                        <td>
-                            @notification.Title
-                        </td>
-                        <td>
-                            @notification.IsRead
-                        </td>
-                        <td>
-                            <div class="d-flex justify-content-center w-100">
-                                <a class="btn btn-info mx-2" asp-area="Owner" asp-controller="Notifications" asp-action="Details"
-                                   asp-route-notificationId="@notification.Id" asp-route-link="@notification.Link" asp-route-isRead="@notification.IsRead">
-                                    <i class="bi bi-info"></i>
-                                    <span class="d-lg-inline d-none">Details</span>
-                                </a>
-                            </div>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    </div>
+    </section>
 }
 else
 {
