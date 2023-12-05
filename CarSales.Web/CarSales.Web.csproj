@@ -9,6 +9,37 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="wwwroot\lib\bootstrap\bootstrap 5.1 backup\dist\css\bootstrap-grid.css.map" />
+    <Content Remove="wwwroot\lib\bootstrap\bootstrap 5.1 backup\dist\css\bootstrap-grid.min.css.map" />
+    <Content Remove="wwwroot\lib\bootstrap\bootstrap 5.1 backup\dist\css\bootstrap-grid.rtl.css.map" />
+    <Content Remove="wwwroot\lib\bootstrap\bootstrap 5.1 backup\dist\css\bootstrap-grid.rtl.min.css.map" />
+    <Content Remove="wwwroot\lib\bootstrap\bootstrap 5.1 backup\dist\css\bootstrap-reboot.css.map" />
+    <Content Remove="wwwroot\lib\bootstrap\bootstrap 5.1 backup\dist\css\bootstrap-reboot.min.css.map" />
+    <Content Remove="wwwroot\lib\bootstrap\bootstrap 5.1 backup\dist\css\bootstrap-reboot.rtl.css.map" />
+    <Content Remove="wwwroot\lib\bootstrap\bootstrap 5.1 backup\dist\css\bootstrap-reboot.rtl.min.css.map" />
+    <Content Remove="wwwroot\lib\bootstrap\bootstrap 5.1 backup\dist\css\bootstrap-utilities.css.map" />
+    <Content Remove="wwwroot\lib\bootstrap\bootstrap 5.1 backup\dist\css\bootstrap-utilities.min.css.map" />
+    <Content Remove="wwwroot\lib\bootstrap\bootstrap 5.1 backup\dist\css\bootstrap-utilities.rtl.css.map" />
+    <Content Remove="wwwroot\lib\bootstrap\bootstrap 5.1 backup\dist\css\bootstrap-utilities.rtl.min.css.map" />
+    <Content Remove="wwwroot\lib\bootstrap\bootstrap 5.1 backup\dist\css\bootstrap.css.map" />
+    <Content Remove="wwwroot\lib\bootstrap\bootstrap 5.1 backup\dist\css\bootstrap.min.css.map" />
+    <Content Remove="wwwroot\lib\bootstrap\bootstrap 5.1 backup\dist\css\bootstrap.rtl.css.map" />
+    <Content Remove="wwwroot\lib\bootstrap\bootstrap 5.1 backup\dist\css\bootstrap.rtl.min.css.map" />
+    <Content Remove="wwwroot\lib\bootstrap\bootstrap 5.1 backup\dist\js\bootstrap.bundle.js" />
+    <Content Remove="wwwroot\lib\bootstrap\bootstrap 5.1 backup\dist\js\bootstrap.bundle.js.map" />
+    <Content Remove="wwwroot\lib\bootstrap\bootstrap 5.1 backup\dist\js\bootstrap.bundle.min.js" />
+    <Content Remove="wwwroot\lib\bootstrap\bootstrap 5.1 backup\dist\js\bootstrap.bundle.min.js.map" />
+    <Content Remove="wwwroot\lib\bootstrap\bootstrap 5.1 backup\dist\js\bootstrap.esm.js" />
+    <Content Remove="wwwroot\lib\bootstrap\bootstrap 5.1 backup\dist\js\bootstrap.esm.js.map" />
+    <Content Remove="wwwroot\lib\bootstrap\bootstrap 5.1 backup\dist\js\bootstrap.esm.min.js" />
+    <Content Remove="wwwroot\lib\bootstrap\bootstrap 5.1 backup\dist\js\bootstrap.esm.min.js.map" />
+    <Content Remove="wwwroot\lib\bootstrap\bootstrap 5.1 backup\dist\js\bootstrap.js" />
+    <Content Remove="wwwroot\lib\bootstrap\bootstrap 5.1 backup\dist\js\bootstrap.js.map" />
+    <Content Remove="wwwroot\lib\bootstrap\bootstrap 5.1 backup\dist\js\bootstrap.min.js" />
+    <Content Remove="wwwroot\lib\bootstrap\bootstrap 5.1 backup\dist\js\bootstrap.min.js.map" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="7.0.5" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.0.5" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="7.0.5" />
@@ -35,6 +66,65 @@
     <Folder Include="Areas\Reviewer\Views\Reviewers\" />
     <Folder Include="Areas\Salesman\Data\" />
     <Folder Include="Areas\Salesman\Models\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\lib\bootstrap\bootstrap 5.1 backup\dist\css\bootstrap-grid.css.map" />
+    <None Include="wwwroot\lib\bootstrap\bootstrap 5.1 backup\dist\css\bootstrap-grid.min.css.map" />
+    <None Include="wwwroot\lib\bootstrap\bootstrap 5.1 backup\dist\css\bootstrap-grid.rtl.css.map" />
+    <None Include="wwwroot\lib\bootstrap\bootstrap 5.1 backup\dist\css\bootstrap-grid.rtl.min.css.map" />
+    <None Include="wwwroot\lib\bootstrap\bootstrap 5.1 backup\dist\css\bootstrap-reboot.css.map" />
+    <None Include="wwwroot\lib\bootstrap\bootstrap 5.1 backup\dist\css\bootstrap-reboot.min.css.map" />
+    <None Include="wwwroot\lib\bootstrap\bootstrap 5.1 backup\dist\css\bootstrap-reboot.rtl.css.map" />
+    <None Include="wwwroot\lib\bootstrap\bootstrap 5.1 backup\dist\css\bootstrap-reboot.rtl.min.css.map" />
+    <None Include="wwwroot\lib\bootstrap\bootstrap 5.1 backup\dist\css\bootstrap-utilities.css.map" />
+    <None Include="wwwroot\lib\bootstrap\bootstrap 5.1 backup\dist\css\bootstrap-utilities.min.css.map" />
+    <None Include="wwwroot\lib\bootstrap\bootstrap 5.1 backup\dist\css\bootstrap-utilities.rtl.css.map" />
+    <None Include="wwwroot\lib\bootstrap\bootstrap 5.1 backup\dist\css\bootstrap-utilities.rtl.min.css.map" />
+    <None Include="wwwroot\lib\bootstrap\bootstrap 5.1 backup\dist\css\bootstrap.css.map" />
+    <None Include="wwwroot\lib\bootstrap\bootstrap 5.1 backup\dist\css\bootstrap.min.css.map" />
+    <None Include="wwwroot\lib\bootstrap\bootstrap 5.1 backup\dist\css\bootstrap.rtl.css.map" />
+    <None Include="wwwroot\lib\bootstrap\bootstrap 5.1 backup\dist\css\bootstrap.rtl.min.css.map" />
+    <None Include="wwwroot\lib\bootstrap\bootstrap 5.1 backup\dist\js\bootstrap.bundle.js" />
+    <None Include="wwwroot\lib\bootstrap\bootstrap 5.1 backup\dist\js\bootstrap.bundle.js.map" />
+    <None Include="wwwroot\lib\bootstrap\bootstrap 5.1 backup\dist\js\bootstrap.bundle.min.js" />
+    <None Include="wwwroot\lib\bootstrap\bootstrap 5.1 backup\dist\js\bootstrap.bundle.min.js.map" />
+    <None Include="wwwroot\lib\bootstrap\bootstrap 5.1 backup\dist\js\bootstrap.esm.js" />
+    <None Include="wwwroot\lib\bootstrap\bootstrap 5.1 backup\dist\js\bootstrap.esm.js.map" />
+    <None Include="wwwroot\lib\bootstrap\bootstrap 5.1 backup\dist\js\bootstrap.esm.min.js" />
+    <None Include="wwwroot\lib\bootstrap\bootstrap 5.1 backup\dist\js\bootstrap.esm.min.js.map" />
+    <None Include="wwwroot\lib\bootstrap\bootstrap 5.1 backup\dist\js\bootstrap.js" />
+    <None Include="wwwroot\lib\bootstrap\bootstrap 5.1 backup\dist\js\bootstrap.js.map" />
+    <None Include="wwwroot\lib\bootstrap\bootstrap 5.1 backup\dist\js\bootstrap.min.js" />
+    <None Include="wwwroot\lib\bootstrap\bootstrap 5.1 backup\dist\js\bootstrap.min.js.map" />
+    <None Include="wwwroot\lib\bootstrap\dist\css\bootstrap-grid.css.map" />
+    <None Include="wwwroot\lib\bootstrap\dist\css\bootstrap-grid.min.css.map" />
+    <None Include="wwwroot\lib\bootstrap\dist\css\bootstrap-grid.rtl.css.map" />
+    <None Include="wwwroot\lib\bootstrap\dist\css\bootstrap-grid.rtl.min.css.map" />
+    <None Include="wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.css.map" />
+    <None Include="wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.min.css.map" />
+    <None Include="wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.rtl.css.map" />
+    <None Include="wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.rtl.min.css.map" />
+    <None Include="wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.css.map" />
+    <None Include="wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.min.css.map" />
+    <None Include="wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.rtl.css.map" />
+    <None Include="wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.rtl.min.css.map" />
+    <None Include="wwwroot\lib\bootstrap\dist\css\bootstrap.css.map" />
+    <None Include="wwwroot\lib\bootstrap\dist\css\bootstrap.min.css.map" />
+    <None Include="wwwroot\lib\bootstrap\dist\css\bootstrap.rtl.css.map" />
+    <None Include="wwwroot\lib\bootstrap\dist\css\bootstrap.rtl.min.css.map" />
+    <None Include="wwwroot\lib\bootstrap\dist\js\bootstrap.bundle.js" />
+    <None Include="wwwroot\lib\bootstrap\dist\js\bootstrap.bundle.js.map" />
+    <None Include="wwwroot\lib\bootstrap\dist\js\bootstrap.bundle.min.js" />
+    <None Include="wwwroot\lib\bootstrap\dist\js\bootstrap.bundle.min.js.map" />
+    <None Include="wwwroot\lib\bootstrap\dist\js\bootstrap.esm.js" />
+    <None Include="wwwroot\lib\bootstrap\dist\js\bootstrap.esm.js.map" />
+    <None Include="wwwroot\lib\bootstrap\dist\js\bootstrap.esm.min.js" />
+    <None Include="wwwroot\lib\bootstrap\dist\js\bootstrap.esm.min.js.map" />
+    <None Include="wwwroot\lib\bootstrap\dist\js\bootstrap.js" />
+    <None Include="wwwroot\lib\bootstrap\dist\js\bootstrap.js.map" />
+    <None Include="wwwroot\lib\bootstrap\dist\js\bootstrap.min.js" />
+    <None Include="wwwroot\lib\bootstrap\dist\js\bootstrap.min.js.map" />
   </ItemGroup>
 
   <ItemGroup>
