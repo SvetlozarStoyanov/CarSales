@@ -15,6 +15,15 @@ namespace CarSales.Core.Services
             this.repository = repository;
         }
 
+        public async Task<bool> CanUserViewNotificationAsync(int notificationId, string userId)
+        {
+            var notification = await repository.GetByIdAsync<Notification>(notificationId);
+            if (notification != null && notification.UserId == userId)
+            {
+                return true;
+            }
+            return false;
+        }
 
         public async Task<bool> DoesUserHaveUnreadNotificationsAsync(string userId)
         {
@@ -26,8 +35,11 @@ namespace CarSales.Core.Services
         public async Task MarkNotificationAsReadAsync(int id)
         {
             var notification = await repository.GetByIdAsync<Notification>(id);
-            notification.IsRead = true;
-            await repository.SaveChangesAsync();
+            if (notification != null && !notification.IsRead)
+            {
+                notification.IsRead = true;
+                await repository.SaveChangesAsync();
+            }
         }
 
         public async Task CreateNotificationAsync(string userId, string title, string link)

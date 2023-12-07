@@ -4,6 +4,10 @@ namespace CarSales.Core.Contracts
 {
     public interface INotificationService
     {
+
+        Task<bool> CanUserViewNotificationAsync(int notificationId, string userId);
+
+
         Task<bool> DoesUserHaveUnreadNotificationsAsync(string userId);
 
 
