@@ -4,24 +4,28 @@
 }
 @if (Model.Any())
 {
-    <section class="container d-flex flex-column justify-content-center gap-5">
-        <h2 class="text-center text-white mt-3 mb-3">Notifications</h2>
-
+    <section class="container d-flex flex-column justify-content-center align-content-center gap-5">
+        <h1 class="text-center text-white mt-3 mb-3">Notifications</h1>
         @foreach (var notification in Model)
         {
-            <article class="d-flex flex-column justify-content-center align-items-center  @(notification.IsRead ? "bg-secondary bg-opacity-10" : "bg-info bg-opacity-50") border border-3 border-white rounded-4">
+            <article class="d-flex flex-row justify-content-center align-items-center  @(notification.IsRead ? "bg-secondary bg-opacity-10" : "bg-info bg-opacity-50") border border-3 border-white rounded-4">
+                <input class="notification-id" value="@notification.Id" hidden readonly/>
                 <a class="text-decoration-none w-100 h-100" asp-area="Owner" asp-controller="Notifications" asp-action="Details"
                    asp-route-notificationId="@notification.Id" asp-route-link="@notification.Link" asp-route-isRead="@notification.IsRead">
                     <h3 class="text-center text-wrap  text-white justify-self-center p-3">
                         @notification.Title
                     </h3>
                 </a>
+                <button class="mark-as-read-button h-100 btn @(notification.IsRead ? "btn-primary" : "btn-warning") rounded rounded-4" disabled="@(notification.IsRead)">
+                    Mark as read
+                </button>
             </article>
         }
-
     </section>
 }
 else
 {
     <h2 class="text-center text-white mt-3 mb-3">You have no notifications!</h2>
 }
+
+<script src="~/js/Notifications/index.js"></script>
