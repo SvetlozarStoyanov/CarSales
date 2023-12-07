@@ -1,5 +1,4 @@
 ﻿using CarSales.Core.Contracts;
-using CarSales.Core.Models.Notifications;
 using CarSales.Web.Extensions;
 using Microsoft.AspNetCore.Mvc;
 
@@ -29,12 +28,26 @@ namespace CarSales.Web.Areas.Owner.Controllers
         public async Task<IActionResult> GetNotificationsPartial()
         {
             var model = await notificationService.GetLatestNotificationsAsync(User.Id());
-            
-            return PartialView("_NotificationsPartial", model);
+
+            return PartialView("_NotificationsDropdownPartial", model);
+        }
+
+        public async Task MarkAsRead(int id)
+        {
+            var canViewNotification = await notificationService.CanUserViewNotificationAsync(id, User.Id());
+            if (canViewNotification)
+            {
+                await notificationService.MarkNotificationAsReadAsync(id);
+            }
         }
 
         public async Task<IActionResult> Details(int notificationId, string link, bool isRead)
         {
+            var canViewNotification = await notificationService.CanUserViewNotificationAsync(notificationId, User.Id());
+            if (!canViewNotification)
+            {
+                return RedirectToAction("Home", "Index");
+            }
             if (!isRead)
             {
                 await notificationService.MarkNotificationAsReadAsync(notificationId);
