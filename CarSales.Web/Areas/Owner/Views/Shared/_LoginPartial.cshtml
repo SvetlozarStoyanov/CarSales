@@ -7,23 +7,21 @@
     var userNavbarModel = await userService.GetUserNavbarModelAsync(User.Id());
 }
 <input id="areaInput" value="Owner" hidden readonly/>
-<ul class="navbar-nav me-5 d-flex align-items-lg-center">
+<ul class="navbar-nav me-5 d-flex align-items-lg-center gap-3">
     @if (SignInManager.IsSignedIn(User))
     {
         <li class="nav-item">
             <a class="nav-link active" disabled><span id="userCredits">@userNavbarModel.Credits</span> credits</a>
         </li>
-        <li class="nav-item" id="notificationsListItem">
-            <div class="dropdown" id="notificationsDiv">
+        <li class="nav-item dropdown-center d-flex justify-content-center align-items-center" id="notificationsListItem">
                 <button class="nav-link text-dark" href="#" id="dropdownMenuLink"
                         data-bs-toggle="dropdown" aria-expanded="false">
-                    <i id="notificationsIcon" class="bi w-100 h-100 fs-1"></i>
+                <i id="notificationsIcon" class="bi fs-1"></i>
                 </button>
                 <ul class="dropdown-menu mt-3 mb-3" id="notificationsList" aria-labelledby="dropdownMenuLink">
                 </ul>
-            </div>
         </li>
-        <li class="dropdown">
+        <li class="dropdown-center">
             <partial name="_MyProfilePartial" model="@userNavbarModel"></partial>
         </li>
     }
