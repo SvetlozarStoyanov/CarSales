@@ -73,6 +73,25 @@ namespace CarSales.Core.Services
             return notifications;
         }
 
+        public async Task<IEnumerable<NotificationListModel>> GetNotificationsAsync(string userId, int skipped)
+        {
+            var notifications = await repository.AllReadOnly<Notification>()
+                .Where(n => n.UserId == userId)
+                .OrderByDescending(n => n.Id)
+                .Skip(skipped)
+                .Take(5)
+                .Select(n => new NotificationListModel()
+                {
+                    Id = n.Id,
+                    Title = n.Title,
+                    Link = n.Link,
+                    IsRead = n.IsRead
+                })
+                .ToListAsync();
+
+            return notifications;
+        }
+
         public async Task<NotificationViewModel> GetNotificationByIdAsync(int id, string userId)
         {
             var notification = await repository.GetByIdAsync<Notification>(id);
@@ -111,5 +130,7 @@ namespace CarSales.Core.Services
                 .ToListAsync();
             return notifications;
         }
+
+
     }
 }

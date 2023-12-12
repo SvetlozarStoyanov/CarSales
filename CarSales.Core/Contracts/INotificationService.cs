@@ -42,8 +42,19 @@ namespace CarSales.Core.Contracts
         /// Returns all <see cref="Notification"/>s for given <see cref="User"/>
         /// </summary>
         /// <param name="userId"></param>
-        /// <returns></returns>
+        /// <returns><see cref="IEnumerable{T}"/> of <see cref="NotificationListModel"/></returns>
         Task<IEnumerable<NotificationListModel>> GetAllNotificationsAsync(string userId);
+
+
+        /// <summary>
+        /// Gets the next  5 <see cref="Notification"/>s after skipping <paramref name="skipped"/> count
+        /// <see cref="Notification"/>s
+        /// of <see cref="User"/> with <paramref name="userId"/>
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="skipped"></param>
+        /// <returns></returns>
+        Task<IEnumerable<NotificationListModel>> GetNotificationsAsync(string userId, int skipped);
 
         /// <summary>
         /// Returns latest <see cref="Notification"/>s for given <see cref="User"/>
