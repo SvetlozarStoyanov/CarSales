@@ -12,7 +12,7 @@ window.addEventListener('load', async function () {
 
 notificationsListItem.addEventListener('click', function () {
     if (notificationsList.classList.contains('show')) {
-        $(notificationsList).load(`/${areaInput.value}/Notifications/GetNotificationsPartial`);
+        $(notificationsList).load(`/${areaInput.value}/Notifications/GetNotificationsDropdownPartial`);
     }
 })
 
