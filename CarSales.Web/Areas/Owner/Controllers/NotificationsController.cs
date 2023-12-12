@@ -19,13 +19,20 @@ namespace CarSales.Web.Areas.Owner.Controllers
             return View(model);
         }
 
+        
+        public async Task<IActionResult> GetNotifications(int skipped)
+        {
+            var model = await notificationService.GetNotificationsAsync(User.Id(), skipped);
+            return PartialView("_NotificationsPartial", model);
+        }
+
         public async Task<IActionResult> DoesUserHaveUnreadNotifications()
         {
             var model = await notificationService.DoesUserHaveUnreadNotificationsAsync(User.Id());
             return Json(model);
         }
 
-        public async Task<IActionResult> GetNotificationsPartial()
+        public async Task<IActionResult> GetNotificationsDropdownPartial()
         {
             var model = await notificationService.GetLatestNotificationsAsync(User.Id());
 
