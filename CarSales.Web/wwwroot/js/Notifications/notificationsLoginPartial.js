@@ -1,7 +1,7 @@
 ﻿const areaInput = document.querySelector('#areaInput');
 const notificationsIcon = document.querySelector('#notificationsIcon');
 const notificationsListItem = document.querySelector('#notificationsListItem');
-const notificationsList = document.querySelector('#notificationsList');
+const notificationsDropdownList = document.querySelector('#notificationsDropdownList');
 
 window.addEventListener('load', async function () {
     await checkIfUserHasUnreadNotifications();
@@ -11,8 +11,8 @@ window.addEventListener('load', async function () {
 })
 
 notificationsListItem.addEventListener('click', function () {
-    if (notificationsList.classList.contains('show')) {
-        $(notificationsList).load(`/${areaInput.value}/Notifications/GetNotificationsDropdownPartial`);
+    if (notificationsDropdownList.classList.contains('show')) {
+        $(notificationsDropdownList).load(`/${areaInput.value}/Notifications/GetNotificationsDropdownPartial`);
     }
 })
 
