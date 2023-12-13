@@ -1,12 +1,12 @@
 ﻿@model NotificationListModel
 
-<article  class="notification-article w-100 h-100 d-flex flex-row justify-content-center align-items-center
+<li class="notification-list-item w-100 h-100 d-flex flex-row justify-content-center align-items-center
                 @(Model.IsRead ? "bg-secondary bg-opacity-10" : "bg-info bg-opacity-50") border
                     border-3 border-white">
     <a class="text-decoration-none w-100 h-100 py-5 d-flex flex-column justify-content-center align-items-center"
        asp-area="Owner" asp-controller="Notifications" asp-action="Details"
        asp-route-notificationId="@Model.Id" asp-route-link="@Model.Link" asp-route-isRead="@Model.IsRead">
-        <h4 class="text-wrap text-white">
+        <h4 class="text-center text-wrap text-white">
             @Model.Title
         </h4>
     </a>
@@ -15,4 +15,4 @@
     </button>
     <input class="notification-id" value="@Model.Id" hidden readonly />
 
-</article>
+</li>
