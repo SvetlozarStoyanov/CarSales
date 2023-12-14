@@ -6,6 +6,8 @@
 @{
     var userNavbarModel = await userService.GetUserNavbarModelAsync(User.Id());
 }
+
+<input id="areaInput" value="Reviewer" hidden readonly />
 <ul class="navbar-nav me-5 d-flex align-items-md-center align-items-start">
     @if (SignInManager.IsSignedIn(User))
     {
@@ -13,60 +15,7 @@
             <a class="nav-link active" disabled><span id="userCredits">@userNavbarModel.Credits</span> credits</a>
         </li>
         <li class="dropdown">
-            <a class="d-flex align-items-center m-1" data-bs-auto-close="outside" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-                <img class="custom-avatar-img border border-3 border-black rounded-circle" src="@userNavbarModel.ProfilePicture" />
-            </a>
-            <ul class="dropdown-menu">
-                <li class="dropstart">
-                    <a class="nav-link active" data-bs-toggle="dropdown" href="#">
-                        <span class="d-none d-md-inline">
-                            <i class="bi bi-caret-left-fill"></i>
-                        </span>
-                        My Profile
-                        <span class="d-md-none d-sm-inline">
-                            <i class="bi bi-caret-down-fill"></i>
-                        </span>
-                    </a>
-                    <ul class="dropdown-menu dropdown-submenu">
-                        <li>
-                            <a class="nav-link active" asp-area="Reviewer" asp-controller="Users" asp-action="Details" asp-route-id="@userNavbarModel.Id">Details</a>
-                        </li>
-                        <li>
-                            <a class="nav-link active" asp-area="Reviewer" asp-controller="Users" asp-action="Edit" asp-route-id="@userNavbarModel.Id">Edit</a>
-                        </li>
-                        <li>
-                            <a class="nav-link active" asp-area="Reviewer" asp-controller="Reviewers" asp-action="EditReviewPrices">Edit Review Prices</a>
-                        </li>
-                        <li>
-                            <a class="nav-link active" asp-area="Reviewer" asp-controller="RoleRequests" asp-action="Index">Request role</a>
-                        </li>
-                    </ul>
-                </li>
-                <li>
-                    <div class="dropdown-divider"></div>
-                </li>
-                <li>
-                    <a class="nav-link active" asp-area="Reviewer" asp-controller="Reviews" asp-action="Mine">My Reviews</a>
-                </li>
-                <li>
-                    <div class="dropdown-divider"></div>
-                </li>
-                <li>
-                    <a class="nav-link active" asp-area="Reviewer" asp-controller="Vehicles" asp-action="Mine">My Vehicles</a>
-                </li>
-                <li>
-                    <div class="dropdown-divider"></div>
-                </li>
-                <li>
-                    <a class="nav-link active" asp-area="Reviewer" asp-controller="Offers" asp-action="Outgoing">My Offers</a>
-                </li>
-                <li>
-                    <div class="dropdown-divider"></div>
-                </li>
-                <li>
-                    <a class="nav-link active" asp-area="" asp-controller="Users" asp-action="Logout">Logout</a>
-                </li>
-            </ul>
+            <partial name="_MyProfilePartial" model="userNavbarModel"/>
         </li>
     }
     else
