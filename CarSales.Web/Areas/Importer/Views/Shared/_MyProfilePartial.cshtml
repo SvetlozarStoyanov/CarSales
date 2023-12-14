@@ -1,0 +1,63 @@
+﻿@model UserNavbarModel
+
+<a class="d-flex align-items-center m-1" data-bs-auto-close="outside" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+    <img class="custom-avatar-img border border-3 border-dark rounded-circle" src="@Model.ProfilePicture" />
+</a>
+<ul class="dropdown-menu">
+    <li class="dropstart">
+        <a class="nav-link active" data-bs-toggle="dropdown" href="#">
+            <span class="d-none d-md-inline">
+                <i class="bi bi-caret-left-fill"></i>
+            </span>
+            My Profile
+            <span class="d-md-none d-sm-inline">
+                <i class="bi bi-caret-down-fill"></i>
+            </span>
+        </a>
+        <ul class="dropdown-menu dropdown-submenu">
+            <li>
+                <a class="nav-link active" asp-area="Importer" asp-controller="Users" asp-action="Details" asp-route-id="@Model.Id">Details</a>
+            </li>
+            <li>
+                <a class="nav-link active" asp-area="Importer" asp-controller="Users" asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
+            </li>
+            <li>
+                <a class="nav-link active" asp-area="Importer" asp-controller="RoleRequests" asp-action="Index">Roles</a>
+            </li>
+        </ul>
+    </li>
+    <li>
+        <div class="dropdown-divider"></div>
+    </li>
+    <li class="dropstart">
+        <a class="nav-link active" data-bs-toggle="dropdown" href="#">
+            <span class="d-none d-md-inline">
+                <i class="bi bi-caret-left-fill"></i>
+            </span>
+            My Vehicles
+            <span class="d-md-none d-sm-inline">
+                <i class="bi bi-caret-down-fill"></i>
+            </span>
+        </a>
+        <ul class="dropdown-menu dropdown-submenu">
+            <li>
+                <a class="nav-link active" asp-area="Importer" asp-controller="Vehicles" asp-action="Mine">Owned</a>
+            </li>
+            <li>
+                <a class="nav-link active" asp-area="Importer" asp-controller="Vehicles" asp-action="MyImportedVehicles">Imported</a>
+            </li>
+        </ul>
+    </li>
+    <li>
+        <div class="dropdown-divider"></div>
+    </li>
+    <li>
+        <a class="nav-link active" asp-area="Importer" asp-controller="Offers" asp-action="Outgoing">My Offers</a>
+    </li>
+    <li>
+        <div class="dropdown-divider"></div>
+    </li>
+    <li>
+        <a class="nav-link active" asp-area="" asp-controller="Users" asp-action="Logout">Logout</a>
+    </li>
+</ul>
