@@ -1,0 +1,13 @@
+﻿@model NotificationListModel
+
+<li class="custom-dropdown-item w-100 px-2 py-2 my-2 d-flex justify-content-center align-items-center
+    @(Model.IsRead ? "" : "bg-info") border border-3 border-light rounded rounded-4">
+    <a class="w-100 h-100 text-light text-wrap fs-5 fw-5 text-center" asp-area="Salesman" asp-controller="Notifications" asp-action="Details"
+       asp-route-notificationId="@Model.Id" asp-route-link="@Model.Link" asp-route-isRead="@Model.IsRead">
+        @Model.Title
+    </a>
+    <button class="dropdown-mark-as-read-button p-0 m-0 mx-2 h-100 btn border border-0 rounded rounded-4" disabled="@(Model.IsRead)">
+        <i class="bi text-light @(Model.IsRead ? "bi-toggle-off" : "bi-toggle-on text-success") fs-1 "></i>
+    </button>
+    <input class="notification-dropdown-id" value="@Model.Id" hidden readonly />
+</li>
