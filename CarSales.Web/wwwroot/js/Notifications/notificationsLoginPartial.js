@@ -26,6 +26,7 @@ window.addEventListener('click', function (e) {
 })
 
 notificationsDropdownButton.addEventListener('click', async function () {
+    notificationsDropdownButton.blur();
     notificationsDropdownList.classList.toggle('custom-show-dropdown');
     if (notificationsDropdownList.classList.contains('custom-show-dropdown')) {
         await $.ajax({
