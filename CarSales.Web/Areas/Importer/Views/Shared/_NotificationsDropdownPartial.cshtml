@@ -1,0 +1,24 @@
+﻿@model IEnumerable<NotificationListModel>
+
+
+@if (Model.Any())
+{
+    <h3 class="text-center text-white px-3 mx-3 my-3 fw-bold">Notifications</h3>
+    <li class="custom-dropdown-item mx-3 my-3 text-end justify-self-end">
+        <a class="btn btn-secondary p-2 rounded rounded-2 fw-bold"
+           asp-area="Importer" asp-controller="Notifications" asp-action="Index">
+            See all
+        </a>
+    </li>
+    @foreach (var notification in Model)
+    {
+        <partial name="_NotificationDropdownPartial" model="notification" />
+    }
+}
+else
+{
+    <li class="custom-dropdown-item px-4 py-4 d-flex flex-column justify-content-center align-items-center">
+        <i class="bi bi-bell-slash fs-1 text-black fw-bold d-block"></i>
+        <h4 class="text-center mt-3 mb-3">No notifications!</h4>
+    </li>
+}

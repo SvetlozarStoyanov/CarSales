@@ -7,11 +7,23 @@
     var userNavbarModel = await userService.GetUserNavbarModelAsync(User.Id());
 }
 <input id="areaInput" value="Importer" hidden readonly />
-<ul class="navbar-nav me-5 d-flex align-items-md-center align-items-start">
+<ul class="navbar-nav me-5 d-flex align-items-md-center align-items-start gap-3">
     @if (SignInManager.IsSignedIn(User))
     {
         <li class="nav-item">
             <a class="nav-link active" disabled><span id="userCredits">@userNavbarModel.Credits </span>credits</a>
+        </li>
+        <li class="nav-item custom-dropdown d-lg-flex d-none justify-content-lg-center align-items-center" id="notificationsDropdownListItem">
+            <button class="nav-link text-white btn" id="notificationsDropdownButton">
+                <i id="notificationsDropdownIcon" class="bi fs-2"></i>
+            </button>
+            <ul class="custom-dropdown-menu bg-primary px-4 mt-3 mb-3 list-unstyled" id="notificationsDropdownList">
+            </ul>
+        </li>
+        <li class="nav-item d-lg-none d-block">
+            <a class="nav-link active" asp-area="Importer" asp-controller="Notifications" asp-action="Index">
+                Notifications
+            </a>
         </li>
         <li class="dropdown">
             <partial name="_MyProfilePartial" model="userNavbarModel"/>
@@ -27,3 +39,5 @@
         </li>
     }
 </ul>
+
+<script src="~/js/Notifications/notificationsLoginPartial.js"></script>

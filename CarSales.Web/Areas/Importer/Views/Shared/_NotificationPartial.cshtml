@@ -1,0 +1,18 @@
+﻿@model NotificationListModel
+
+<li class="notification-list-item w-100 h-100 d-flex flex-row justify-content-center align-items-center
+                @(Model.IsRead ? "bg-secondary bg-opacity-10" : "bg-info bg-opacity-50") border
+                    border-3 border-white">
+    <a class="text-decoration-none w-100 h-100 py-5 d-flex flex-column justify-content-center align-items-center"
+       asp-area="Importer" asp-controller="Notifications" asp-action="Details"
+       asp-route-notificationId="@Model.Id" asp-route-link="@Model.Link" asp-route-isRead="@Model.IsRead">
+        <h4 class="text-center text-wrap text-white">
+            @Model.Title
+        </h4>
+    </a>
+    <button class="mark-as-read-button h-100 btn border border-0 rounded rounded-4" disabled="@(Model.IsRead)">
+        <i class="bi @(Model.IsRead ? "bi-toggle-off" : "bi-toggle-on text-success") fs-1 "></i>
+    </button>
+    <input class="notification-id" value="@Model.Id" hidden readonly />
+
+</li>
