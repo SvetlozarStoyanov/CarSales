@@ -430,6 +430,12 @@ namespace CarSales.Core.Services
                         Price = v.Price,
                         OldPrice = v.Price
                     } : null,
+                    VehicleBuyModel = (v.SalesmanId != null || v.ImporterId != null) ? new VehicleBuyModel()
+                    {
+                        Id = v.Id,
+                        Name = $"{v.Brand} {v.Model}",
+                        Price = v.Price
+                    } : null,
                     VehicleEditModel = (v.SalesmanId != null || v.ImporterId != null) ? new VehicleEditModel()
                     {
                         Id = v.Id,
