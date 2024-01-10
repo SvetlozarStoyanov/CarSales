@@ -75,9 +75,21 @@
                     <h3 class="mt-3 mb-3">@Model.Price credits</h3>
                     <div class="d-flex flex-row gap-1 justify-content-center">
                         <div class="text-center mt-3 mb-3">
-                            <a id="buyBtn" class="btn btn-success btn-lg" asp-area="Reviewer" asp-controller="Vehicles" asp-action="Buy" asp-route-id="@Model.Id">
+                            <!-- Button trigger modal -->
+                            <button id="buyBtn" type="button" class="btn btn-lg btn-success" data-bs-toggle="modal" data-bs-target="#buyVehicleModal">
                                 Buy
-                            </a>
+                            </button>
+
+                            <!-- Modal -->
+                            <div class="modal fade" id="buyVehicleModal" tabindex="-1" aria-labelledby="buyVehicleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content bg-transparent border-0">
+                                        <div class="modal-body">
+                                            <partial name="_BuyVehiclePartial" model="@Model.VehicleBuyModel" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
                         @if (ViewBag.CanCreateOffer)
