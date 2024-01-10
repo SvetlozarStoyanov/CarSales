@@ -1,0 +1,26 @@
+﻿@model VehicleBuyModel
+
+<section class="w-100 h-100">
+    <form asp-area="Salesman" asp-controller="Vehicles" asp-action="BuyFromImporter" asp-route-id="@Model.Id" method="post">
+        <article class="d-flex flex-column px-5 py-2 text-white bg-dark border border-5 border-light rounded-5">
+            <h1 class="text-center mt-1 mb-3">Buy @Model.Name</h1>
+            <div class="form-group mb-3">
+                <label asp-for="@Model.Price" class="form-label">Price</label>
+                <input id="buyPrice" type="number" value="@Model.Price" class="form-control text-black" name="Price" />
+            </div>
+            <div class="form-group mb-3">
+                <label class="form-label">Credits after purchase</label>
+                <input id="creditsAfterBuyingInput" type="number" class="form-control text-black" disabled style="background-color:gray!important" />
+            </div>
+            <div class="text-center mt-4 mb-4 d-flex justify-content-evenly">
+                <div>
+                    <button class="btn btn-lg btn-success">Buy</button>
+                </div>
+                <div>
+                    <span class="btn btn-lg btn-danger" id="cancelBuyBtn" data-bs-dismiss="modal" aria-label="Close">Cancel</span>
+                </div>
+            </div>
+        </article>
+    </form>
+</section>
+<script src="~/js/Vehicles/buyVehiclePartial.js"></script>
