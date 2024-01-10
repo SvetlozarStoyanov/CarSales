@@ -28,6 +28,7 @@ namespace CarSales.Core.Models.Vehicles
         public string? ImporterUserId { get; set; }
         public string? ImporterName { get; set; }
         public VehicleSellModel? VehicleSellModel { get; set; }
+        public VehicleBuyModel? VehicleBuyModel { get; set; }
         public VehicleEditModel? VehicleEditModel { get; set; }
         public OfferCreateModel? OfferCreateModel { get; set; }
         public OfferEditModel? OfferEditModel { get; set; }
