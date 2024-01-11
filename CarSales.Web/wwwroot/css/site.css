@@ -133,3 +133,32 @@ body {
     .custom-dropdown-menu.custom-show-dropdown {
         display: block;
     }
+
+.custom-review-image-anchor {
+    
+}
+
+ /*   .custom-review-image-anchor:hover .custom-review-image-background-div {
+        transition: 0.5s !important;
+        opacity: 0.8;
+    }*/
+
+
+.custom-review-image-background-div {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    background-color: black;
+    opacity: 0.0;
+    transition: ease-in-out 1.0s !important;
+}
+
+.custom-review-image-background-div-show {
+    transition: ease-in-out 1.0s !important;
+    opacity: 0.8;
+}
+
+.custom-review-vehicleImage {
+}
