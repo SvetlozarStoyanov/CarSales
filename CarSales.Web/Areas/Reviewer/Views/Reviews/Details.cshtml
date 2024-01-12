@@ -18,10 +18,26 @@
     <article class="mt-4 mb-4 d-flex flex-lg-row flex-column justify-content-evenly text-break">
         <div class="row row-cols-lg-2 row-cols-1">
             <div class="col d-lg-block d-none w-50" style="max-height:450px">
-                <img class="w-100 mh-100 border border-4 border-primary bg-dark bg-opacity-25" src="@Model.Vehicle.ImageUrl" alt="vehicleImage" />
+                <a class="btn w-100 h-100 position-relative p-0 custom-review-image-anchor border border-4 border-primary"
+                   asp-area="Reviewer" asp-controller="Vehicles" asp-action="Details" asp-route-id="@Model.Id">
+                    <div class="custom-review-image-background-div w-100 h-100">
+                        <h4>
+                            Click for more information
+                        </h4>
+                    </div>
+                    <img class="w-100 mh-100 bg-dark bg-opacity-25" src="@Model.Vehicle.ImageUrl" alt="vehicleImage" />
+                </a>
             </div>
             <div class="col d-lg-none d-flex justify-content-center" style="max-height:250px">
-                <img class="w-50 mh-100 border border-4 border-primary bg-dark bg-opacity-25 " src="@Model.Vehicle.ImageUrl" alt="vehicleImage" />
+                <a class="btn w-50 h-100 position-relative p-0 custom-review-image-anchor border border-4 border-primary"
+                   asp-area="Reviewer" asp-controller="Vehicles" asp-action="Details" asp-route-id="@Model.Id">
+                    <div class="custom-review-image-background-div w-100 h-100">
+                        <h4>
+                            Click for more information
+                        </h4>
+                    </div>
+                    <img class="w-100 mh-100 bg-dark bg-opacity-25" src="@Model.Vehicle.ImageUrl" alt="vehicleImage" />
+                </a>
             </div>
             <div class="col d-flex flex-column justify-content-between align-items-center">
 
@@ -93,3 +109,4 @@
         </div>
     }
 </section>
+<script src="~/js/Reviews/details.js"></script>
