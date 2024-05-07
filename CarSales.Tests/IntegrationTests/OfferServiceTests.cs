@@ -1,4 +1,4 @@
-﻿using AirsoftMatchMaker.Infrastructure.Data.Common.Repository;
+﻿using CarSales.Infrastructure.Data.Common.Repository;
 using CarSales.Core.Contracts;
 using CarSales.Core.Services;
 using CarSales.Infrastructure.Data;
