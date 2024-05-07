@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System.Linq.Expressions;
 
-namespace AirsoftMatchMaker.Infrastructure.Data.Common.Repository
+namespace CarSales.Infrastructure.Data.Common.Repository
 {
     /// <summary>
     /// Implementation of repository access methods

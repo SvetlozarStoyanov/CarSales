@@ -1,6 +1,6 @@
 ﻿using System.Linq.Expressions;
 
-namespace AirsoftMatchMaker.Infrastructure.Data.Common.Repository
+namespace CarSales.Infrastructure.Data.Common.Repository
 {
     /// <summary>
     /// Abstraction of repository access methods
