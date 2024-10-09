@@ -1,4 +1,4 @@
-﻿using CarSales.Infrastructure.Data.Common.Repository;
+﻿using CarSales.Infrastructure.Data.DataAccess.Repository;
 using CarSales.Core.Contracts;
 using CarSales.Core.Enums;
 using CarSales.Core.Extensions;
@@ -10,6 +10,7 @@ using DotNet.Testcontainers.Containers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.StackExchangeRedis;
+using CarSales.Infrastructure.Data.DataAccess.UnitOfWork;
 
 namespace CarSales.Tests.UnitTests
 {
@@ -17,7 +18,7 @@ namespace CarSales.Tests.UnitTests
     public class ReviewServiceTests
     {
         private CarSalesDbContext context;
-        private IRepository repository;
+        private IUnitOfWork unitOfWork;
         private IDistributedCache cache;
         private IReviewService reviewService;
         private IReviewerService reviewerService;
@@ -34,7 +35,7 @@ namespace CarSales.Tests.UnitTests
             context.Database.EnsureDeleted();
             context.Database.EnsureCreated();
 
-            repository = new Repository(context);
+            unitOfWork = new UnitOfWork(context);
 
             var redisOptions = new RedisCacheOptions();
 
@@ -43,8 +44,8 @@ namespace CarSales.Tests.UnitTests
             redisOptions.Configuration = "localhost:6379" ?? throw new InvalidOperationException("Connection string 'Redis' not found.");
             cache = new RedisCache(redisOptions);
 
-            reviewService = new ReviewService(repository, cache);
-            reviewerService = new ReviewerService(repository);
+            reviewService = new ReviewService(unitOfWork, cache);
+            reviewerService = new ReviewerService(unitOfWork);
         }
 
         [OneTimeTearDown]

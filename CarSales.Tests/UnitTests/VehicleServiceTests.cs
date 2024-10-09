@@ -1,8 +1,8 @@
-﻿using CarSales.Infrastructure.Data.Common.Repository;
-using CarSales.Core.Contracts;
+﻿using CarSales.Core.Contracts;
 using CarSales.Core.Enums;
 using CarSales.Core.Services;
 using CarSales.Infrastructure.Data;
+using CarSales.Infrastructure.Data.DataAccess.UnitOfWork;
 using CarSales.Infrastructure.Data.Enums;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,7 +12,7 @@ namespace CarSales.Tests.UnitTests
     public class VehicleServiceTests
     {
         private CarSalesDbContext context;
-        private IRepository repository;
+        private IUnitOfWork unitOfWork;
         private IVehicleService vehicleService;
 
         [SetUp]
@@ -27,9 +27,9 @@ namespace CarSales.Tests.UnitTests
             context.Database.EnsureDeleted();
             context.Database.EnsureCreated();
 
-            repository = new Repository(context);
+            unitOfWork = new UnitOfWork(context);
 
-            vehicleService = new VehicleService(repository);
+            vehicleService = new VehicleService(unitOfWork);
         }
 
         [Test]

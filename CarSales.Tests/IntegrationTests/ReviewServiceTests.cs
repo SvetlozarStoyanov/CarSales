@@ -1,12 +1,9 @@
-﻿using CarSales.Infrastructure.Data.Common.Repository;
-using CarSales.Core.Contracts;
+﻿using CarSales.Core.Contracts;
 using CarSales.Core.Extensions;
 using CarSales.Core.Services;
 using CarSales.Infrastructure.Data;
-using CarSales.Infrastructure.Data.Entities;
+using CarSales.Infrastructure.Data.DataAccess.UnitOfWork;
 using CarSales.Infrastructure.Data.Enums;
-using DotNet.Testcontainers.Builders;
-using DotNet.Testcontainers.Containers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.StackExchangeRedis;
@@ -17,7 +14,7 @@ namespace CarSales.Tests.IntegrationTests
     public class ReviewServiceTests
     {
         private CarSalesDbContext context;
-        private IRepository repository;
+        private IUnitOfWork unitOfWork;
         private IDistributedCache cache;
         private IReviewService reviewService;
         private IReviewerService reviewerService;
@@ -34,7 +31,7 @@ namespace CarSales.Tests.IntegrationTests
             context.Database.EnsureDeleted();
             context.Database.EnsureCreated();
 
-            repository = new Repository(context);
+            unitOfWork = new UnitOfWork(context);
 
             var redisOptions = new RedisCacheOptions();
             redisOptions.InstanceName = "CarSales_";
@@ -42,8 +39,8 @@ namespace CarSales.Tests.IntegrationTests
             redisOptions.Configuration = "localhost:6379" ?? throw new InvalidOperationException("Connection string 'Redis' not found.");
             cache = new RedisCache(redisOptions);
 
-            reviewService = new ReviewService(repository, cache);
-            reviewerService = new ReviewerService(repository);
+            reviewService = new ReviewService(unitOfWork, cache);
+            reviewerService = new ReviewerService(unitOfWork);
         }
 
         [OneTimeTearDown]
@@ -71,7 +68,7 @@ namespace CarSales.Tests.IntegrationTests
             var orderModel = await reviewService.CreateReviewOrderModelAsync(2, 2, reviewerReviewTypesAndPrices);
             orderModel.ReviewTypeIndex = 2;
             await reviewService.CreateOrderedReviewAsync("66ccb670-f0dd-4aa1-a83d-8b2a0003bb50", orderModel);
-            var result = await repository.AllReadOnly<Review>()
+            var result = await unitOfWork.ReviewRepository.AllReadOnly()
                 .Where(r => r.ReviewerId == 2 && r.VehicleId == 2)
                 .FirstOrDefaultAsync();
             Assert.That(result, Is.Not.EqualTo(null));

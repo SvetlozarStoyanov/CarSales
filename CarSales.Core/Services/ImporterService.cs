@@ -1,22 +1,23 @@
-﻿using CarSales.Infrastructure.Data.Common.Repository;
+﻿using CarSales.Infrastructure.Data.DataAccess.Repository;
 using CarSales.Core.Contracts;
 using CarSales.Infrastructure.Data.Entities;
 using CarSales.Infrastructure.Data.Enums;
 using Microsoft.EntityFrameworkCore;
+using CarSales.Infrastructure.Data.DataAccess.UnitOfWork;
 
 namespace CarSales.Core.Services
 {
     public class ImporterService : IImporterService
     {
-        private readonly IRepository repository;
-        public ImporterService(IRepository repository)
+        private readonly IUnitOfWork unitOfWork;
+        public ImporterService(IUnitOfWork unitOfWork)
         {
-            this.repository = repository;
+            this.unitOfWork = unitOfWork;
         }
 
         public async Task CreateOrRenewImporterAsync(string userId)
         {
-            var importer = await repository.All<Importer>()
+            var importer = await unitOfWork.ImporterRepository.All()
                 .Where(i => i.UserId == userId)
                 .FirstOrDefaultAsync();
 
@@ -27,27 +28,30 @@ namespace CarSales.Core.Services
                     UserId = userId,
                     ImporterRating = ImporterRating.Average,
                 };
-                await repository.AddAsync<Importer>(importer);
+                await unitOfWork.ImporterRepository.AddAsync(importer);
             }
             else
             {
                 importer.IsActive = true;
             }
-            await repository.SaveChangesAsync();
+
+            await unitOfWork.SaveChangesAsync();
         }
 
         public async Task RetireImporterAsync(string userId)
         {
-            var importer = await repository.All<Importer>()
+            var importer = await unitOfWork.ImporterRepository.All()
                 .Where(i => i.UserId == userId)
                 .FirstOrDefaultAsync();
+
             importer.IsActive = false;
-            await repository.SaveChangesAsync();
+
+            await unitOfWork.SaveChangesAsync();
         }
 
         public async Task<string> GetImporterUserIdAsync(int id)
         {
-            var importer = await repository.GetByIdAsync<Importer>(id);
+            var importer = await unitOfWork.ImporterRepository.GetByIdAsync(id);
             return importer.UserId;
         }
     }

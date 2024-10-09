@@ -1,4 +1,4 @@
-﻿using CarSales.Infrastructure.Data.Common.Repository;
+﻿using CarSales.Infrastructure.Data.DataAccess.Repository;
 using CarSales.Core.Constants;
 using CarSales.Core.Contracts;
 using CarSales.Core.Enums;
@@ -10,29 +10,30 @@ using CarSales.Infrastructure.Data.Entities;
 using CarSales.Infrastructure.Data.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
+using CarSales.Infrastructure.Data.DataAccess.UnitOfWork;
 
 namespace CarSales.Core.Services
 {
     public class ReviewService : IReviewService
     {
-        private readonly IRepository repository;
+        private readonly IUnitOfWork unitOfWork;
         private readonly IDistributedCache cache;
 
-        public ReviewService(IRepository repository, IDistributedCache cache)
+        public ReviewService(IUnitOfWork unitOfWork, IDistributedCache cache)
         {
-            this.repository = repository;
+            this.unitOfWork = unitOfWork;
             this.cache = cache;
         }
 
 
         public async Task<bool> CanCreateReviewAsync(string userId, int reviewId)
         {
-            var review = await repository.GetByIdAsync<Review>(reviewId);
+            var review = await unitOfWork.ReviewRepository.GetByIdAsync(reviewId);
             if (review == null || review.ReviewStatus == ReviewStatus.Completed)
             {
                 return false;
             }
-            var reviewer = await repository.AllReadOnly<Reviewer>()
+            var reviewer = await unitOfWork.ReviewerRepository.AllReadOnly()
                 .Where(r => r.UserId == userId)
                 .Include(r => r.Reviews)
                 .FirstOrDefaultAsync();
@@ -45,7 +46,7 @@ namespace CarSales.Core.Services
 
         public async Task<int> GetOrderedReviewIdByReviewerIdAndVehicleIdAsync(int reviewerId, int vehicleId)
         {
-            var review = await repository.AllReadOnly<Review>()
+            var review = await unitOfWork.ReviewRepository.AllReadOnly()
                 .Where(r => r.ReviewStatus == ReviewStatus.Ordered
                  && r.ReviewerId == reviewerId && r.VehicleId == vehicleId)
                 .FirstOrDefaultAsync();
@@ -60,7 +61,7 @@ namespace CarSales.Core.Services
             if (reviews is null)
             {
 
-                reviews = await repository.AllReadOnly<Review>()
+                reviews = await unitOfWork.ReviewRepository.AllReadOnly()
                     .Where(r => r.ReviewStatus == ReviewStatus.Completed)
                     .OrderByDescending(r => r.Id)
                     .Take(7)
@@ -106,7 +107,7 @@ namespace CarSales.Core.Services
             ReviewSorting reviewSorting = ReviewSorting.VehiclePriceDescending)
         {
 
-            var reviews = await repository.AllReadOnly<Review>()
+            var reviews = await unitOfWork.ReviewRepository.AllReadOnly()
                 .Where(r => r.ReviewStatus == ReviewStatus.Completed)
                 .Include(r => r.Vehicle)
                 .ToListAsync();
@@ -182,10 +183,10 @@ namespace CarSales.Core.Services
            ReviewSorting reviewSorting = ReviewSorting.VehiclePriceDescending
            )
         {
-            var reviewer = await repository.AllReadOnly<Reviewer>()
+            var reviewer = await unitOfWork.ReviewerRepository.AllReadOnly()
                 .FirstOrDefaultAsync(r => r.UserId == userId);
 
-            var reviews = await repository.AllReadOnly<Review>()
+            var reviews = await unitOfWork.ReviewRepository.AllReadOnly()
                 .Where(r => r.ReviewerId == reviewer.Id)
                 .Include(r => r.Vehicle)
                 .ToListAsync();
@@ -258,7 +259,7 @@ namespace CarSales.Core.Services
 
         public async Task<ReviewViewModel> GetReviewByIdAsync(int id)
         {
-            var review = await repository.AllReadOnly<Review>()
+            var review = await unitOfWork.ReviewRepository.AllReadOnly()
                 .Where(r => r.Id == id && r.ReviewStatus == ReviewStatus.Completed)
                 .Select(r => new ReviewViewModel()
                 {
@@ -301,7 +302,7 @@ namespace CarSales.Core.Services
 
         public async Task<ReviewCreateModel> CreateReviewCreateModelAsync(int id)
         {
-            var model = await repository.AllReadOnly<Review>()
+            var model = await unitOfWork.ReviewRepository.AllReadOnly()
                 .Where(r => r.Id == id && r.ReviewStatus == ReviewStatus.Ordered)
                 .Select(r => new ReviewCreateModel()
                 {
@@ -334,12 +335,12 @@ namespace CarSales.Core.Services
 
         public async Task CreateOrderedReviewAsync(string userId, ReviewOrderModel model)
         {
-            var salesman = await repository.All<Salesman>()
+            var salesman = await unitOfWork.SalesmanRepository.All()
                 .Where(s => s.UserId == userId)
                 .Include(s => s.User)
                 .FirstOrDefaultAsync();
 
-            var reviewer = await repository.All<Reviewer>()
+            var reviewer = await unitOfWork.ReviewerRepository.All()
                 .Where(r => r.Id == model.ReviewerId)
                 .Include(s => s.User)
                 .FirstOrDefaultAsync();
@@ -371,13 +372,13 @@ namespace CarSales.Core.Services
             salesman.User.Credits -= model.Price;
             reviewer.User.Credits += model.Price;
 
-            await repository.AddAsync<Review>(review);
+            await unitOfWork.ReviewRepository.AddAsync(review);
 
-            await repository.SaveChangesAsync();
+            await unitOfWork.SaveChangesAsync();
         }
         public async Task CreateCompletedReviewAsync(ReviewCreateModel model)
         {
-            var review = await repository.All<Review>()
+            var review = await unitOfWork.ReviewRepository.All()
                 .FirstOrDefaultAsync(r => r.Id == model.Id);
 
             review.Title = model.Title;
@@ -389,7 +390,7 @@ namespace CarSales.Core.Services
             review.ReviewStatus = ReviewStatus.Completed;
             review.VehicleRating = model.VehicleRating;
 
-            await repository.SaveChangesAsync();
+            await unitOfWork.SaveChangesAsync();
         }
 
         public async Task<ReviewPreviewModel> CreateReviewPreviewModelAsync(ReviewCreateModel model)

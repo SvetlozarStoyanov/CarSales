@@ -1,44 +1,47 @@
-﻿using CarSales.Infrastructure.Data.Common.Repository;
+﻿using CarSales.Infrastructure.Data.DataAccess.Repository;
 using CarSales.Core.Contracts;
 using CarSales.Core.Models.Notifications;
 using CarSales.Infrastructure.Data.Entities;
 using Microsoft.EntityFrameworkCore;
+using CarSales.Infrastructure.Data.DataAccess.UnitOfWork;
 
 namespace CarSales.Core.Services
 {
     public class NotificationService : INotificationService
     {
-        private readonly IRepository repository;
+        private readonly IUnitOfWork unitOfWork;
 
-        public NotificationService(IRepository repository)
+        public NotificationService(IUnitOfWork unitOfWork)
         {
-            this.repository = repository;
+            this.unitOfWork = unitOfWork;
         }
 
         public async Task<bool> CanUserViewNotificationAsync(int notificationId, string userId)
         {
-            var notification = await repository.GetByIdAsync<Notification>(notificationId);
+            var notification = await unitOfWork.NotificationRepository.GetByIdAsync(notificationId);
+
             if (notification != null && notification.UserId == userId)
             {
                 return true;
             }
+
             return false;
         }
 
         public async Task<bool> DoesUserHaveUnreadNotificationsAsync(string userId)
         {
-            var hasUnreadNotifications = await repository.AllReadOnly<Notification>().AnyAsync(n => n.UserId == userId && !n.IsRead);
+            var hasUnreadNotifications = await unitOfWork.NotificationRepository.AllReadOnly().AnyAsync(n => n.UserId == userId && !n.IsRead);
 
             return hasUnreadNotifications;
         }
 
         public async Task MarkNotificationAsReadAsync(int id)
         {
-            var notification = await repository.GetByIdAsync<Notification>(id);
+            var notification = await unitOfWork.NotificationRepository.GetByIdAsync(id);
             if (notification != null && !notification.IsRead)
             {
                 notification.IsRead = true;
-                await repository.SaveChangesAsync();
+                await unitOfWork.SaveChangesAsync();
             }
         }
 
@@ -51,14 +54,14 @@ namespace CarSales.Core.Services
                 Link = link
             };
 
-            await repository.AddAsync<Notification>(notification);
+            await unitOfWork.NotificationRepository.AddAsync(notification);
 
-            await repository.SaveChangesAsync();
+            await unitOfWork.SaveChangesAsync();
         }
 
         public async Task<IEnumerable<NotificationListModel>> GetAllNotificationsAsync(string userId)
         {
-            var notifications = await repository.AllReadOnly<Notification>()
+            var notifications = await unitOfWork.NotificationRepository.AllReadOnly()
                 .Where(n => n.UserId == userId)
                 .OrderByDescending(n => n.Id)
                 .Select(n => new NotificationListModel()
@@ -75,7 +78,7 @@ namespace CarSales.Core.Services
 
         public async Task<IEnumerable<NotificationListModel>> GetNotificationsAsync(string userId, int skipped)
         {
-            var notifications = await repository.AllReadOnly<Notification>()
+            var notifications = await unitOfWork.NotificationRepository.AllReadOnly()
                 .Where(n => n.UserId == userId)
                 .OrderByDescending(n => n.Id)
                 .Skip(skipped)
@@ -94,11 +97,11 @@ namespace CarSales.Core.Services
 
         public async Task<NotificationViewModel> GetNotificationByIdAsync(int id, string userId)
         {
-            var notification = await repository.GetByIdAsync<Notification>(id);
+            var notification = await unitOfWork.NotificationRepository.GetByIdAsync(id);
             if (!notification.IsRead)
             {
                 notification.IsRead = true;
-                await repository.SaveChangesAsync();
+                await unitOfWork.SaveChangesAsync();
             }
             if (notification.UserId == userId)
             {
@@ -116,7 +119,7 @@ namespace CarSales.Core.Services
 
         public async Task<IEnumerable<NotificationListModel>> GetLatestNotificationsAsync(string userId)
         {
-            var notifications = await repository.AllReadOnly<Notification>()
+            var notifications = await unitOfWork.NotificationRepository.AllReadOnly()
                 .Where(n => n.UserId == userId)
                 .OrderByDescending(n => n.Id)
                 .Select(n => new NotificationListModel()

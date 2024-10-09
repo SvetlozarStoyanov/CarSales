@@ -1,7 +1,7 @@
-﻿using CarSales.Infrastructure.Data.Common.Repository;
-using CarSales.Core.Contracts;
+﻿using CarSales.Core.Contracts;
 using CarSales.Core.Services;
 using CarSales.Infrastructure.Data;
+using CarSales.Infrastructure.Data.DataAccess.UnitOfWork;
 using CarSales.Infrastructure.Data.Enums;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,7 +11,7 @@ namespace CarSales.Tests.IntegrationTests
     public class OfferServiceTests
     {
         private CarSalesDbContext context;
-        private IRepository repository;
+        private IUnitOfWork unitOfWork;
         private IOfferService offerService;
         private IUserService userService;
 
@@ -27,10 +27,10 @@ namespace CarSales.Tests.IntegrationTests
             context.Database.EnsureDeleted();
             context.Database.EnsureCreated();
 
-            repository = new Repository(context);
+            unitOfWork = new UnitOfWork(context);
 
-            offerService = new OfferService(repository);
-            userService = new UserService(repository, null);
+            offerService = new OfferService(unitOfWork);
+            userService = new UserService(unitOfWork, null);
         }
 
         [OneTimeTearDown]
@@ -172,7 +172,6 @@ namespace CarSales.Tests.IntegrationTests
             Assert.That(offer.Status, Is.EqualTo(OfferStatus.Declined));
         }
 
-
         [Test]
         [Order(14)]
         public async Task Test_CancelOfferAsync_SuccessfullyDeletesOffer()
@@ -181,8 +180,6 @@ namespace CarSales.Tests.IntegrationTests
             var offer = await offerService.GetOfferByIdAsync(2);
             Assert.That(offer, Is.EqualTo(null));
         }
-
-
 
         [Test]
         [Order(15)]

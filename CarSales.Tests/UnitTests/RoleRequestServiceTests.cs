@@ -1,34 +1,54 @@
-﻿using CarSales.Infrastructure.Data.Common.Repository;
+﻿using CarSales.Infrastructure.Data.DataAccess.Repository;
 using CarSales.Core.Contracts;
 using CarSales.Core.Enums;
 using CarSales.Core.Services;
 using CarSales.Infrastructure.Data;
 using CarSales.Infrastructure.Data.Entities;
 using Microsoft.EntityFrameworkCore;
+using CarSales.Infrastructure.Data.DataAccess.UnitOfWork;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace CarSales.Tests.UnitTests
 {
     public class RoleRequestServiceTests
     {
+        private ServiceProvider serviceProvider;
         private CarSalesDbContext context;
-        private IRepository repository;
+        private IUnitOfWork unitOfWork;
         private IRoleRequestService roleRequestService;
+        private UserManager<User> userManager;
+        private RoleManager<Role> roleManager;
 
         [OneTimeSetUp]
         public async Task Setup()
         {
-            var contextOptions = new DbContextOptionsBuilder<CarSalesDbContext>()
-                .UseInMemoryDatabase("CarSalesTestDB")
-                .Options;
+            var services = new ServiceCollection();
 
-            context = new CarSalesDbContext(contextOptions, false);
+            services.AddDbContext<CarSalesDbContext>(options =>
+                options.UseInMemoryDatabase("CarSalesTestDB"));
+
+            services.AddIdentityCore<User>()
+               .AddRoles<Role>()
+               .AddEntityFrameworkStores<CarSalesDbContext>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IRoleRequestService, RoleRequestService>();
+
+            serviceProvider = services.BuildServiceProvider();
+
+            context = serviceProvider.GetRequiredService<CarSalesDbContext>();
 
             context.Database.EnsureDeleted();
             context.Database.EnsureCreated();
 
-            repository = new Repository(context);
 
-            roleRequestService = new RoleRequestService(repository);
+
+            unitOfWork = serviceProvider.GetRequiredService<IUnitOfWork>();
+            userManager = serviceProvider.GetRequiredService<UserManager<User>>();
+            roleManager = serviceProvider.GetRequiredService<RoleManager<Role>>();
+
+            roleRequestService = serviceProvider.GetRequiredService<IRoleRequestService>();
         }
 
         [OneTimeTearDown]
@@ -43,7 +63,7 @@ namespace CarSales.Tests.UnitTests
         {
             await roleRequestService.CreateRoleRequestAsync("c63016c0-e087-43dc-bb9c-a8958a05cbdd", "b5fef437-f504-46d2-926d-3158e54e1932");
             await roleRequestService.CreateRoleRequestAsync("9cbd5531-0c49-4889-95b9-b81fc1e7653a", "926bee86-8bbd-43f6-bc1c-9639d43531a4");
-            var roleRequestsCount = repository.AllReadOnly<RoleRequest>().Count();
+            var roleRequestsCount = unitOfWork.RoleRequestRepository.AllReadOnly().Count();
             Assert.That(roleRequestsCount, Is.EqualTo(2));
         }
 

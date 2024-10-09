@@ -1,4 +1,4 @@
-﻿using CarSales.Infrastructure.Data.Common.Repository;
+﻿using CarSales.Infrastructure.Data.DataAccess.Repository;
 using CarSales.Core.Contracts;
 using CarSales.Core.Enums;
 using CarSales.Core.Models.Reviewers;
@@ -6,22 +6,24 @@ using CarSales.Core.Models.Reviews;
 using CarSales.Infrastructure.Data.Entities;
 using CarSales.Infrastructure.Data.Enums;
 using Microsoft.EntityFrameworkCore;
+using CarSales.Infrastructure.Data.DataAccess.UnitOfWork;
 
 namespace CarSales.Core.Services
 {
     public class ReviewerService : IReviewerService
     {
-        private readonly IRepository repository;
-        public ReviewerService(IRepository repository)
+        private readonly IUnitOfWork unitOfWork;
+        public ReviewerService(IUnitOfWork unitOfWork)
         {
-            this.repository = repository;
+            this.unitOfWork = unitOfWork;
         }
 
         public async Task<bool> CanBeOrderedToCreateReviewAsync(int reviewerId, int vehicleId)
         {
-            var reviewer = await repository.AllReadOnly<Reviewer>()
+            var reviewer = await unitOfWork.ReviewerRepository.AllReadOnly()
                 .Where(r => r.Id == reviewerId && !r.Reviews.Any(rv => rv.VehicleId == vehicleId))
                 .FirstOrDefaultAsync();
+
             if (reviewer == null)
             {
                 return false;
@@ -31,7 +33,7 @@ namespace CarSales.Core.Services
 
         public async Task CreateOrRenewReviewerAsync(string userId)
         {
-            var reviewer = await repository.All<Reviewer>()
+            var reviewer = await unitOfWork.ReviewerRepository.All()
                 .FirstOrDefaultAsync(s => s.UserId == userId);
             if (reviewer != null)
             {
@@ -47,26 +49,26 @@ namespace CarSales.Core.Services
                     PremiumReviewPrice = 200,
                     //SalesmanRating = SalesmanRating.Average
                 };
-                await repository.AddAsync<Reviewer>(reviewer);
+                await unitOfWork.ReviewerRepository.AddAsync(reviewer);
             }
-            await repository.SaveChangesAsync();
+            await unitOfWork.SaveChangesAsync();
         }
 
         public async Task RetireReviewerAsync(string userId)
         {
-            var reviewer = await repository.All<Reviewer>()
+            var reviewer = await unitOfWork.ReviewerRepository.All()
                 .FirstOrDefaultAsync(s => s.UserId == userId);
 
             if (reviewer != null)
             {
                 reviewer.IsActive = false;
-                await repository.SaveChangesAsync();
+                await unitOfWork.SaveChangesAsync();
             }
         }
 
         public async Task<string> GetReviewerUserId(int id)
         {
-            var reviewer = await repository.GetByIdAsync<Reviewer>(id);
+            var reviewer = await unitOfWork.ReviewerRepository.GetByIdAsync(id);
             return reviewer.UserId;
         }
 
@@ -74,7 +76,7 @@ namespace CarSales.Core.Services
         {
             var reviewTypesAndPrices = new Dictionary<ReviewType, decimal>();
             var reviewTypes = Enum.GetValues<ReviewType>().ToList();
-            var reviewer = await repository.AllReadOnly<Reviewer>()
+            var reviewer = await unitOfWork.ReviewerRepository.AllReadOnly()
                 .FirstOrDefaultAsync(r => r.Id == reviewerId);
             if (reviewer == null)
             {
@@ -93,7 +95,7 @@ namespace CarSales.Core.Services
 
         public async Task<ReviewersQueryModel> GetReviewersAsync(string? searchTerm = null)
         {
-            var reviewers = await repository.AllReadOnly<Reviewer>()
+            var reviewers = await unitOfWork.ReviewerRepository.AllReadOnly()
                 .Where(r => r.IsActive)
                 .Include(r => r.User)
                 .ToListAsync();
@@ -116,13 +118,11 @@ namespace CarSales.Core.Services
             int reviewersPerPage = 6,
             ReviewerSorting sorting = ReviewerSorting.Alphabetically)
         {
-            var reviewers = await repository.AllReadOnly<Reviewer>()
+            var reviewers = await unitOfWork.ReviewerRepository.AllReadOnly()
                 .Where(r => r.IsActive && r.UserId != userId && !r.Reviews.Any(r => r.VehicleId == vehicleId))
                 .Include(r => r.User)
                 .Include(r => r.Reviews)
                 .ToListAsync();
-
-
 
             if (!string.IsNullOrWhiteSpace(searchTerm))
             {
@@ -151,7 +151,7 @@ namespace CarSales.Core.Services
 
         public async Task<ReviewerViewModel> GetReviewerByIdAsync(int reviewerId, int vehicleId)
         {
-            var reviewer = await repository.AllReadOnly<Reviewer>()
+            var reviewer = await unitOfWork.ReviewerRepository.AllReadOnly()
                 .Where(r => r.Id == reviewerId)
                 .Select(r => new ReviewerViewModel()
                 {
@@ -191,7 +191,7 @@ namespace CarSales.Core.Services
 
         public async Task<ReviewerPriceEditModel> CreateReviewerPriceEditModelAsync(string userId)
         {
-            var model = await repository.All<Reviewer>()
+            var model = await unitOfWork.ReviewerRepository.All()
                 .Where(r => r.UserId == userId)
                 .Select(r => new ReviewerPriceEditModel()
                 {
@@ -207,14 +207,14 @@ namespace CarSales.Core.Services
 
         public async Task EditReviewPricesAsync(ReviewerPriceEditModel model)
         {
-            var reviewer = await repository.All<Reviewer>()
+            var reviewer = await unitOfWork.ReviewerRepository.All()
                 .FirstOrDefaultAsync(r => r.Id == model.Id);
 
             reviewer.ShortReviewPrice = model.ShortReviewPrice;
             reviewer.StandartReviewPrice = model.StandartReviewPrice;
             reviewer.PremiumReviewPrice = model.PremiumReviewPrice;
 
-            await repository.SaveChangesAsync();
+            await unitOfWork.SaveChangesAsync();
         }
 
         private ReviewersQueryModel CreateReviewersQueryModel(string? searchTerm,

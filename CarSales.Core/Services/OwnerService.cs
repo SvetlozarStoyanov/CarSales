@@ -1,15 +1,16 @@
-﻿using CarSales.Infrastructure.Data.Common.Repository;
+﻿using CarSales.Infrastructure.Data.DataAccess.Repository;
 using CarSales.Core.Contracts;
 using CarSales.Infrastructure.Data.Entities;
+using CarSales.Infrastructure.Data.DataAccess.UnitOfWork;
 
 namespace CarSales.Core.Services
 {
     public class OwnerService : IOwnerService
     {
-        private readonly IRepository repository;
-        public OwnerService(IRepository repository)
+        private readonly IUnitOfWork unitOfWork;
+        public OwnerService(IUnitOfWork unitOfWork)
         {
-            this.repository = repository;
+            this.unitOfWork = unitOfWork;
         }
 
         public async Task CreateOwnerAsync(string userId)
@@ -18,13 +19,13 @@ namespace CarSales.Core.Services
             {
                 UserId = userId,
             };
-            await repository.AddAsync<Owner>(owner);
-            await repository.SaveChangesAsync();
+            await unitOfWork.OwnerRepository.AddAsync(owner);
+            await unitOfWork.SaveChangesAsync();
         }
 
         public async Task<string> GetOwnerUserIdAsync(int id)
         {
-            var owner = await repository.GetByIdAsync<Owner>(id);
+            var owner = await unitOfWork.OwnerRepository.GetByIdAsync(id);
 
             return owner.UserId;
         }

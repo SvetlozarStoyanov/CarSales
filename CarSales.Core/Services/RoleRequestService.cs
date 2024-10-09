@@ -1,8 +1,8 @@
-﻿using CarSales.Infrastructure.Data.Common.Repository;
-using CarSales.Core.Contracts;
+﻿using CarSales.Core.Contracts;
 using CarSales.Core.Enums;
 using CarSales.Core.Models.RoleRequests;
 using CarSales.Core.Models.Users;
+using CarSales.Infrastructure.Data.DataAccess.UnitOfWork;
 using CarSales.Infrastructure.Data.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -11,10 +11,15 @@ namespace CarSales.Core.Services
 {
     public class RoleRequestService : IRoleRequestService
     {
-        private readonly IRepository repository;
-        public RoleRequestService(IRepository repository)
+        private readonly IUnitOfWork unitOfWork;
+        private readonly UserManager<User> userManager;
+        private readonly RoleManager<Role> roleManager;
+
+        public RoleRequestService(IUnitOfWork unitOfWork, UserManager<User> userManager, RoleManager<Role> roleManager)
         {
-            this.repository = repository;
+            this.unitOfWork = unitOfWork;
+            this.userManager = userManager;
+            this.roleManager = roleManager;
         }
 
         public async Task<RoleRequestsQueryModel> GetRoleRequestsAsync(string searchTerm = null,
@@ -24,7 +29,7 @@ namespace CarSales.Core.Services
             string selectedRoleNames = null,
             RoleRequestSorting sorting = RoleRequestSorting.Newest)
         {
-            var roleRequests = await repository.AllReadOnly<RoleRequest>()
+            var roleRequests = await unitOfWork.RoleRequestRepository.AllReadOnly()
                 .Include(rrq => rrq.Role)
                 .Include(rrq => rrq.User)
                 .ToListAsync();
@@ -88,7 +93,7 @@ namespace CarSales.Core.Services
 
         public async Task<IEnumerable<RoleRequestListModel>> GetRoleRequestsByUserIdAsync(string userId)
         {
-            var requestedRoles = await repository.AllReadOnly<RoleRequest>()
+            var requestedRoles = await unitOfWork.RoleRequestRepository.AllReadOnly()
                 .Where(rrq => rrq.UserId == userId)
                 .Select(rrq => new RoleRequestListModel()
                 {
@@ -104,7 +109,7 @@ namespace CarSales.Core.Services
 
         public async Task<RoleRequestViewModel> GetRoleRequestByIdAsync(int id)
         {
-            var roleRequest = await repository.AllReadOnly<RoleRequest>()
+            var roleRequest = await unitOfWork.RoleRequestRepository.AllReadOnly()
                .Where(rrq => rrq.Id == id)
                .Include(rrq => rrq.Role)
                .Include(rrq => rrq.User)
@@ -129,21 +134,17 @@ namespace CarSales.Core.Services
             {
                 return null;
             }
-            var userRoles = await repository.AllReadOnly<IdentityUserRole<string>>()
-                .Where(ur => ur.UserId == roleRequest.UserModel.Id)
-                .Select(ur => ur.RoleId)
-                .ToListAsync();
-            var roles = await repository.AllReadOnly<Role>()
-                .Where(r => userRoles.Contains(r.Id))
-                .Select(r => r.Name)
-                .ToListAsync();
-            roleRequest.UserModel.Roles = roles.ToHashSet();
+
+            var user = await unitOfWork.UserRepository.GetByIdAsync(roleRequest.UserModel.Id);
+            var userRoles = await userManager.GetRolesAsync(user);
+
+            roleRequest.UserModel.Roles = userRoles.ToHashSet();
             return roleRequest;
         }
 
         public async Task CreateRoleRequestAsync(string roleId, string userId)
         {
-            if (repository.All<RoleRequest>().Any(rrq => rrq.RoleId == roleId && rrq.UserId == userId))
+            if (unitOfWork.RoleRequestRepository.All().Any(rrq => rrq.RoleId == roleId && rrq.UserId == userId))
             {
                 return;
             }
@@ -153,39 +154,35 @@ namespace CarSales.Core.Services
                 RoleId = roleId,
                 UserId = userId
             };
-            await repository.AddAsync<RoleRequest>(roleRequest);
-            await repository.SaveChangesAsync();
+            await unitOfWork.RoleRequestRepository.AddAsync(roleRequest);
+            await unitOfWork.SaveChangesAsync();
         }
 
         public async Task DeleteRoleRequestAsync(string roleId, string userId)
         {
-            if (!repository.All<RoleRequest>().Any(rrq => rrq.RoleId == roleId && rrq.UserId == userId))
+            if (!unitOfWork.RoleRequestRepository.All().Any(rrq => rrq.RoleId == roleId && rrq.UserId == userId))
             {
                 return;
             }
-            var roleRequest = await repository.All<RoleRequest>().FirstOrDefaultAsync(rrq => rrq.RoleId == roleId && rrq.UserId == userId);
+            var roleRequest = await unitOfWork.RoleRequestRepository.All().FirstOrDefaultAsync(rrq => rrq.RoleId == roleId && rrq.UserId == userId);
             if (roleRequest == null)
             {
                 return;
             }
-            repository.Delete<RoleRequest>(roleRequest);
-            await repository.SaveChangesAsync();
+            unitOfWork.RoleRequestRepository.Delete(roleRequest);
+            await unitOfWork.SaveChangesAsync();
         }
 
         public async Task DeleteRoleRequestAsync(int id)
         {
-            var roleRequest = await repository.GetByIdAsync<RoleRequest>(id);
+            var roleRequest = await unitOfWork.RoleRequestRepository.GetByIdAsync(id);
             if (roleRequest == null)
             {
                 return;
             }
-            repository.Delete<RoleRequest>(roleRequest);
-            await repository.SaveChangesAsync();
+            unitOfWork.RoleRequestRepository.Delete(roleRequest);
+            await unitOfWork.SaveChangesAsync();
         }
-
-
-
-
 
 
         private async Task<RoleRequestsQueryModel> CreateRoleRequestsQueryModel(string searchTerm, int currentPage, int roleRequestsPerPage, string selectedUserName, string selectedRoleNames, List<RoleRequestListModel> roleRequests, HashSet<string?> userNames, int roleRequestCount)
@@ -202,7 +199,7 @@ namespace CarSales.Core.Services
                 RoleRequests = roleRequests,
                 UserNames = userNames
             };
-            var roleNames = await repository.AllReadOnly<Role>()
+            var roleNames = await roleManager.Roles
                 .Where(r => r.Name != "Owner" && r.Name != "Administrator")
                 .Select(r => r.Name)
                 .ToListAsync();
