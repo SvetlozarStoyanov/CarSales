@@ -1,8 +1,7 @@
-﻿using CarSales.Infrastructure.Data.Common.Repository;
-using CarSales.Core.Contracts;
+﻿using CarSales.Core.Contracts;
 using CarSales.Core.Services;
 using CarSales.Infrastructure.Data;
-using CarSales.Infrastructure.Data.Entities;
+using CarSales.Infrastructure.Data.DataAccess.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
 
 namespace CarSales.Tests.IntegrationTests
@@ -11,7 +10,7 @@ namespace CarSales.Tests.IntegrationTests
     {
         private const string REVIEWER_USER_ID = "9b92fe41-3f2e-4eb1-990b-73c2ea2d746d";
         private CarSalesDbContext context;
-        private IRepository repository;
+        private IUnitOfWork unitOfWork;
         private IReviewerService reviewerService;
 
         [OneTimeSetUp]
@@ -26,16 +25,16 @@ namespace CarSales.Tests.IntegrationTests
             context.Database.EnsureDeleted();
             context.Database.EnsureCreated();
 
-            repository = new Repository(context);
+            unitOfWork = new UnitOfWork(context);
 
-            reviewerService = new ReviewerService(repository);
+            reviewerService = new ReviewerService(unitOfWork);
         }
 
         [Test]
         public async Task Test_CreateReviewerPriceEditModelAsync_ReturnsCorrectModel_IfIdExists()
         {
             var result = await reviewerService.CreateReviewerPriceEditModelAsync(REVIEWER_USER_ID);
-            var reviewer = await repository.GetByIdAsync<Reviewer>(2);
+            var reviewer = await unitOfWork.ReviewerRepository.GetByIdAsync(2);
             Assert.That(result.ShortReviewPrice,Is.EqualTo(reviewer.ShortReviewPrice));
             Assert.That(result.StandartReviewPrice,Is.EqualTo(reviewer.StandartReviewPrice));
             Assert.That(result.PremiumReviewPrice,Is.EqualTo(reviewer.PremiumReviewPrice));
@@ -55,12 +54,12 @@ namespace CarSales.Tests.IntegrationTests
             editModel.ShortReviewPrice = 99;
             editModel.StandartReviewPrice = 101;
             editModel.PremiumReviewPrice = 102;
-            var reviewer = await repository.GetByIdAsync<Reviewer>(2);
+            var reviewer = await unitOfWork.ReviewerRepository.GetByIdAsync(2);
             Assert.That(reviewer.ShortReviewPrice, Is.Not.EqualTo(editModel.ShortReviewPrice));
             Assert.That(reviewer.StandartReviewPrice, Is.Not.EqualTo(editModel.StandartReviewPrice));
             Assert.That(reviewer.PremiumReviewPrice, Is.Not.EqualTo(editModel.PremiumReviewPrice));
             await reviewerService.EditReviewPricesAsync(editModel);
-            reviewer = await repository.GetByIdAsync<Reviewer>(2);
+            reviewer = await unitOfWork.ReviewerRepository.GetByIdAsync(2);
             Assert.That(reviewer.ShortReviewPrice, Is.EqualTo(editModel.ShortReviewPrice));
             Assert.That(reviewer.StandartReviewPrice, Is.EqualTo(editModel.StandartReviewPrice));
             Assert.That(reviewer.PremiumReviewPrice, Is.EqualTo(editModel.PremiumReviewPrice));

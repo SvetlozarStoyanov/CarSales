@@ -1,9 +1,8 @@
-﻿using CarSales.Infrastructure.Data.Common.Repository;
-using CarSales.Core.Contracts;
+﻿using CarSales.Core.Contracts;
 using CarSales.Core.Exceptions;
 using CarSales.Core.Services;
 using CarSales.Infrastructure.Data;
-using CarSales.Infrastructure.Data.Entities;
+using CarSales.Infrastructure.Data.DataAccess.UnitOfWork;
 using CarSales.Infrastructure.Data.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
@@ -14,7 +13,7 @@ namespace CarSales.Tests.IntegrationTests
     public class VehicleServiceTests
     {
         private CarSalesDbContext context;
-        private IRepository repository;
+        private IUnitOfWork unitOfWork;
         private IDistributedCache cache;
         private IVehicleService vehicleService;
         private IUserService userService;
@@ -31,10 +30,10 @@ namespace CarSales.Tests.IntegrationTests
             context.Database.EnsureDeleted();
             context.Database.EnsureCreated();
 
-            repository = new Repository(context);
+            unitOfWork = new UnitOfWork(context);
 
-            vehicleService = new VehicleService(repository);
-            userService = new UserService(repository, cache);
+            vehicleService = new VehicleService(unitOfWork);
+            userService = new UserService(unitOfWork, cache);
         }
 
         [Test]
@@ -57,7 +56,7 @@ namespace CarSales.Tests.IntegrationTests
             Assert.That(vehicleSalesmanCredits, Is.EqualTo(50000 + result.Price));
             Assert.That(result.SalesmanId, Is.EqualTo(null));
             Assert.That(result.OwnerId, Is.EqualTo(1));
-            var sale = await repository.AllReadOnly<Sale>()
+            var sale = await unitOfWork.SaleRepository.AllReadOnly()
                 .Where(s => s.SalesmanId == 1
                     && s.OwnerId == 1
                     && s.VehicleId == result.Id)
@@ -107,7 +106,8 @@ namespace CarSales.Tests.IntegrationTests
             Assert.That(vehicleImporterCredits, Is.EqualTo(50000 + result.Price));
             Assert.That(result.ImporterId, Is.EqualTo(null));
             Assert.That(result.OwnerId, Is.EqualTo(3));
-            var sale = await repository.AllReadOnly<Sale>()
+
+            var sale = await unitOfWork.SaleRepository.AllReadOnly()
                 .Where(s => s.ImporterId == 1
                     && s.OwnerId == 3
                     && s.VehicleId == result.Id)

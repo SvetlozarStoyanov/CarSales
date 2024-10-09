@@ -1,9 +1,8 @@
-﻿using CarSales.Infrastructure.Data.Common.Repository;
-using CarSales.Core.Constants;
+﻿using CarSales.Core.Constants;
 using CarSales.Core.Contracts;
 using CarSales.Core.Extensions;
 using CarSales.Core.Models.Users;
-using CarSales.Infrastructure.Data.Entities;
+using CarSales.Infrastructure.Data.DataAccess.UnitOfWork;
 using CarSales.Infrastructure.Data.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
@@ -12,18 +11,18 @@ namespace CarSales.Core.Services
 {
     public class UserService : IUserService
     {
-        private readonly IRepository repository;
+        private readonly IUnitOfWork unitOfWork;
         private readonly IDistributedCache cache;
 
-        public UserService(IRepository repository, IDistributedCache cache)
+        public UserService(IUnitOfWork repository, IDistributedCache cache)
         {
-            this.repository = repository;
+            this.unitOfWork = repository;
             this.cache = cache;
         }
 
         public async Task<bool> IsUserNameTakenAsync(string id, string userName)
         {
-            var userWithUserName = await repository.AllReadOnly<User>()
+            var userWithUserName = await unitOfWork.UserRepository.AllReadOnly()
                 .FirstOrDefaultAsync(u => u.UserName == userName);
 
             if (userWithUserName != null)
@@ -48,7 +47,7 @@ namespace CarSales.Core.Services
 
         public async Task<decimal> GetUserAvailableCreditsAsync(string id)
         {
-            var owner = await repository.AllReadOnly<Owner>()
+            var owner = await unitOfWork.OwnerRepository.AllReadOnly()
                 .Where(o => o.UserId == id)
                 .Include(o => o.User)
                 .Include(o => o.Offers)
@@ -63,7 +62,7 @@ namespace CarSales.Core.Services
 
         public async Task<decimal> GetUserAvailableCreditsAsync(string userId, int offerId)
         {
-            var owner = await repository.AllReadOnly<Owner>()
+            var owner = await unitOfWork.OwnerRepository.AllReadOnly()
                 .Where(o => o.UserId == userId)
                 .Include(o => o.User)
                 .Include(o => o.Offers)
@@ -84,7 +83,7 @@ namespace CarSales.Core.Services
 
             if (userNavbarModel is null || userNavbarModel.Id != id)
             {
-                userNavbarModel = await repository.AllReadOnly<User>()
+                userNavbarModel = await unitOfWork.UserRepository.AllReadOnly()
                     .Where(u => u.Id == id)
                     .Select(u => new UserNavbarModel()
                     {
@@ -107,7 +106,7 @@ namespace CarSales.Core.Services
         }
         public async Task<UserViewModel> GetUserByIdAsync(string id)
         {
-            var user = await repository.AllReadOnly<User>()
+            var user = await unitOfWork.UserRepository.AllReadOnly()
                 .Where(u => u.Id == id)
                 .Select(u => new UserViewModel()
                 {
@@ -127,7 +126,7 @@ namespace CarSales.Core.Services
 
         public async Task<UserEditModel> CreateUserEditModelAsync(string id)
         {
-            var user = await repository.AllReadOnly<User>()
+            var user = await unitOfWork.UserRepository.AllReadOnly()
                     .Where(u => u.Id == id)
                     .Select(u => new UserEditModel()
                     {
@@ -146,7 +145,7 @@ namespace CarSales.Core.Services
 
         public async Task EditUserAsync(UserEditModel model)
         {
-            var user = await repository.GetByIdAsync<User>(model.Id);
+            var user = await unitOfWork.UserRepository.GetByIdAsync(model.Id);
 
             if (model.ImageUrl == string.Empty)
             {
@@ -160,7 +159,7 @@ namespace CarSales.Core.Services
             user.PhoneNumber = model.PhoneNumber;
 
 
-            await repository.SaveChangesAsync();
+            await unitOfWork.SaveChangesAsync();
         }
 
         private UserEditModel CreateUserEditModel(UserViewModel viewModel)

@@ -1,6 +1,7 @@
-﻿using CarSales.Infrastructure.Data.Common.Repository;
+﻿using CarSales.Infrastructure.Data.DataAccess.Repository;
 using CarSales.Core.Contracts;
 using CarSales.Core.Services;
+using CarSales.Infrastructure.Data.DataAccess.UnitOfWork;
 
 namespace CarSales.Web.Extensions
 {
@@ -8,7 +9,7 @@ namespace CarSales.Web.Extensions
     {
         public static IServiceCollection AddApplicationServices(this IServiceCollection services)
         {
-            services.AddScoped<IRepository, Repository>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IHtmlSanitizingService, HtmlSanitizingService>();
             services.AddScoped<IVehicleService, VehicleService>();
             services.AddScoped<IOwnerService, OwnerService>();

@@ -1,12 +1,11 @@
-﻿using CarSales.Infrastructure.Data.Common.Repository;
-using CarSales.Core.Contracts;
+﻿using CarSales.Core.Contracts;
 using CarSales.Core.Enums;
 using CarSales.Core.Services;
 using CarSales.Infrastructure.Data;
+using CarSales.Infrastructure.Data.DataAccess.UnitOfWork;
 using CarSales.Infrastructure.Data.Entities;
 using CarSales.Infrastructure.Data.Enums;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Caching.Distributed;
 
 namespace CarSales.Tests.UnitTests
 {
@@ -15,7 +14,7 @@ namespace CarSales.Tests.UnitTests
         private const string SALESMAN_ID = "66ccb670-f0dd-4aa1-a83d-8b2a0003bb50";
         private int vehicleForSaleId = 0;
         private CarSalesDbContext context;
-        private IRepository repository;
+        private IUnitOfWork unitOfWork;
         private IReviewerService reviewerService;
 
 
@@ -31,9 +30,9 @@ namespace CarSales.Tests.UnitTests
             context.Database.EnsureDeleted();
             context.Database.EnsureCreated();
 
-            repository = new Repository(context);
+            unitOfWork = new UnitOfWork(context);
 
-            reviewerService = new ReviewerService(repository);
+            reviewerService = new ReviewerService(unitOfWork);
 
             var vehicleForSale = new Vehicle()
             {
@@ -49,10 +48,10 @@ namespace CarSales.Tests.UnitTests
                 YearProduced = DateTime.Now.Year
             };
 
-            await repository.AddAsync<Vehicle>(vehicleForSale);
-            await repository.SaveChangesAsync();
+            await unitOfWork.VehicleRepository.AddAsync(vehicleForSale);
+            await unitOfWork.SaveChangesAsync();
 
-            vehicleForSaleId = await repository.AllReadOnly<Vehicle>()
+            vehicleForSaleId = await unitOfWork.VehicleRepository.AllReadOnly()
                 .Where(v => v.Brand == "Test")
                 .Select(v => v.Id)
                 .FirstOrDefaultAsync();
@@ -69,13 +68,13 @@ namespace CarSales.Tests.UnitTests
         public async Task Test_GetReviewTypesAndPricesAsync_ReturnsCorrectReviewTypesAndPrices_IfIdExists()
         {
             var result = await reviewerService.GetReviewTypesAndPricesAsync(1);
-            var reviewer = await repository.GetByIdAsync<Reviewer>(1);
+            var reviewer = await unitOfWork.ReviewerRepository.GetByIdAsync(1);
             Assert.That(result[ReviewType.Short], Is.EqualTo(reviewer.ShortReviewPrice));
             Assert.That(result[ReviewType.Standart], Is.EqualTo(reviewer.StandartReviewPrice));
             Assert.That(result[ReviewType.Premium], Is.EqualTo(reviewer.PremiumReviewPrice));
 
             result = await reviewerService.GetReviewTypesAndPricesAsync(2);
-            reviewer = await repository.GetByIdAsync<Reviewer>(2);
+            reviewer = await unitOfWork.ReviewerRepository.GetByIdAsync(2);
             Assert.That(result[ReviewType.Short], Is.EqualTo(reviewer.ShortReviewPrice));
             Assert.That(result[ReviewType.Standart], Is.EqualTo(reviewer.StandartReviewPrice));
             Assert.That(result[ReviewType.Premium], Is.EqualTo(reviewer.PremiumReviewPrice));

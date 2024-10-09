@@ -1,4 +1,4 @@
-﻿using CarSales.Infrastructure.Data.Common.Repository;
+﻿using CarSales.Infrastructure.Data.DataAccess.Repository;
 using CarSales.Core.Contracts;
 using CarSales.Core.Enums;
 using CarSales.Core.Exceptions;
@@ -7,31 +7,33 @@ using CarSales.Core.Models.Vehicles;
 using CarSales.Infrastructure.Data.Entities;
 using CarSales.Infrastructure.Data.Enums;
 using Microsoft.EntityFrameworkCore;
+using CarSales.Infrastructure.Data.DataAccess.UnitOfWork;
 
 namespace CarSales.Core.Services
 {
     public class OfferService : IOfferService
     {
-        private readonly IRepository repository;
+        private readonly IUnitOfWork unitOfWork;
 
-        public OfferService(IRepository repository)
+        public OfferService(IUnitOfWork unitOfWork)
         {
-            this.repository = repository;
+            this.unitOfWork = unitOfWork;
         }
 
         public async Task<bool> OfferExistsAsync(int id)
         {
-            var offer = await repository.GetByIdAsync<Offer>(id);
+            var offer = await unitOfWork.OfferRepository.GetByIdAsync(id);
             return offer != null;
         }
 
         public async Task<bool> CanCreateOfferAsync(string userId, int vehicleId)
         {
-            var owner = await repository.AllReadOnly<Owner>()
+            var owner = await unitOfWork.OwnerRepository.AllReadOnly()
                 .Where(o => o.UserId == userId)
                 .Include(o => o.Offers)
                 .FirstOrDefaultAsync();
-            var vehicle = await repository.AllReadOnly<Vehicle>()
+
+            var vehicle = await unitOfWork.VehicleRepository.AllReadOnly()
                 .Where(v => v.Id == vehicleId)
                 .Include(v => v.Salesman)
                 .FirstOrDefaultAsync();
@@ -46,11 +48,12 @@ namespace CarSales.Core.Services
 
         public async Task<bool> CanEditOfferAsync(string userId, int vehicleId)
         {
-            var offer = await repository.AllReadOnly<Offer>()
+            var offer = await unitOfWork.OfferRepository.AllReadOnly()
                 .Where(o => o.Status == OfferStatus.Pending
                         && o.VehicleId == vehicleId
                         && o.Offeror.UserId == userId)
                 .FirstOrDefaultAsync();
+
             if (offer != null)
             {
                 return true;
@@ -60,7 +63,7 @@ namespace CarSales.Core.Services
 
         public async Task<bool> CanViewOfferAsync(string userId, int offerId)
         {
-            var offer = await repository.AllReadOnly<Offer>()
+            var offer = await unitOfWork.OfferRepository.AllReadOnly()
                 .Where(o => o.Id == offerId)
                 .Include(o => o.Offeror)
                 .Include(o => o.Salesman)
@@ -74,7 +77,7 @@ namespace CarSales.Core.Services
 
         public async Task<bool> CanRespondToOfferAsync(string userId, int offerId)
         {
-            var offer = await repository.AllReadOnly<Offer>()
+            var offer = await unitOfWork.OfferRepository.AllReadOnly()
                 .Where(o => o.Id == offerId)
                 .Include(o => o.Salesman)
                 .FirstOrDefaultAsync();
@@ -87,7 +90,7 @@ namespace CarSales.Core.Services
 
         public async Task<int> GetOfferIdAsync(string userId, int vehicleId)
         {
-            var offerId = await repository.AllReadOnly<Offer>()
+            var offerId = await unitOfWork.OfferRepository.AllReadOnly()
                 .Where(o => o.Offeror.UserId == userId && o.VehicleId == vehicleId && o.Status == OfferStatus.Pending)
                 .Select(o => o.Id)
                 .FirstOrDefaultAsync();
@@ -103,10 +106,10 @@ namespace CarSales.Core.Services
             OfferStatus offerStatus = OfferStatus.Pending,
             OfferSorting offerSorting = OfferSorting.Newest)
         {
-            var owner = await repository.AllReadOnly<Owner>()
+            var owner = await unitOfWork.OwnerRepository.AllReadOnly()
                 .FirstOrDefaultAsync(o => o.UserId == userId);
 
-            var offers = await repository.AllReadOnly<Offer>()
+            var offers = await unitOfWork.OfferRepository.AllReadOnly()
                 .Where(o => o.OfferorId == owner!.Id)
                 .Include(o => o.Vehicle)
                 .Include(o => o.Salesman)
@@ -178,10 +181,10 @@ namespace CarSales.Core.Services
             string? offerorName = null,
             OfferSorting offerSorting = OfferSorting.Newest)
         {
-            var salesman = await repository.AllReadOnly<Salesman>()
+            var salesman = await unitOfWork.SalesmanRepository.AllReadOnly()
                 .FirstOrDefaultAsync(o => o.UserId == userId);
 
-            var offers = await repository.AllReadOnly<Offer>()
+            var offers = await unitOfWork.OfferRepository.AllReadOnly()
                 .Where(o => o.Status == OfferStatus.Pending && o.SalesmanId == salesman!.Id)
                 .Include(o => o.Vehicle)
                 .Include(o => o.Offeror)
@@ -249,7 +252,7 @@ namespace CarSales.Core.Services
 
         public async Task<OfferViewModel> GetOfferByIdAsync(int id)
         {
-            var offer = await repository.AllReadOnly<Offer>()
+            var offer = await unitOfWork.OfferRepository.AllReadOnly()
                 .Where(o => o.Id == id)
                 .Select(o => new OfferViewModel()
                 {
@@ -284,7 +287,7 @@ namespace CarSales.Core.Services
 
         public async Task<OfferCreateModel> CreateOfferCreateModelAsync(string userId, int vehicleId)
         {
-            var vehicle = await repository.GetByIdAsync<Vehicle>(vehicleId);
+            var vehicle = await unitOfWork.VehicleRepository.GetByIdAsync(vehicleId);
             if (vehicle.SalesmanId == null)
             {
                 throw new NotForSaleException("Vehicle is not for sale!");
@@ -293,7 +296,7 @@ namespace CarSales.Core.Services
             {
                 throw new NullReferenceException();
             }
-            var offeror = await repository.AllReadOnly<Owner>()
+            var offeror = await unitOfWork.OwnerRepository.AllReadOnly()
                 .Where(o => o.UserId == userId)
                 .Include(o => o.User)
                 .Include(o => o.Offers)
@@ -326,19 +329,21 @@ namespace CarSales.Core.Services
                 OfferorId = model.OfferorId,
                 SalesmanId = model.SalesmanId
             };
-            await repository.AddAsync(offer);
-            await repository.SaveChangesAsync();
+
+            await unitOfWork.OfferRepository.AddAsync(offer);
+
+            await unitOfWork.SaveChangesAsync();
         }
 
         public async Task<OfferEditModel> CreateOfferEditModelAsync(int id)
         {
-            var offer = await repository.AllReadOnly<Offer>()
+            var offer = await unitOfWork.OfferRepository.AllReadOnly()
                 .Where(o => o.Id == id)
                 .Include(o => o.Offeror)
                 .ThenInclude(o => o.User)
                 .FirstOrDefaultAsync();
 
-            var offeror = await repository.AllReadOnly<Owner>()
+            var offeror = await unitOfWork.OwnerRepository.AllReadOnly()
                 .Where(o => o.Id == offer!.OfferorId)
                 .Include(o => o.User)
                 .Include(o => o.Offers)
@@ -362,17 +367,17 @@ namespace CarSales.Core.Services
 
         public async Task EditOfferAsync(OfferEditModel model)
         {
-            var offer = await repository.GetByIdAsync<Offer>(model.Id);
+            var offer = await unitOfWork.OfferRepository.GetByIdAsync(model.Id);
 
             offer.Description = model.Description;
             offer.Price = model.Price;
 
-            await repository.SaveChangesAsync();
+            await unitOfWork.SaveChangesAsync();
         }
 
         public async Task AcceptOfferAsync(int id)
         {
-            var offer = await repository.All<Offer>()
+            var offer = await unitOfWork.OfferRepository.All()
                 .Where(o => o.Id == id)
                 .Include(o => o.Offeror)
                 .ThenInclude(o => o.User)
@@ -397,24 +402,24 @@ namespace CarSales.Core.Services
                 ImporterId = null,
             };
 
-            await repository.AddAsync<Sale>(sale);
-            await repository.SaveChangesAsync();
+            await unitOfWork.SaleRepository.AddAsync(sale);
+            await unitOfWork.SaveChangesAsync();
 
             await DeclineAllOffersForVehicleAsync(offer.VehicleId);
         }
 
         public async Task DeclineOfferAsync(int id)
         {
-            var offer = await repository.GetByIdAsync<Offer>(id);
+            var offer = await unitOfWork.OfferRepository.GetByIdAsync(id);
             offer.Status = OfferStatus.Declined;
 
-            await repository.SaveChangesAsync();
+            await unitOfWork.SaveChangesAsync();
         }
 
         public async Task CancelOfferAsync(int id)
         {
-            await repository.DeleteAsync<Offer>(id);
-            await repository.SaveChangesAsync();
+            await unitOfWork.OfferRepository.DeleteAsync(id);
+            await unitOfWork.SaveChangesAsync();
         }
 
         private OffersQueryModel CreateOffersQueryModel(int currentPage,
@@ -476,14 +481,14 @@ namespace CarSales.Core.Services
 
         private async Task DeclineAllOffersForVehicleAsync(int vehicleId)
         {
-            var offers = await repository.All<Offer>()
+            var offers = await unitOfWork.OfferRepository.All()
                 .Where(o => o.VehicleId == vehicleId && o.Status == OfferStatus.Pending)
                 .ToListAsync();
             foreach (var offer in offers)
             {
                 offer.Status = OfferStatus.Declined;
             }
-            await repository.SaveChangesAsync();
+            await unitOfWork.SaveChangesAsync();
         }
 
     }

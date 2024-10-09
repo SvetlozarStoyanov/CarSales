@@ -1,10 +1,8 @@
-﻿using CarSales.Infrastructure.Data.Common.Repository;
-using CarSales.Core.Contracts;
+﻿using CarSales.Core.Contracts;
 using CarSales.Core.Extensions;
 using CarSales.Core.Services;
 using CarSales.Infrastructure.Data;
-using DotNet.Testcontainers.Builders;
-using DotNet.Testcontainers.Containers;
+using CarSales.Infrastructure.Data.DataAccess.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.StackExchangeRedis;
@@ -15,7 +13,7 @@ namespace CarSales.Tests.IntegrationTests
     public class UserServiceTests
     {
         private CarSalesDbContext context;
-        private IRepository repository;
+        private IUnitOfWork unitOfWork;
         private IUserService userService;
         private IDistributedCache cache;
 
@@ -31,7 +29,7 @@ namespace CarSales.Tests.IntegrationTests
             context.Database.EnsureDeleted();
             context.Database.EnsureCreated();
 
-            repository = new Repository(context);
+            unitOfWork = new UnitOfWork(context);
 
             var redisOptions = new RedisCacheOptions();
 
@@ -40,7 +38,7 @@ namespace CarSales.Tests.IntegrationTests
             redisOptions.Configuration = "localhost:6379" ?? throw new InvalidOperationException("Connection string 'Redis' not found.");
             cache = new RedisCache(redisOptions);
 
-            userService = new UserService(repository, cache);
+            userService = new UserService(unitOfWork, cache);
 
         }
 
@@ -49,7 +47,6 @@ namespace CarSales.Tests.IntegrationTests
         {
             await cache.ClearCacheAsync();
         }
-
 
         [Test]
         public async Task Test_EditUserAsync_EditsUserCorrectly()
