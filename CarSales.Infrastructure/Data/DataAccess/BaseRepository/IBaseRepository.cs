@@ -83,11 +83,5 @@ namespace CarSales.Infrastructure.Data.DataAccess.Repository
         /// </summary>
         /// <param name="entity">Entity to be detached</param>
         void Detach(T entity);
-
-        /// <summary>
-        /// Saves all made changes in trasaction
-        /// </summary>
-        /// <returns>Error code</returns>
-        Task<int> SaveChangesAsync();
     }
 }
